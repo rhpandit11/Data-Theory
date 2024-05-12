@@ -93,3 +93,34 @@
 * Increased Overhead: when we do complex operations stored procedure consume more resources than a simple sql statement.
 * Limited Portability: often specific for a particular DBMS, not easy to portable to other business.
 * Debugging Challeneges: if there multiple layers of code involved debugging the store procedure is challenging.
+
+
+**Trigger:** is a stored procedure that can be executed in response to one of three conditions 1. An UPDATE, 2.An INSERT, 3. A DELETE. automatically invokes whenever a special event in the database occurs.
+
+**Types of Triggers: 1.** DDL Triggers, 2. DML Triggers, 3. TCL Triggers
+
+**Advantages:** 
+
+1. maintain integrity constrainsts when primary key and foreign key constrain are not defined.
+2. SQL code short
+3. give alternative way to run scheduled tasks.
+
+**Disadvantages:**
+
+1. Only provide extended validators
+2. increase overhead
+3. difficult to troubleshoot because they execute automatically
+
+
+**VIEW:** kind of virtual table not stored in database and give query result through real tables.
+
+**Advantages:**
+
+1. not store data in a physical location
+2. used to hide some of the column from table
+3. provide access restriction, since data insertion, delete, update not possible.
+
+**Disadvantages:**
+
+1. when physical table drop associated view irrelevant.
+2. when views are created for large tables it occupy more memory.
