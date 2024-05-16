@@ -95,7 +95,6 @@
 2. increase overhead
 3. difficult to troubleshoot because they execute automatically
 
-
 **Store Procedures:** group of sql statements stored together in a database, based on procedure and parameters you pass, it can perform one or multiiple DML operations, allow to pass same statement multiple times, thereby enabling reusability.
 
 **Advantages:**
@@ -124,7 +123,6 @@
 1. when physical table drop associated view irrelevant.
 2. when views are created for large tables it occupy more memory.
 
-
 **Index:** is like organized catalog for your database. It's a data structure that help's you quickly locate specific rows in a table.Just like the index at the back of a book.
 
 **Benefits:**
@@ -139,16 +137,17 @@
 1. Clustered Index: Index which have primary key define
 2. Non-Clustered Index: index which have non-primary key
 
+**LOGICAL ORDER OF OPERATIONS IN SQL:**
 
-**SQL Query Follow:**
-
-1. **FROM** : Logically query starts from the **FROM **clause by assembling the initial set of data.
-2. **WHERE** : Then where clause is applied to select only the rows that meet the criteria.
-3. **Aggregations(GroupBy,Having)** : Lateraggregation is performed on the data such as finding the sum, grouping the data values in columns, and filtering the groups.
-4. **ColumnExpressions** : After the above operations the SELECT list is processed along with calculations of any expressions involved in it.(Except column expressions everything else is optional in SQL query)
-5. **ORDER BY** : After getting the final resulting rows are sorted ascending or descending by ORDER BY clause.
-6. **OVER:** Windowing and ranking functions can later be applied to get a separately ordered view of the result with additional functions for aggregation.
-7. **DISTINCT** : This is applied to remove any duplicate rows present in result data.
-8. **TOP:** After all this process of selectingdata filtering it and performing all the calculations and ordering them, SQL can restrict the result to top few rows.
-9. **INSERT,UPDATE, DELETE:** This is the final logical step of the query to perform data modification using the resulting output.
-10. **UNION** : The output from the multiplequeries can be stacked to using the UNION command.
+1. FROM, JOIN
+2. WHERE
+3. GROUP BY
+4. aggregate functions
+5. HAVING
+6. window functions
+7. SELECT
+8. DISTINCT
+9. UNION/INTERSECT/EXCEPT
+10. ORDER BY
+11. OFFSET
+12.  LIMIT/FETCH/TOP

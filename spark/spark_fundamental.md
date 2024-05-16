@@ -59,7 +59,7 @@
 
 Difference Between RDD, Dataframe, Dataset:
 
-| RDD                                | Datafram           | Dataset                 |
+| RDD                                | Dataframe          | Dataset                 |
 | ---------------------------------- | ------------------ | ----------------------- |
 | No schema                          | schema             | schema                  |
 | slow on non JVM launguages         | fast               | fast                    |
@@ -122,9 +122,7 @@ Step3: DAG Execution: Action Triggering -> Stages breaks into Tasks -> DAG Sched
 | Direction      | direction of edges represent the flow of dependencies between tasks     | the direction of edges represent the flow of data transformations or processing steps. |
 | Use            | used in task scheduling, workflow management, and distributed computing | used in data lineage and data quality analysis.                                        |
 
-Note: Because dag represent dependencies between task that must be executed in particular order while lineage Represent history of data transformations that may be
-
-repeated or looped over.
+Note: Because dag represent dependencies between task that must be executed in particular order while lineage Represent history of data transformations that may be repeated or looped over.
 
 ---
 
@@ -235,15 +233,9 @@ Resources Allocation in Spark:
 
 Resources Isolation achieved in spark:
 
-1. Utilize resource managers like YARN, Mesos, etc. These managers allocate independent resources for each Spark application, such as memory, CPU, etc.,
-
-   to ensure there is no interference between different applications.
-2. Spark's built-in scheduler can dynamically allocate resources based on the application's requirements, ensuring that each application receives enough
-
-   resources and avoiding resource contention issues.
-3. Utilize Spark’s dynamic resource allocation feature. Spark can dynamically adjust resource allocation based on the needs of the application,
-
-   enabling dynamic isolation of resources to ensure each application receives sufficient resources.
+1. Utilize resource managers like YARN, Mesos, etc. These managers allocate independent resources for each Spark application, such as memory, CPU, etc., to ensure there is no interference between different applications.
+2. Spark's built-in scheduler can dynamically allocate resources based on the application's requirements, ensuring that each application receives enough resources and avoiding resource contention issues.
+3. Utilize Spark’s dynamic resource allocation feature. Spark can dynamically adjust resource allocation based on the needs of the application, enabling dynamic isolation of resources to ensure each application receives sufficient resources.
 
 ---
 
