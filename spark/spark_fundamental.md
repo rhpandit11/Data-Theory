@@ -192,42 +192,13 @@ This could result in performance degradation, especially for complex data proces
 
 ---
 
-Resources Allocation in Spark:
+**Resource Allocation:**
 
-1. Static Resource Allocation:Resources will be fixed while running the spark application even if resources are free after some filter /transformation.
-2. Dynamic Resource Allocation: allows Spark applications to request and release resources (memory and CPU) from the cluster manager dynamically as per need.
-
-   How It Works:
-
-   When enabled, Spark applications can acquire additional resources when the workload increases and release resources when the workload decreases.
-
-   The cluster manager monitors the resource usage and makes decisions about allocating or deallocating resources based on the application's needs.
-
-  Benefits:
-
-    Efficient Resource Utilization: Ensures that resources are allocated based on the actual demand of the application, avoiding over-provisioning or
-
-    under-provisioning.
-
-    Small cluster, bigger impact : Enables sharing resources among multiple applications running on the same cluster.
-
-  How to enable? spark-defaults.conf | spark.shuffle.service.enabled true
-
-    spark.dynamicAllocation.enabled true
-
-    spark.dynamicAllocation.minExecutors 1
-
-    spark.dynamicAllocation.maxExecutors 4
-
-    spark.dynamicAllocation.executorIdleTimeout 60s
-
-    spark.dynamicAllocation.schedulerBacklogTimeout 60s
-
- Use Cases:
-
-    Well-suited for scenarios where the workload varies over time, and the demand for resources is unpredictable.
-
-    Commonly used in shared environments where multiple Spark applications coexist on the same cluster.
+1. Static Resource Allocation: resources are pre-allocated to the spark application before it starts running, amount of resources are fixed and cannot be changed during runtime.
+   **Disadvantages:** 1. Inefficient Resource Utilization  2. Limited Flexibility
+2. Dynamic Resource Allocation: It is a feature in spark that allows for automatic adjustment of the number of executors allocated to an application a run time.Useful for applications that have varying workloads and need to scale up or down depending on the amount of data being processed.
+   **Advantages:** 1. Resource efficiency  2. Scalability  3. Cost Savings  4. Fairness
+   **Disadvantages:** 1. Overhead  2. Latency  3. Configuration Complexity  4. Unpredictability  5. Increased Network Traffic.
 
 ---
 
