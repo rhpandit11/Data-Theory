@@ -147,6 +147,16 @@ Optimization Techniques:
 4. Join ReOrdering: It re-orders the join's condition to minize the data Shuffle through that it enhance the parallelism and reduce overall execution time.
 5. Constant Folding: During query Analysis it evaluates Constant expressions through that reducing the computational overhead.
 
+
+1. Parsing -> parsing the dataframe to create an Abstract Syntax Tree(AST) represent logical structure of query
+2. Analysis -> Semantic Analysis perform on AST structure resolve/check for query is valid or not.
+3. Logical Optimization -> apply set of logical optimization, it simply rewrite the query operation without changing overall result.
+4. Logical Plan -> Then it produce logical plan, it is like tree like representation of queries operations.It captures high level opearations like join, aggregation etc.
+5. Physical Plan -> based on logical plan it generates many alternative physical plans and explore different execution strategies.
+6. Cost-based Optimization -> It checks each physical factors like distribution, network latency, disk I/o, CPU usage and memory consumption then seletct one physical plan which cost is lowest estimated.
+7. Code-Generation -> After that it generates efficient JAVA byte code or optimizes sql code for executing the query.
+8. Execution: Finally spark SQL executes the optimized physical plan to get the desired result.
+
 ---
 
 **Spark handle fault tolerance:**
