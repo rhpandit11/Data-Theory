@@ -87,7 +87,7 @@ Dataset prefered over dataframe when data is strongly typed meaning schema is kn
 
 ---
 
-**2. DAG:** DAG is a more general concept that represents the logical execution plan for a set of stages in a Spark job.It is a combination of vertices as well as edges where vertices represents RDDs and edges represents operation to be applied on RDD.
+**2. DAG:**  represents the logical execution plan for a set of stages in a Spark job.It is a combination of vertices as well as edges where vertices represents RDDs and edges represents operation to be applied on RDD.
 
 Components: Stages | DAG Scheduler
 
@@ -212,15 +212,9 @@ Resources Isolation achieved in spark:
 
 Difference between Standalone, mesos and yarn cluster:
 
-1. Independent cluster setup without a resource manager. | Master-slave architecture with dynamic resource allocation. | Part of the Hadoop ecosystem, follows
-
-   master-slave architecture.
-2. Resources managed manually, suitable for smaller  development/testing environments. | Fine-grained resource sharing across multiple frameworks. | Primarily
-
-   optimized for running Hadoop MapReduce jobs.
-3. Limited scalability and resource optimization compared to yarn, mesos | Supports diverse workloads including Hadoop, Spark, containers, etc. | Integrates
-
-   tightly with Hadoop ecosystem tools and workflows.
+1. Independent cluster setup without a resource manager. | Master-slave architecture with dynamic resource allocation. | Part of the Hadoop ecosystem, follows master-slave architecture.
+2. Resources managed manually, suitable for smaller  development/testing environments. | Fine-grained resource sharing across multiple frameworks. | Primarily optimized for running Hadoop MapReduce jobs.
+3. Limited scalability and resource optimization compared to yarn, mesos | Supports diverse workloads including Hadoop, Spark, containers, etc. | Integrates tightly with Hadoop ecosystem tools and workflows.
 
 ---
 
@@ -257,15 +251,13 @@ Disadvantages:
 Fix Data Skewness:
 
 1. Broadcast Join: Instead of sort-merge join we use Broadcast join because 1. Shuffle 2. Sort 3. merge. Use a broadcast join for smaller datasets to avoid shuffling large datasets.
-   2. Salting Concept: Add a random value to the key to distribute the data more evenly across partitions.key1 == key1, it should also get satisfied by key1_`<salt>` = key1_`<salt>`
-   3. Bucketing: In this, we group/bucket specific attributes of values into fixed-size so that data can evenly distribute.
-   4. Custom Partioning: Implement a custom partitioner that distributes the data based on specific characteristics.
-   5. AQE
-   6. Repartition or Coalesce: Use repartition or coalesce to redistribute the data among partitions.
-
-Salting Work: When certain keys(hot keys) data have high number of occurences, which result in Skewness, now we add random number/string(salt) to the key
-
-so that the record with the same key is now spread accross multiple keys.
+2. Bucketing: In this, we group/bucket specific attributes of values into fixed-size so that data can evenly distribute.
+3. Custom Partioning: Implement a custom partitioner that distributes the data based on specific characteristics.
+4. AQE
+5. Repartition or Coalesce: Use repartition or coalesce to redistribute the data among partitions.
+6. Salting Technique: salting involves artificially increasing the number of distinct keys in a dataset by appending a random or unique identifier, known as salt helps to distribute data more evenly across partitions.
+   Example: (A,10), (B,15), (A,5), (c,8), (B,20), (A,7)
+   (A_1,10), (B_2,15), (A_3,5), (c_4,8), (B_5,20), (A_6,7) -> adding salt
 
 ---
 
