@@ -130,24 +130,6 @@ Catalyst Optimizer: It is a robust query optimization framework, responsible for
 
 How It Works:
 
-1. Parsing: parsing the dataframe to create an AST(abstract syntax tree) represent logical structure of query.
-2. Analysis: Sementic Analysis perform on AST resolve/check column or table names, check for syntax errors and type checking to check query is valid or not. Additionaly, collect metadata of columns and tables involved in it.
-3. Logical optimization: apply set of logical optimization, it simply or rewrite the query operations without changing overall behaviour or results.
-4. Logical Plan: Then it produce logical plan, it is like tree-like representation of queries operations and their dependencies. It captures high level operations like filter, joins, aggregation and projection.
-5. Physical Planing: based on logical plan it generates many alternative physical plans, and explore different execution strategies and physical operators for the specific data source involved in the query.
-6. Cost-Based Optimization: It checks each physical plan factors like, distribution, network latency, disk I/o, CPU Usage, and memory consumption after that select one physical execution plan which cost is lowest estimated.
-7. Code-Generation: After that it generate efficient java bytes code or optimized sql code for executing the query which further optimized by underlying execution engine.
-8. Execution: Finally spark sql execuets the optimized physical plan to get the desired results.
-
-Optimization Techniques:
-
-1. Predicate Pushdown: data need to filter out in source level before entering in the Processing pipeline, it push filter condition as close  to the data sources as possible.
-2. Column Purining / projection Pushdown: It reads only necessary columns and load it.
-3. Broadcast Join: In this small tables copy send to every worker nodes during join with large tables.
-4. Join ReOrdering: It re-orders the join's condition to minize the data Shuffle through that it enhance the parallelism and reduce overall execution time.
-5. Constant Folding: During query Analysis it evaluates Constant expressions through that reducing the computational overhead.
-
-
 1. Parsing -> parsing the dataframe to create an Abstract Syntax Tree(AST) represent logical structure of query
 2. Analysis -> Semantic Analysis perform on AST structure resolve/check for query is valid or not.
 3. Logical Optimization -> apply set of logical optimization, it simply rewrite the query operation without changing overall result.
@@ -156,6 +138,14 @@ Optimization Techniques:
 6. Cost-based Optimization -> It checks each physical factors like distribution, network latency, disk I/o, CPU usage and memory consumption then seletct one physical plan which cost is lowest estimated.
 7. Code-Generation -> After that it generates efficient JAVA byte code or optimizes sql code for executing the query.
 8. Execution: Finally spark SQL executes the optimized physical plan to get the desired result.
+
+Optimization Techniques:
+
+1. Predicate Pushdown: data need to filter out in source level before entering in the Processing pipeline, it push filter condition as close  to the data sources as possible.
+2. Column Purining / projection Pushdown: It reads only necessary columns and load it.
+3. Broadcast Join: In this small tables copy send to every worker nodes during join with large tables.
+4. Join ReOrdering: It re-orders the join's condition to minize the data Shuffle through that it enhance the parallelism and reduce overall execution time.
+5. Constant Folding: During query Analysis it evaluates Constant expressions through that reducing the computational overhead.
 
 ---
 
