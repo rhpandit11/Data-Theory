@@ -1,65 +1,84 @@
-Data Skewness: In scenario where some of the partitioned data has more data compared to others.
+**Pyspark:** PySpark is an Apache Spark interface in Python. It is used forcollaborating with Spark using APIs written in Python. It also supports Spark’s features like Spark DataFrame, Spark SQL, Spark Streaming, Spark MLlib and Spark Core.
 
-How it Occurs:
+**advantages:**
 
-1. When data get re-partitioned
-2. Join/Group by operations
+* Simple to use: Parallelized code can be written in a simpler manner.
+* Error Handling: PySpark framework easily handles errors.
+* Inbuilt Algorithms: PySpark provides many of the useful algorithms in Machine Learning or Graphs.
+* Library Support: Compared to Scala, Python has a huge library collection for working in the field of data science and data visualization.
 
-Disadvantages:
-
-1. Impact on job performance
-2. Execution time increase then usual time
-3. Spark job resources not used in its full potential
-4. most resources become idle without doing any tasks
-5. distributed Processing got affected.
-6. Out of memory errors
-
-Fix Data Skewness:
-
-1. Broadcast Join: Instead of sort-merge join we use Broadcast join because 1. Shuffle 2. Sort 3. merge. Use a broadcast join for smaller datasets to avoid shuffling large datasets.
-   2. Salting Concept: Add a random value to the key to distribute the data more evenly across partitions.key1 == key1, it should also get satisfied by key1_`<salt>` = key1_`<salt>`
-   3. Bucketing: In this, we group/bucket specific attributes of values into fixed-size so that data can evenly distribute.
-   4. Custom Partioning: Implement a custom partitioner that distributes the data based on specific characteristics.
-   5. AQE
-   6. Repartition or Coalesce: Use repartition or coalesce to redistribute the data among partitions.
-
-Salting Work: When certain keys(hot keys) data have high number of occurences, which result in Skewness, now we add random number/string(salt) to the key
-
-so that the record with the same key is now spread accross multiple keys.
+**Disadvantages:**
 
 ---
 
-Shared Variables: There are two different types of Shared Variables in spark -Broadcast Variable and Accumulator
-
-1. Broadcast Variables: are read-only Variables distributed across worker nodes in-memory. The data Broadcasted this way is cached in serialized form and deserialized before running each task. Used for cache a value in memory on all nodes generally small datasets only Broadcasted.
-2. Accumulator: Which are used to update the variables in parallel during execution/runtime and share results from worker to driver.similar to counters in Mapreduce. used for performing associative and commutative operations such as counters or sums.
+**SparkContext:** PySpark SparkContext is an initial entry point of the spark functionality. It also represents Spark Cluster Connection and can be used for creating the Spark RDDs (Resilient Distributed Datasets) and broadcasting the variables on the cluster.
 
 ---
 
-difference between Persist and Cache: are optimization techniques for both iterative and interactive Spark applications to improve the performance of the jobs or applications.
+**PySpark serializers:** The serialization process is used to conduct performance tuning on Spark. The data sent or received over the network to the disk or memory should be persisted.
 
-iterative -> Reuse intermediate results
-
-interactive  -> allowing a two-way flow of information
-
-cache() -> MEMORY_ONLY
-
-Persist(level) -> MEMORY_ONLY, MEMORY_AND_DISK, MEMORY_ONLY_SER, MEMORY_AND_DISK_SER, DISK_ONLY (disk, or off-heap memory)
-
-unpersist() can be used to Freeing up space from the Storage memory.
-
-Checkpoint: used for fault-tolerance and to cut down the lineage of RDDs/dataframes especially in long and complex computations. It breaks the lineage and
-
-stores data to a reliable Storage(HDFS), used in scenario where lineage graph is too long or when you want to recover from failures efficiently.
-
-Note: use cache() -> for optimization purpose Checkpoint() -> for fault tolerance purpose, and reduce the lineage length in complex computations.
+* **PickleSerializer:** This serializes objects using Pythons PickleSerializer (`class pyspark.PickleSerializer`). This supports almost every Python object.
+* **MarshalSerializer:** This performs serialization of objects. We can use it by using `class pyspark.MarshalSerializer`. This serializer is faster than the PickleSerializer but it supports only limited types.
 
 ---
 
-coalesce and repartition:
-
-coalesce: is used to decrease the number of partitions without invoking Shuffling. It used in when output partitions is less than the input.
-
-repartition: helps to increase or decrease the number of partitions by doing Shuffling of data.
+**Is PySpark faster than pandas?** PySpark supports parallel execution of statements in a distributed environment, i.e on different cores and different machines which are not present in Pandas. This is why PySpark is faster than pandas.
 
 ---
+
+**PySpark UDF:** User Defined Function that is used to create a reusable function in Spark.After creation it can be re-used on multiple dataframes and SQL(after registering).default type is string.
+
+```python
+```python
+def upperCase(str):
+    return str.upper()
+upperCaseUDF = udf(lambda z:upperCase(z),StringType())   
+
+df.withColumn("Cureated Name", upperCaseUDF(col("Name"))) \
+  .show(truncate=False)
+```
+
+---
+
+**SparkConf:** used for setting the configuration and parameters required to run applications on a cluster or local system.
+
+---
+
+**create SparkSession:** sparkSession class from the pyspark.sql liabrary has the getOrCreate() method which creates new sparkSession.
+
+```python-
+import pyspark
+from pyspark.sql import SparkSession
+spark = SparkSession.builder.master("local[1]") 
+                   .appName('InterviewBitSparkSession') 
+                   .getOrCreate()
+```
+
+master() -> setting up the mode where application run clustermode/standalone mode for standalone mode we use local[x] value where x represents partition count to be created in RDD,dataframe,dataset.ideally x is CPU numbers of cores available.
+
+appName() -> setting the application name
+
+getOrCreate() -> returning sparkSession object. creates new one if it does not exists
+
+for creating new sparkSession every time we use spark_session = SparkSession.newSession
+
+---
+
+Creating RDD:
+
+* `sparkContext.parallelize() -> do not require data but require partition for creating empty RDD`
+* `sparkContext.textFile() -> read .txt file and convert them into RDD`
+* `sparkContext.wholeTextFiles() -> returns pairRDD(key,value)`
+* `sparkContext.emptyRDD -> RDD with no data`
+
+Creating DataFrames:
+
+`createDataFrame()`-> spark session method
+
+---
+
+Pyspark's startsWith() and endsWith() methods: methods belongs to column class and are used to searching datagrames rows by checking if the column values startswith some values or endwith some value.
+
+* **startsWith()** – returns boolean Boolean value. It is true when the value of the column starts with the specified string and False when the match is not satisfied in that column value.
+
+* **endsWith()** – returns boolean Boolean value. It is true when the value of the column ends with the specified string and False when the match is not satisfied in that column value.
