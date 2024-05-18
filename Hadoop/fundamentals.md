@@ -95,7 +95,6 @@ Car Car River       (Car,Car,River)               (car,1) (car,1) (River,1)     
 
 Deer Car Bear     (Dear,car,Bear)               (dear,1) (car,1) (bear,1)          Deer (1,1)   Deer,2
 
-
 Advantages:
 
 * Scalability: mapreduce is designed for scale horizontally allowing it to process massive datasets accross thousands of nodes.
@@ -107,3 +106,5 @@ Limitations:
 
 * Latency: not well suited for real-time data processing primarly designed for batch processing.
 * complexity: writting efficient map and reduce functions can be challenging particularly for complex data processing tasks.
+
+---
