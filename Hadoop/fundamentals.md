@@ -108,3 +108,45 @@ Limitations:
 * complexity: writting efficient map and reduce functions can be challenging particularly for complex data processing tasks.
 
 ---
+
+YARN
+
+---
+
+Yarn allows different data processing engines like graph processing, interactive processing, stream processing as well as batch processing to run and process data stored in HDFS. Apart from resource management yarn also does job scheduling.
+
+Components/Daemons:
+
+1. Client: It submits map-reduce job
+2. Global Resource Manager: main purpose of resource manager is to disribute resources among various applications in the system. It has two functionalities.
+
+   1. Scheduler: decides allocation of resources to various running applications. Pure scheduler does not monitor or track the status of application.
+   2. Application Manager: accept the job submissions, Negotiating resources(containers) for executing the application master, Restarting the Application master in case of failure
+3. Application Master: process that runs the main function/entry point of an application, such as spark driver. several responsibilities: Requesting resources, Running the master/driver program
+4. Node Manager: Java process that run on slave/worker nodes in a hadoop cluster. responsible for managing containers and resources on each worker node.
+5. Container: unit of resource allocation such as CPU, memory, disk space allowing the task to run in a controlled and isolated environment.
+
+Flow Chart:
+
+1. client submits an application to RM
+2. RM -> allocates container -> to start the application manager
+3. AM -> resgister itself with RM
+4. AM -> negotiates containers from the RM
+5. AM -> notify the node manager to launch containers
+6. Application code is executed in the container
+7. client contact -> RM/AM to monitor application's status
+8. After task completed -> AM un-registered with RM
+
+Advantages:
+
+1. Flexibility: run various distributed processing systems such as Apache spark, Apache flink, Apache storm and others, also in a single hadoop cluster it allows multiple processing engines run simultaneously
+2. Resource Management: allows administartors to allocate and monitor the resources required by each application in a cluster.
+3. Scalability: highly scalable handle thousands of nodes in a cluster, it can scale up or down based on the applications.
+4. Security: offer kerberos authentication
+
+Disadvantages:
+
+1. Complexity: requires additionla configurations and settings which can be difficult for user who are not familiar with YARN
+2. Overhead: Increase overhead because of required managing resources and scheduling applications
+3. Single Point of Failure: yarn can be single point failure if it falls the entire cluster to go down need to configure backup yarn
+4. Limited Support: YARN has limited support for non-java programming languages.
