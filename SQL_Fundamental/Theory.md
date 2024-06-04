@@ -16,14 +16,19 @@
 4. DQL: Data Query Language - allow you to get and organise data from database {SELECT}
 5. TCL: Transaction Control Language - used to manage database transaction(squence of one or more sql operations that are treated as a unit.) {COMMIT, ROLLBACK}
 
+---
+
 **Constraints:** are rules that we can apply on the type of data in a table to store data in specific manner or order.
 
-* NOT NULL
-* UNIQUE
-* PRIMARY KEY
-* FOREIGN KEY
-* CHECK
-* DEFAULT
+* NOT NULL - Restricts NULL value from being inserted into a column.
+* UNIQUE  - Ensures unique values to be inserted into the field.
+* PRIMARY KEY - Uniquely identifies each record in a table.
+* FOREIGN KEY - Ensures referential integrity for a record in another table.
+* CHECK - Verifies that all values in a field satisfy a condition.
+* DEFAULT - Automatically assigns a default value if no value has been specified for the field.
+* **INDEX** - Indexes a field providing faster retrieval of records.
+
+---
 
 **ACID Properties:**
 
@@ -31,6 +36,8 @@
 * CONSISTENCY: Transcation move in a database one valid state to another.
 * ISOLATION: Multiple transactions independetally happen without interfare.
 * DURABILITY: After one transaction committed, it can't be modified even after system failure.
+
+---
 
 **Keys and Why we need it:** basice requirement of relational database model, used to identify the tuples(row) uniquely in the table and also used for setup relations amongst various columns and tables.
 
@@ -43,6 +50,8 @@
 * Foreign Key: supports for creation of associations between tables, EX: course_id
 * Composite Key: unique method two identifying rows in a table by combining two or more characteristics to create composite key. EX: (AP 19 CB 2005) AP -> state_id, 19->sectore_id
 * Surrogate Key: allow under certain conditions like main PK is very large, challenging PK, lack of key, when not natural choice. EX: student Table {student_id}
+
+---
 
 **Dependency:** it is a constraint defines relationship between attributes, also define relationship knowing that one attribute is enough to tell you the value of another attribute in the same table.
 
@@ -64,12 +73,19 @@
 
 **Normal Forms:**
 
-1. **1NF:** A relation is in 1NF if all its attributes have an atomic value.
-2. **2NF:** A relation is in 2NF if it is in 1NF and all non-key attributes are fully functional dependent on the candidate key.
-3. **3NF:** A relation is in 3NF if it is in 2NF and there is no transitive dependency.
-4. **BCNF:** A relation is in BCNF if it is in 3NF and for every Functional Dependency, LHS is the super key.
+* First normal Form (1NF): It removes all duplicate columns from the table. Creates table for related data and identifies unique column values
+* First Normal Form (2NF): Follows 1NF and creates and places data subsets in an individual table and defines relationship between tables using primary key
+* Third Normal Form (3NF): Follows 2NF and removes those columns which are not related through primary key
+* Fourth Normal Form (4NF): Follows 3NF and do not define multi-valued dependencies. 4NF also known as BCNF
 
 **Denormalization:** database optimization technique in which we add redundant data to one or more tables. (OLAP).
+
+reasons for denormalizing the data: We de-normalize data when we need better performance. Sometimes there are many joins in a query due to highly normalized data. In that case, for faster data retrieval it becomes essential to de-normalize data.
+
+
+---
+
+
 
 **Relationship in SQL:**
 
@@ -78,6 +94,8 @@
 3. Many-to-many Relationship
 4. Many-to-one Relationship
 5. Self-referencing Relationship
+
+---
 
 **Trigger:** is a stored procedure that can be executed in response to one of three conditions 1. An UPDATE, 2.An INSERT, 3. A DELETE. automatically invokes whenever a special event in the database occurs.
 
@@ -95,6 +113,8 @@
 2. increase overhead
 3. difficult to troubleshoot because they execute automatically
 
+---
+
 **Store Procedures:** group of sql statements stored together in a database, based on procedure and parameters you pass, it can perform one or multiiple DML operations, allow to pass same statement multiple times, thereby enabling reusability.
 
 **Advantages:**
@@ -110,6 +130,8 @@
 * Limited Portability: often specific for a particular DBMS, not easy to portable to other business.
 * Debugging Challeneges: if there multiple layers of code involved debugging the store procedure is challenging.
 
+---
+
 **VIEW:** kind of virtual table not stored in database and give query result through real tables.
 
 **Advantages:**
@@ -122,6 +144,8 @@
 
 1. when physical table drop associated view irrelevant.
 2. when views are created for large tables it occupy more memory.
+
+---
 
 **Index:** is like organized catalog for your database. It's a data structure that help's you quickly locate specific rows in a table.Just like the index at the back of a book.
 
@@ -137,6 +161,10 @@
 1. Clustered Index: Index which have primary key define
 2. Non-Clustered Index: index which have non-primary key
 
+---
+
+Cursor: 
+
 **LOGICAL ORDER OF OPERATIONS IN SQL:**
 
 1. FROM, JOIN
@@ -150,4 +178,4 @@
 9. UNION/INTERSECT/EXCEPT
 10. ORDER BY
 11. OFFSET
-12.  LIMIT/FETCH/TOP
+12. LIMIT/FETCH/TOP

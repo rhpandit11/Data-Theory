@@ -8,6 +8,8 @@
 4. **Cluster Manager** - mesos, yarn, kubernets, standalone.
 5. **Storage Layer** - HDFS, S3, ADLS GEN2, Local Storage
 
+---
+
 **Spark Execution Model:**
 
 1. **Driver** - brain of spark framework
@@ -15,15 +17,17 @@
 
 **Driver Works:**
 
-* sparkcontext/session initialization
+* creating the sparkcontext/session which serves as a entry point for spark functionality
+* Defining the main logic of the Spark application.
 * compute the application requirement resoures and also manage dynamic allocation lifecycle
-* works/Tasks distributor
-* react on node/executor failure
-* progress/monitor the executor
+* Tasks distributor among the executors
+* react on executor failure
+* monitor the executor progress
 * send response to user
+* Converting transformations into a logical Directed Acyclic Graph (DAG)
 * through the metadata job it powers the spark WEBUI
 
-**Executor  Works:** execute the task assigned by driver, report the progress back to driver
+**Executor  Works:** execute the task assigned by driver, report the progress back to driver, Storing data for the application in memory or disk storage.
 
 **Spark Programming Model:**
 
@@ -35,19 +39,34 @@
 
 **Spark Internally Working:**
 
-1. user submit job using "sparkSubmit()"
-2. "sparkSubmit()" -> driver program  -> execute main() method
-3. Driver -> contact cluster manager -> request for resources to launch the executors
-4. cluster manager -> launch executors on behalf of driver
-5. Executors -> established direct connection with driver.
-6. Driver -> determined total number of tasks -> by checking the lineage.
-7. Driver -> creates logical and physical plan
-8. Physical plan granted -> Spark allocates the task to the executors
-9. Task run on executors -> after completion return to driver
-10. All Task completed -> main() method -> invokes sparkContextStop().
-11. Spark release all resources from cluster manager.
+1. **Job Submission:** The user submits a Spark application using the SparkContext in the driver program.
+2. **DAG Construction:** The driver builds a logical Directed Acyclic Graph (DAG) of stages representing transformations and actions.
+3. **Task Scheduling:** The DAG is divided into smaller sets of tasks, which are then submitted to the cluster manager.
+4. **Task Execution:** The cluster manager allocates resources and schedules the tasks on available executors.
+
+- Executors perform the tasks assigned to them, which may involve reading data from a data source, performing computations, and storing
+  intermediate results.
+
+5. **Result Collection:**
+
+- Executors send the results of their computations back to the driver.
+- The driver program consolidates these results and performs any final actions required.
 
 ---
+
+SparkContext: was the primary entry point for interacting with spark represent the connection to the spark cluster and was responsible for co-ordinating task execution.
+
+SparkSession: spark2.0 introduced as unified entry point that encapsulates sparkcontext while offering much more.Provides user-friendly API for working with structured data in the form of dataframes and datasets.
+
+| SparkContext                                                                                                               | SparkSession                                                                                                    |
+| -------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| preferred way to work with the lower-level API like RDD,<br />Accumulator and broadcast variable                           | prefered way when to work with data structure like<br />dataframe and datasets as it provides simpler interface |
+| can be created only once in spark application at any time                                                                  | can be created multiple times                                                                                   |
+| provides method for creating RDD's accumulator and broadcasying variable<br />as well as method to start task on executors | provides method for creating dataframe and datasets <br />as well as methods for reading and writting data.     |
+
+---
+
+Data abstraction refers to the difference between how the data is stored and how it's used (or access) within the software that's consuming it.
 
 **Two Main Abstraction of Spark:**
 
@@ -83,7 +102,17 @@ Difference Between RDD, Dataframe, Dataset:
 
 **Use:**
 
-Dataset prefered over dataframe when data is strongly typed meaning schema is known ahead of time and data is not necessarily homogeneous. Because in dataset type errors will be caught at compile time rather than at runtime. In addition, Datasets can take advantage of the Catalyst optimizer, which can lead to more efficient execution.
+◽DataFrames: Perfect for structured data and SQL-like queries. They offer excellent performance and ease of use, making them ideal for ETL operations and data analysis.
+◽Datasets: Ideal when you need the optimizations of DataFrames along with the type safety of RDDs. They are great for complex transformations that benefit from compile-time type checking.
+
+---
+
+Transformation: are operations on RDD/Dataframes/Dataset that produce a new distributed dataset from existing one.They are generally lazy meaning they are not executed immediately.EX: map, filter, groupby,join.
+
+* Narrow: each partition of the input rdd contributes to only one partition of the output rdd.ex: map,filter
+* Wide: each partition of the input rdd may contribute to multiple partition of the output rdd(ex: groupby,reducebykey,join)
+
+Action: are operations that trigger the execution of transformation and return value to the driver program or write data to external storage system.ex: collect,count,first,saveAsTextFile.
 
 ---
 
@@ -280,9 +309,7 @@ Persist(level) -> MEMORY_ONLY, MEMORY_AND_DISK, MEMORY_ONLY_SER, MEMORY_AND_DISK
 
 unpersist() can be used to Freeing up space from the Storage memory.
 
-Checkpoint: used for fault-tolerance and to cut down the lineage of RDDs/dataframes especially in long and complex computations. It breaks the lineage and
-
-stores data to a reliable Storage(HDFS), used in scenario where lineage graph is too long or when you want to recover from failures efficiently.
+Checkpoint: used for fault-tolerance and to cut down the lineage of RDDs/dataframes especially in long and complex computations. It breaks the lineage and stores data to a reliable Storage(HDFS), used in scenario where lineage graph is too long or when you want to recover from failures efficiently.
 
 Note: use cache() -> for optimization purpose Checkpoint() -> for fault tolerance purpose, and reduce the lineage length in complex computations.
 
@@ -293,3 +320,21 @@ coalesce and repartition:
 coalesce: is used to decrease the number of partitions without invoking Shuffling. It used in when output partitions is less than the input.
 
 repartition: helps to increase or decrease the number of partitions by doing Shuffling of data.
+
+Working:
+
+SparkSubmit=====> Driver Program launched ======> request resources to cluster manager ======>  main program of user function of the user processing program created
+
+Based on main program execution logic processed =====> parallely spark/session also created ====> using spark context different Transformation and action are processed
+
+till action called all sparkcontext will go in the form of dag and will create RDD lineage.
+
+Once Action called ===> Job created ===> breakdown to stages =====> then to tasks ====> after that tasks are launched by cluster manager on the worker node and
+
+this done with the help task Scheduler class.
+
+tasks ====> launched to different executors in worker node through cluster for execution.===> resources allocation and tracking of the jobs and task performed
+
+by cluster manager.
+
+Result return to driver program by executor.
