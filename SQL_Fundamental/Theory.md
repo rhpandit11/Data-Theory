@@ -8,6 +8,8 @@
 
 **SQL:** is a standard database language that is used to create, maintain and retrieve the relational database.
 
+---
+
 **Types of SQL:**
 
 1. DDL : Data Defination Language - Handle database schema and used to construct and modify the structure of database objects {CREATE, ALTER, DROP, TRUNCATE}
@@ -15,6 +17,17 @@
 3. DCL: Data Control Language - Used to control access to data stored in database {GRANT, REVOKE}
 4. DQL: Data Query Language - allow you to get and organise data from database {SELECT}
 5. TCL: Transaction Control Language - used to manage database transaction(squence of one or more sql operations that are treated as a unit.) {COMMIT, ROLLBACK}
+
+Difference Between DROP and TRUNCATE:
+
+| DROP                                                                                                               | TRUNCATE                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------- |
+| In the drop table data and its defination is deleted<br />with their full structure                                | it preserves the structure of the table for further<br />use exist but deletes all the data |
+| Drop is used to eliminate existing complications and fewer complications<br />in the whole database form the table | used to eliminate the tuple from the table                                                  |
+| Integrity constraints get removed in the DROP command                                                              | Integrity commands exists in the truncate command                                           |
+| since the structure does not exist, the view of the table does not exist<br />in the drop command                  | since the structure exists the view of the table exists in the<br />truncate command        |
+| free the memory                                                                                                    | does not free the table space from the memory                                               |
+| it slow as compare to truncate                                                                                     | it is fast                                                                                  |
 
 ---
 
@@ -36,6 +49,13 @@
 * CONSISTENCY: Transcation move in a database one valid state to another.
 * ISOLATION: Multiple transactions independetally happen without interfare.
 * DURABILITY: After one transaction committed, it can't be modified even after system failure.
+
+Example:
+
+* **Atomicity:** Consider a fund transfer between two bank accounts. If the debiting of one account succeeds but the crediting of the other account fails due to a technical glitch, the entire transaction is rolled back to maintain the atomicity of the operation.
+* **Consistency:** In an e-commerce platform, when a user places an order, the inventory of the purchased items is decremented to reflect the items’ availability accurately.
+* **Isolation:** In a reservation system for flight tickets, two users attempting to book the same seat simultaneously are isolated from each other. Only one user’s reservation is accepted, preventing double bookings.
+* **Durability:** After a user confirms an edit to a document in a word processing application, the changes are permanently stored in the document file, even if the application crashes before the document is closed.
 
 ---
 
@@ -82,10 +102,7 @@
 
 reasons for denormalizing the data: We de-normalize data when we need better performance. Sometimes there are many joins in a query due to highly normalized data. In that case, for faster data retrieval it becomes essential to de-normalize data.
 
-
 ---
-
-
 
 **Relationship in SQL:**
 
@@ -163,7 +180,7 @@ reasons for denormalizing the data: We de-normalize data when we need better per
 
 ---
 
-Cursor: 
+Cursor:
 
 **LOGICAL ORDER OF OPERATIONS IN SQL:**
 
