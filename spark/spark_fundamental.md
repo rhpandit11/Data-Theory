@@ -1,4 +1,4 @@
-**Spark:**  spark is a open-source unified analytics engine for large scale data processing.
+**Spark:**  spark is an open-source unified analytics engine for large scale data processing.
 
 **Spark Architecture:**
 
@@ -54,7 +54,7 @@
 
 ---
 
-SparkContext: was the primary entry point for interacting with spark represent the connection to the spark cluster and was responsible for co-ordinating task execution.
+SparkContext: was the primary entry point for interacting with spark, represent the connection to the spark cluster and was responsible for co-ordinating task execution.
 
 SparkSession: spark2.0 introduced as unified entry point that encapsulates sparkcontext while offering much more.Provides user-friendly API for working with structured data in the form of dataframes and datasets.
 
@@ -62,7 +62,7 @@ SparkSession: spark2.0 introduced as unified entry point that encapsulates spark
 | -------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
 | preferred way to work with the lower-level API like RDD,<br />Accumulator and broadcast variable                           | prefered way when to work with data structure like<br />dataframe and datasets as it provides simpler interface |
 | can be created only once in spark application at any time                                                                  | can be created multiple times                                                                                   |
-| provides method for creating RDD's accumulator and broadcasying variable<br />as well as method to start task on executors | provides method for creating dataframe and datasets <br />as well as methods for reading and writting data.     |
+| provides method for creating RDD's accumulator and broadcasying variable<br />as well as method to start task on executors | provides method for creating dataframe and datasets<br />as well as methods for reading and writting data.      |
 
 ---
 
@@ -135,7 +135,7 @@ Step3: DAG Execution: Action Triggering -> Stages breaks into Tasks -> DAG Sched
 
 ---
 
-**Lineage Graph:** Lineage Graph is a historical record of transformations, tracing back to the original data. It is the representation of dependencies in between RDDs rather than the actual data.
+**Lineage Graph:** Lineage Graph is a historical record of transformations, tracing back to the original data. It represent the dependency in between rdds.
 
 **Use:**
 
@@ -144,12 +144,12 @@ Step3: DAG Execution: Action Triggering -> Stages breaks into Tasks -> DAG Sched
 
 **DAG VS Lineage Graph:**
 
-|                | DAG                                                                     | Lineage                                                                                |
-| -------------- | ----------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| Representation | dependencies between tasks or events                                    | history of data transformations or processing steps                                    |
-| Cycle          | A DAG does not contain cycles                                           | lineage graph can contain cycles.                                                      |
-| Direction      | direction of edges represent the flow of dependencies between tasks     | the direction of edges represent the flow of data transformations or processing steps. |
-| Use            | used in task scheduling, workflow management, and distributed computing | used in data lineage and data quality analysis.                                        |
+|                | DAG                                                                           | Lineage                                                                                      |
+| -------------- | ----------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| Representation | dependencies between tasks or events                                          | history of data transformations or processing steps                                          |
+| Cycle          | A DAG does not contain cycles                                                 | lineage graph can contain cycles.                                                            |
+| Direction      | direction of edges represent the flow <br />of dependencies between tasks     | the direction of edges represent the flow of data transformations <br />or processing steps. |
+| Use            | used in task scheduling, workflow <br />management, and distributed computing | used in data lineage and data quality analysis.                                              |
 
 Note: Because dag represent dependencies between task that must be executed in particular order while lineage Represent history of data transformations that may be repeated or looped over.
 
