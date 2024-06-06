@@ -54,7 +54,7 @@ Example:
 
 * **Atomicity:** Consider a fund transfer between two bank accounts. If the debiting of one account succeeds but the crediting of the other account fails due to a technical glitch, the entire transaction is rolled back to maintain the atomicity of the operation.
 * **Consistency:** In an e-commerce platform, when a user places an order, the inventory of the purchased items is decremented to reflect the items’ availability accurately.
-* **Isolation:** In a reservation system for flight tickets, two users attempting to book the same seat simultaneously are isolated from each other. Only one user’s reservation is accepted, preventing double bookings.
+* **Isolation:** In a reservation system for flight tickets, two users attempting to book the same seat simultaneously are isolated from each other. Only one user's reservation is accepted, preventing double bookings.
 * **Durability:** After a user confirms an edit to a document in a word processing application, the changes are permanently stored in the document file, even if the application crashes before the document is closed.
 
 ---
