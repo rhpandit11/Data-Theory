@@ -1,5 +1,17 @@
 **Spark:**  spark is an open-source unified analytics engine for large scale data processing.
 
+**Difference between mapreduce and spark:**
+
+| MapReduce                                                 | Spark                                                                  |
+| --------------------------------------------------------- | ---------------------------------------------------------------------- |
+| read/write data to a disk                                 | spark can do it in-memory make it faster.                              |
+| developed in java                                         | developed in scala                                                     |
+| Fault tolerance is done through replication               | done throgh rdd                                                        |
+| Hard to work with real-time data                          | Easy                                                                   |
+| Less costly comparison to spark                           | more costly                                                            |
+| Hadoop can work or process far larger datasets than spark | Less compare to hadoop                                                 |
+| MapReduce requires an external scheduler for jobs.        | Spark has its own job scheduler due to the in-memory data computation. |
+
 **Spark Architecture:**
 
 1. **Liabrary Layer** - spark sql,spark streaming, spark Mllib, spark graphx
@@ -144,12 +156,12 @@ Step3: DAG Execution: Action Triggering -> Stages breaks into Tasks -> DAG Sched
 
 **DAG VS Lineage Graph:**
 
-|                | DAG                                                                           | Lineage                                                                                      |
-| -------------- | ----------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| Representation | dependencies between tasks or events                                          | history of data transformations or processing steps                                          |
-| Cycle          | A DAG does not contain cycles                                                 | lineage graph can contain cycles.                                                            |
-| Direction      | direction of edges represent the flow <br />of dependencies between tasks     | the direction of edges represent the flow of data transformations <br />or processing steps. |
-| Use            | used in task scheduling, workflow <br />management, and distributed computing | used in data lineage and data quality analysis.                                              |
+|                | DAG                                                                          | Lineage                                                                                     |
+| -------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| Representation | dependencies between tasks or events                                         | history of data transformations or processing steps                                         |
+| Cycle          | A DAG does not contain cycles                                                | lineage graph can contain cycles.                                                           |
+| Direction      | direction of edges represent the flow<br />of dependencies between tasks     | the direction of edges represent the flow of data transformations<br />or processing steps. |
+| Use            | used in task scheduling, workflow<br />management, and distributed computing | used in data lineage and data quality analysis.                                             |
 
 Note: Because dag represent dependencies between task that must be executed in particular order while lineage Represent history of data transformations that may be repeated or looped over.
 
@@ -320,21 +332,3 @@ coalesce and repartition:
 coalesce: is used to decrease the number of partitions without invoking Shuffling. It used in when output partitions is less than the input.
 
 repartition: helps to increase or decrease the number of partitions by doing Shuffling of data.
-
-Working:
-
-SparkSubmit=====> Driver Program launched ======> request resources to cluster manager ======>  main program of user function of the user processing program created
-
-Based on main program execution logic processed =====> parallely spark/session also created ====> using spark context different Transformation and action are processed
-
-till action called all sparkcontext will go in the form of dag and will create RDD lineage.
-
-Once Action called ===> Job created ===> breakdown to stages =====> then to tasks ====> after that tasks are launched by cluster manager on the worker node and
-
-this done with the help task Scheduler class.
-
-tasks ====> launched to different executors in worker node through cluster for execution.===> resources allocation and tracking of the jobs and task performed
-
-by cluster manager.
-
-Result return to driver program by executor.
