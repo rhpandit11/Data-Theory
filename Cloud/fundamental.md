@@ -273,9 +273,123 @@ various aspect:
 
 Types:
 
-| EXTERNAL  | REGIONAL INTERNAL | REGIONAL EXTERNAL |
-| --------- | ----------------- | ----------------- |
-| HTTP(s)   | TCP/UDP LB        | TCP/UDP Network   |
-| Classic   | HTTP(s) LB        | HTTP(s)           |
-| TCP Proxy | TCP Proxy         |                   |
-| SSL Proxy |                   |                   |
+| EXTERNAL  | REGIONAL INTERNAL       | REGIONAL EXTERNAL            |
+| --------- | ----------------------- | ---------------------------- |
+| HTTP(s)   | TCP/UDP LB(pass-throgh) | TCP/UDP Network(pass-throgh) |
+| Classic   | HTTP(s) LB              | HTTP(s)                      |
+| TCP Proxy | TCP Proxy               |                              |
+| SSL Proxy |                         |                              |
+
+* Global Load Balancing when your backends are distributed accross multiple regions.
+* Regional Load balancing when your backends are in one region or when you have juridictional compliance requirements for traffic to stay in a praticular region.
+* External load balancers distribute traffic from the internet to your google cloud vpc.
+* Premium tier delivers traffic on google's premium backbone. It gives high performance and low latency.
+* Standard tier uses regular ISP network. It is low cost alternative for apps that don't have stric requirement. for latency & performance.
+* Proxy Load Balancers terminate incoming client connections and open new connection from the LB to backends.
+* Pass-throgh LB do not terminate client connections instead load-balanced packets are received by backends VMS with the packet source, destination, and if applicable port information. Unchanged connections are terminated by the backends VM's go directly to the client's not back throgh the load balancer. The term for this is direct server return.
+
+Underlying Technology of Google Cloud Load Balancers:
+
+1. Google Front Ends (GFES) are software defined, distributed system that are located in google points of presence(Pops) and perform global load balancing in conjuction with other systems and control plane.
+1. Androme is google cloud's SDN virtualisation stack.
+1. Maglev is a distributed system for network load balancing.
+1. Envoy Proxy is and open-source edge and service proxy designed for cloud-native applications.
+
+---
+
+**IAM - Identity(user/person) Access(Role) Management(Resources)**
+
+* IAM lets you grant granular access to specific google cloud resources and helps to prevent access to other resources.
+* IAM lets you adopt the security principle of least priviledged which states that nobody should have more permissions than they actually need.
+* With IAM, you manage access control by defining who('Identity') has what access(role) for which resources.
+* IAM permission to access a resource is n9it granted directly to the end user. Instead permissions are grouped into roles, and roles are granted to authenticated principles(members).
+* Policy defines and enforces what roles are granted to which principles.Each allow policy is attached to a resource.(Member+role)
+* When an authenticated principla attempts to access a resource IAM checks the resource's allow policy to determine whether the action is permitted.
+
+Features:
+
+* Lets you authrozie who can take specific action on resources to give you full control and visibilty on your google cloud service centrally.
+* Permissions are represnetd in the form of service.resources.verb
+* can map job functions into groups and roles.
+* with IAM users only get access to what they need to get the job done.
+* Cloud IAM enables you to grant access to cloud resources at fine-grined levels, well beyond project level access.
+
+PARTS of IAM:
+
+1. Principals/Members: A pricinple can be
+   * google account
+   * service account
+   * google group
+   * google workspace
+   * cloud identity domain
+   * authenticated users
+   * all user
+2. Role: A role is a collection of permissions. Permission is determine what operations are allowed on a resource.When you grant a role to a principal, you grant all the permissions that the role contains.
+3. Policy: Policy is a collection of role bindings that bind one or more principals to individual roles.When you want to define who has what type of access on a resource you create allow policy and attach resource.
+
+* Google Account: Any email address that's associated with a google account can be an identity, including gmail.com ot other domains.
+* Service Account: A service account is an account for an application or compute workload instead of an individual end user.
+* Google Group: is a collection of google accounts and service accounts. Every google group has a unique email address that's associated with the group. You can grant and change access controls for a whole group at once instead of granting or changing access controls. One at a time for individual users or service accounts.
+* Google workspace account: Google workspace accounts are associated with your organisation internet domain name, such as example.com.When you create a google account for a new user such as username@gmail.com, that google account is added to the virtual group for your google workspace account.
+* Cloud Identity Domain: is like a google workspace account becaus it represents a virtual group of all google accounts in an organization.However cloud identity domain users don't have access to google workspace applications and features.
+* All Authenticated User: The value all authtucated users is a special identifier the represent all service accounts and all users on the internet who have authenticated with a google account.This identifier includes accounts that are not connected to google workspace. Account or cloud identity domain such as personal gmail accounts. User who are not authenticated such as anonymous visitors are not included.
+* All Users: The value all users is a special identifier that represents anyone who is on the internet including authenticated and unauthenticated users.
+
+Roles:
+
+* A role contains a set of permissions that allows you to perform specific actions on google cloud resources.
+* you don't directly grat users permissions in IAM. Instead you grant them roles, which bundle one or more permissions.
+* To make permissions available to member including users, group and service accounts you grant roles to the members.
+
+Types of roles:
+
+1. Basic/Primitive Roles:
+
+| Owner                            | Editor             | Viewer    | Billing Admin                | Browser                           |
+| -------------------------------- | ------------------ | --------- | ---------------------------- | --------------------------------- |
+| Super user at<br />project level | Modify codes       | Read only | Manage Billing               | kind of viwer with limited access |
+| Add or remove<br />members       | Deploy apps        |           | Add or remove administartors |                                   |
+| Delete & create projects         | Configure service  |           |                              |                                   |
+| Setup Billing for project        | Stop start service |           |                              |                                   |
+
+2. Predifined Roles:
+   * Provides granular access for a specific service and is managed and defined by google cloud.
+   * Prevents unwanted access to othe resources
+   * Google is responsible for updating and adding permissions as necessary
+   * You can grant multiple roles to the same user
+3. Custome Roles
+   * provide granular access according to a user defined list of permissions.
+   * you can create a custom IAM role with one or more permissions and then grant that custom role to users or groups
+   * custom roles are not maintained by google
+   * You can grant multiple roles to a user or a group
+
+**Policy(principle+role+condition) :** You cant grant roles to users by creating an allow policy which is a collection of statements that define who has what tyep of access.
+
+* A policy is a collection of bindings audit configuration and metadata.
+* A binding associates one or more members with a single role and any context-specific conditions that change how and when the role is granted.
+* Each binding includes that following fields
+* A member known as an identity or principla can be a
+  * user account
+  * service account
+  * google group
+  * domain
+* A role which is name collection of permissions that grant access to perform actions on google cloud resources
+* A condition which is a logical expression that further constraints the role binding based on attributes about the request such as its origin the target resource etc.
+
+Service Accounts:
+
+* A service account is a special kind of account used by an application or a vitual machine not a person.
+* Application use service accounts to make authorized API calls, authorized as either
+  * the service account itself
+  * as google workspace
+  * as cloud identity users through domain
+  * wide delegation
+* A service account is identified by its email address, which is unique to the account.
+* Each service account is associated with two sets of public/private RSA key pairs used to authenticate to google.
+
+Types of Service Accounts:
+
+1. Default service account
+2. user-managed service account
+
+A service account is also a resource with IAM policies attached to it, which means you can define who can use the account and who can perform specific actions on the service account.0
