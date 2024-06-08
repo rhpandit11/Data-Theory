@@ -73,6 +73,46 @@
 
 MapReduce: is the processing layer in hadoop, designed for processing huge volumes of data in parallel by dividing the task into the set of independent task.
 
+Components of MapReduce
+
+1. Map Phase:
+
+- Input: The input data is divided into smaller, manageable chunks, typically using an input format such as key-value pairs.
+- Processing: Each chunk is processed by a mapper function that performs a specific task, such as filtering, sorting, or transforming the data.
+- Output: The mapper function generates intermediate key-value pairs.
+
+2. Shuffle and Sort Phase:
+
+- Intermediate Data: The intermediate key-value pairs produced by the mappers are shuffled and sorted based on the keys. This phase ensures that all values associated with the same key are grouped together.
+- Distribution: The sorted key-value pairs are distributed to reducers based on the key.
+
+3. Reduce Phase:
+
+- Input: Each reducer receives a set of intermediate key-value pairs grouped by the key.
+- Processing: The reducer function processes these groups, typically aggregating or summarizing the data.
+- Output: The reducer generates the final output key-value pairs.
+
+Steps in MapReduce
+
+1. Splitting: The input data is split into chunks, each of which will be processed by a separate mapper.
+2. Mapping: The mapper processes each chunk independently, producing intermediate key-value pairs.
+3. Shuffling and Sorting: The framework shuffles and sorts the intermediate data by key, ensuring that all values associated with a
+   given key are sent to the same reducer.
+4. Reducing: The reducer processes the grouped intermediate key-value pairs to produce the final output.
+
+Advantages of MapReduce
+
+- Scalability: Can handle very large datasets by distributing the workload across many machines.
+- Fault Tolerance: Can recover from failures of individual nodes in the cluster.
+- Simplicity: Provides a simple programming model that abstracts the complexity of parallel processing and data distribution.
+
+Disadvantages of MapReduce
+
+- Latency: Not suitable for real-time processing due to the batch-oriented nature of the framework.
+- Complexity: Requires careful design of the map and reduce functions, and understanding of data distribution.
+- Resource Intensive: Can require significant computational and storage resources, particularly for large datasets.
+
+
 MapReduce Works: Mapreduce work in two phase 1.Map(write complex logic) 2.Reduce(light-weight processing like aggregation)
 
 Flow Chart:
