@@ -1,3 +1,14 @@
+**Benefits of Python:**
+
+* Object-Oriented Language
+* High-Level Language
+* Dynamically Typed language
+* Extensive support Libraries
+* Presence of third-party modules
+* Open source and community development
+* Portable and Interactive
+* Portable across Operating systems
+
 **Is Python a compiled language or an interpreted language?**
 
 python is actually partially compiled and partially interpreted language. Because first it compile it and generates byte code using Python virtual machine.
@@ -19,7 +30,18 @@ Immutable Type -> not change in run time ex: string, tuple
 | **Mutability**     | Mutable (can add or remove elements).       | Mutable (can add, modify, or remove key-value pairs). |
 | **Access Method**  | Elements are accessed directly.             | Values are accessed using keys.                       |
 | **Use Case**       | To store unique elements.                   | To store related pieces of information.               |
-| **Example**        | my_set = {1, 2, 3}                          | my_dict = {“name”: “Alice”, “age”: 30}          |
+| **Example**        | my_set = {1, 2, 3}                          | my_dict = {“name”: “Alice”, “age”: 30}<br />    |
+
+****Differentiate between List and Tuple?****
+
+
+| ****List****                                                      | ****Tuple****                                   |
+| ----------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| Lists are Mutable datatype                                                    | Tuples are Immutable datatype.                              |
+| Lists consume more memory                                                     | Tuple consumes less memory as compared to the list          |
+| The list is better for performing operations, such as insertion and deletion. | A Tuple data type is appropriate for accessing the elements |
+| The implication of iterations is Time-consuming                               | The implication of iterations is comparatively Faster       |
+
 
 **What is Lambda Function?**
 
@@ -41,11 +63,15 @@ else -> block code used for when not error found
 
 finally -> block code used for execute code without checking try and except block
 
+****Difference between for loop and while loop in Python****
+
+For loop used to iterate through the element lik list,tuple,set,dict, use for loop when there have both start and end condition. Where as while loop have the end condition.
+
 **Can we Pass a function as an argument?**
 
 Yes, we can pass a function as an argument inside another function because its an object.
 
-**What are *args and *kwargs?**
+**What are *args and *kwargs?**** 
 
 *args(Non-Keyword Arguments/Positional Arguments) -> allow functions to accept any number of positional arguments i.e non-keyword arguments(key,value)
 
@@ -56,6 +82,12 @@ Yes, we can pass a function as an argument inside another function because its a
 location where we define variable and in need we can access that.
 
 Local Variable -> define in a function or in a loop
+
+**What is docstring in Python?**
+
+document string or docstring provide a convenient way of associating documentation with python modules,functions,classes and methods
+
+”’triple single quotes”’ or “””triple double quotes”””
 
 **What is Dynamically typed language?**
 
@@ -86,7 +118,6 @@ Iterator allow ietration on collections of data to like list, tuple, dict and se
 | **Iterated by using:** | for loop           | for loop                              |
 | **Methods used:**      | __iter__()   | __iter__() and __next__() |
 
-
 **What are generators in Python?**
 
 In a function if there is one and more than one yield statement than that is generator.Yield keyword pause the execution of current line and save its state and afetr that start from there the execution start as per the requirement.
@@ -103,7 +134,7 @@ The `zip()` function returns a zip object, which is an iterator of tuples where 
 
 Pickling is the process of converting python objects such as list, dictionaries, classes, or custom objects into a format that can be stored or transmitted efficiently. This serialized format is known as "pickle" or "pickled" object.
 
-Unpickling means retrieve the serialized or pickled object and reconstruct it to its original format. 
+Unpickling means retrieve the serialized or pickled object and reconstruct it to its original format.
 
 pickle.dump() -> for pickling the object
 
