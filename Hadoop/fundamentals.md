@@ -1,4 +1,6 @@
- **Distributed FileSystem**: filesystem that allow store data in multiple machines or nodes in a cluster and allow multiple users to access data.
+**Hadoop:** Apache Hadoop is a framework which provides us various services or tools to store and process Big Data. It helps in analyzing Big Data and making business decisions out of it, which can’t be done efficiently and effectively using traditional systems.
+
+**Distributed FileSystem**: filesystem that allow store data in multiple machines or nodes in a cluster and allow multiple users to access data.
 
 **HDFS:** In hadoop framework HDFS is the primary data storage system.
 
@@ -67,6 +69,107 @@
 
 ---
 
+Inetrview Question:
+
+###### What are active and passive “NameNodes”?
+
+* Active “NameNode” is the “NameNode” which works and runs in the cluster.
+* Passive “NameNode” is a standby “NameNode”, which has similar data as active “NameNode”.
+
+When the active “NameNode” fails, the passive “NameNode” replaces the active“NameNode” in the cluster. Hence, the cluster is never without a“NameNode” and so it never fails.
+
+###### What happens when two clients try to access the same file in the HDFS?
+
+HDFS supports exclusive writes only.
+
+When the first client contacts the “NameNode” to open the file for writing, the “NameNode” grants a lease to the client to create this file. When the second client tries to open the same file for writing, the "NameNode” will notice that the lease for the file is already granted to
+ another client, and will reject the open request for the second client.
+
+###### How does NameNode tackle DataNode failures?
+
+NameNode periodically receives a Heartbeat (signal) from each of the DataNode in the cluster, which implies DataNode is functioning properly.A block report contains a list of all the blocks on a DataNode. If a DataNode fails to send a heartbeat message, after a specific period of time it is marked dead.
+
+The NameNode replicates the blocks of dead node to another DataNode using the replicas created earlier.
+
+###### What will you do when NameNode is down?
+
+The NameNode recovery process involves the following steps to make the Hadoop cluster up and running:
+
+1. Use the file system metadata replica (FsImage) to start a new NameNode.
+2. Then, configure the DataNodes and clients so that they can acknowledge this new NameNode, that is started.
+3. Now the new NameNode will start serving the client after it has completed loading the last checkpoint FsImage (for metadata information) and received enough block reports from the DataNodes.
+   Whereas, on large Hadoop clusters this NameNode recovery process may consume a lot of time and this becomes even a greater challenge in the case of the routine maintenance.
+
+###### What is a checkpoint?
+
+In brief, “Checkpointing” is a process that takes an FsImage, edit log and compacts them into a new FsImage. Thus, instead of replaying an edit log, the NameNode can load the final in-memory state directly from the FsImage. This is a far more efficient operation and reduces NameNode startup time. Checkpointing is performed by Secondary NameNode.
+
+###### How is HDFS fault tolerant?
+
+When data is stored over HDFS, NameNode replicates the data to several DataNode. The default replication factor is 3. You can change the
+configuration factor as per your need. If a DataNode goes down, the NameNode will automatically copy the data to another node from the
+replicas and make the data available. This provides fault tolerance in HDFS.
+
+###### Can NameNode and DataNode be a commodity hardware?
+
+The smart answer to this question would be, DataNodes are commodity hardware like personal computers and laptops as it stores data and are required in a large number. But from your experience, you can tell that, NameNode is the master node and it stores metadata about all the blocks stored in HDFS. It requires high memory (RAM) space, so NameNode needs to be a high-end machine with good memory space.
+
+###### Why do we use HDFS for applications having large data sets and not when there are a lot of small files?
+
+HDFS is more suitable for large amounts of data sets in a single file as compared to small amount of data spread across multiple files. As you
+know, the NameNode stores the metadata information regarding the file system in the RAM. Therefore, the amount of memory produces a limit to the number of files in my HDFS file system. In other words, too many files will lead to the generation of too much metadata. And, storing these metadata in the RAM will become a challenge. As a thumb rule,metadata for a file, block or directory takes 150 bytes.
+
+###### How do you define “Rack Awareness” in Hadoop?
+
+**Rack Awareness** is the algorithm in which the “NameNode” decides how blocks and their replicas are placed, based on rack definitions to minimize network traffic between “DataNodes” within the same rack. Let's say we consider replication factor 3 (default), the policy is that“for every block of data, two copies will exist in one rack, third copy in a different rack. This rule is known as the “Replica Placement Policy.
+
+###### What is “speculative execution” in Hadoop?
+
+If a node appears to be executing a task slower, the master node can redundantly execute another instance of the same task on another node.
+Then, the task which finishes first will be accepted and the other one is killed. This process is called “speculative execution.
+
+###### How can I restart “NameNode” or all the daemons in Hadoop?
+
+This question can have two answers, we will discuss both the answers. We can restart NameNode by following methods:
+
+1. You can stop the NameNode individually using ***/sbin /hadoop-daemon.sh stop namenode ***command and then start the NameNode using*.* ***/sbin/hadoop-daemon.sh start namenode ***command.
+2. To stop and start all the daemons, use**.**  ***/sbin/stop-all.*** and then use .***/sbin/start-all.sh*** command which will stop all the daemons first and then start all the daemons.
+
+These script files reside in the sbin directory inside the Hadoop directory.
+
+###### What is the difference between an “HDFS Block” and an “Input Split”?
+
+The“HDFS Block” is the physical division of the data while “Input Split”is the logical division of the data. HDFS divides data in blocks for
+storing the blocks together, whereas for processing, MapReduce divides the data into the input split and assign it to mapper function.
+
+###### Name the three modes in which Hadoop can run.
+
+The three modes in which Hadoop can run are as follows:
+
+1. ***Standalone (local) mode*** : This is the default mode if we don’t configure anything. In this mode, all the components of Hadoop, such NameNode, DataNode, ResourceManager, and NodeManager, run as a single Java process. This uses the local filesystem.
+2. ***Pseudo-distributed mode*** :
+   A single-node Hadoop deployment is considered as running Hadoop system in pseudo-distributed mode. In this mode, all the Hadoop services, including both the master and the slave services, were executed on a single compute node.
+3. ***Fully distributed mode*** :
+   A Hadoop deployments in which the Hadoop master and slave services run on separate nodes, are stated as fully distributed mode.
+
+**What is Job History Server**
+
+It maintains information about MapReduce jobs after the Application Master terminates.
+
+**How does NameNode tackles data node failures?**
+
+NameNode periodically receives a Heartbeat (signal) from each of the DataNode in the cluster, which implies DataNode is functioning properly.
+
+**What will you do when NameNode is down?**
+
+Use the file system metadata replica (FsImage) to start a new NameNode. Then, configure the DataNodes and clients so that they can acknowledge this new NameNode, that is started.
+
+**What is checkpoint?**
+
+Checkpointing” is a process that takes an FsImage, edit log and compacts them into anew FsImage. Thus, instead of replaying an edit log, the NameNode can load the final in-memory state directly from the FsImage.
+
+---
+
     MapReduce
 
 ---
@@ -111,7 +214,6 @@ Disadvantages of MapReduce
 - Latency: Not suitable for real-time processing due to the batch-oriented nature of the framework.
 - Complexity: Requires careful design of the map and reduce functions, and understanding of data distribution.
 - Resource Intensive: Can require significant computational and storage resources, particularly for large datasets.
-
 
 MapReduce Works: Mapreduce work in two phase 1.Map(write complex logic) 2.Reduce(light-weight processing like aggregation)
 
