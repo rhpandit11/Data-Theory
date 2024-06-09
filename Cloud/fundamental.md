@@ -291,9 +291,9 @@ Types:
 Underlying Technology of Google Cloud Load Balancers:
 
 1. Google Front Ends (GFES) are software defined, distributed system that are located in google points of presence(Pops) and perform global load balancing in conjuction with other systems and control plane.
-1. Androme is google cloud's SDN virtualisation stack.
-1. Maglev is a distributed system for network load balancing.
-1. Envoy Proxy is and open-source edge and service proxy designed for cloud-native applications.
+2. Androme is google cloud's SDN virtualisation stack.
+3. Maglev is a distributed system for network load balancing.
+4. Envoy Proxy is and open-source edge and service proxy designed for cloud-native applications.
 
 ---
 
@@ -393,3 +393,27 @@ Types of Service Accounts:
 2. user-managed service account
 
 A service account is also a resource with IAM policies attached to it, which means you can define who can use the account and who can perform specific actions on the service account.0
+
+Big Query
+
+Session user
+
+16 nested views is the limit
+
+smart tuning
+
+materialized view
+
+partioned by how many type 
+
+wildcard tables
+
+structured array in big qury how to query them.
+
+slot
+
+clustering vs partioning
+
+Time Travel in big query
+
+architecture
