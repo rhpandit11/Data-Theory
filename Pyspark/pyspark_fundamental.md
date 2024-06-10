@@ -11,7 +11,62 @@
 
 ---
 
-**SparkContext:** PySpark SparkContext is an initial entry point of the spark functionality. It also represents Spark Cluster Connection and can be used for creating the Spark RDDs (Resilient Distributed Datasets) and broadcasting the variables on the cluster.
+```python
+df.format(....)\
+  .option("key","value")\
+  .schema(....)\
+  .load(...)
+```
+
+format -> data file format(by default parquet)
+
+    (csv,json,JDB/ODBC,Table,Parquet)
+
+option -> inferschema,mode,header(optional)
+
+schema -> manual schema you can pass (optional)
+
+load -> path from where our data is reading
+
+dataframe Reader API Access -> spark.read
+
+Example:
+
+```
+spark.read.format("csv")\
+          .option("header","true")\
+          .option("inferschema","true")\
+          .option("mode","FAILFAST")\
+          .load("c:/user\download\data.csv")
+  
+```
+
+Mode:
+
+1. FailFast -> fail execution if mailformed record
+2. DropmalFormed -> drop the corrupted record
+3. premissive -> default -> set nullvalue to corupted fields
+
+Schema We can create using two method
+
+1. structType (which defines our structure of DF),StructField(list of struct field)
+2. DDL
+
+```
+schema = structType([
+		   	structField("Id",IntegerType(),True),#nullable
+			structField("name",StringType(),True),
+			structField("age",InetegerType(),True)
+	            ])
+```
+
+DDL Method:
+
+```
+ddl_myschema = "id Integer,name string,age int"
+```
+
+
 
 ---
 
@@ -80,5 +135,4 @@ Creating DataFrames:
 Pyspark's startsWith() and endsWith() methods: methods belongs to column class and are used to searching datagrames rows by checking if the column values startswith some values or endwith some value.
 
 * **startsWith()** – returns boolean Boolean value. It is true when the value of the column starts with the specified string and False when the match is not satisfied in that column value.
-
 * **endsWith()** – returns boolean Boolean value. It is true when the value of the column ends with the specified string and False when the match is not satisfied in that column value.
