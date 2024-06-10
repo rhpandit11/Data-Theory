@@ -394,6 +394,49 @@ Types of Service Accounts:
 
 A service account is also a resource with IAM policies attached to it, which means you can define who can use the account and who can perform specific actions on the service account.0
 
+---
+
+BigQuery: BigQuery is a cloud-native data warehouse that handles petabyte-scale analysis using standard SQL. It enables analysts, data scientists, and developers to run fast SQL queries on vast amounts of data.
+
+Key features include:
+
+* Serverless architecture — no infrastructure to manage
+* Real-time analysis of streaming data
+* In-memory BI Engine for interactive analysis
+* Integrated machine learning for predictive insights
+* Geospatial analytics and visualization
+* Granular access controls and encryption
+
+Architecture:
+
+1. Capacitor - columnar format: store data in columnar storage format called capacitor allows BQ to store and efficiently uery semi-structured data with neseted and repeated fields.
+2. colossus - storage: distributed file system is designed to be reliable and fault-tolerant.replaced GFS and capable of handling cluster-wide replication recovery from disk crashes and distributed management.
+3. Dremel - execution engine: scalable, interactive ad-hoc query system for analysis of large scale read only nested data.
+
+* Root Node:
+  * reads metadata from tables
+  * The root server is responsible for communication between the client and mixers
+* Inetrmediate Nodes(mixer):
+  * performs query optimization and re-writes the query to include horizontal partitions of the table(shards), partial aggregation and filtering.
+* Leaf Nodes
+  * perform the heavy lifting of reading the data from colossus and performing filters and final aggregeation
+  * in a typical dremel tree, there are hundreds or thousands of leaf nodes.
+  * each node provides execution threads(slots), which BQ automatically calculates for each query based on its size and complexity.
+
+Execution:
+
+1. user submits a query to BQ ex: SELECT count(*) from mytable where timestamp > '2021-01-01';
+2. query received by root node of dremel serving tree, which is starting point of query execution.
+3. root nodes route the query to intermediate nodes(mixers) of the serving tree.These nodes perform query optimization and rewrite the query to include horizontal partitions of the table and partial aggregations and filtering.
+4. In this ex, query optimizer might decide to pation the table based on timestamp and include partitions that have timestamp greate than '2021-01-01'
+5. intermediate nodes than send ther rewritten query to leaf nodes for execution.Leaf node read the relevant partitions of the table from colossus and perform the filters and final aggregation specified in the query.
+6. in this ex, leaf node would count the number of rows in the partitions that have timestap greate than and return the result to intermediate nodes.
+7. Intermediate nodes than pass the result back up to serving tree to the root node which result final query such as "count(*) = 1000000" to the user.
+
+---
+
+
+
 Big Query
 
 Session user
@@ -404,7 +447,7 @@ smart tuning
 
 materialized view
 
-partioned by how many type 
+partioned by how many type
 
 wildcard tables
 
