@@ -2,23 +2,32 @@
 
 **Difference between mapreduce and spark:**
 
-| MapReduce                                                 | Spark                                                                  |
-| --------------------------------------------------------- | ---------------------------------------------------------------------- |
-| read/write data to a disk                                 | spark can do it in-memory make it faster.                              |
-| developed in java                                         | developed in scala                                                     |
-| Fault tolerance is done through replication               | done throgh rdd                                                        |
-| Hard to work with real-time data                          | Easy                                                                   |
-| Less costly comparison to spark                           | more costly                                                            |
-| Hadoop can work or process far larger datasets than spark | Less compare to hadoop                                                 |
-| MapReduce requires an external scheduler for jobs.        | Spark has its own job scheduler due to the in-memory data computation. |
+| MapReduce                                                                             | Spark                                                                  |
+| ------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| read/write data to a disk                                                             | spark can do it in-memory make it faster.                              |
+| developed in java                                                                     | developed in scala                                                     |
+| Fault tolerance is done through replication                                           | done throgh rdd                                                        |
+| Hard to work with real-time data                                                      | Easy                                                                   |
+| Less costly comparison to spark                                                       | more costly                                                            |
+| Hadoop can work or process far larger datasets than spark                             | Less compare to hadoop                                                 |
+| MapReduce requires an external scheduler for jobs.                                    | Spark has its own job scheduler due to the in-memory data computation. |
+| A program written using map reduce has more lines of code<br />when compared to spark | A program written using spark has less lines of code<br />             |
+
+**Features:** 
+
+* Speed → Due to in-memory processing
+* Caching → Spark has a caching layer to cache the data which makes the processing even faster
+* Deployment → Can be deployed in a Hadoop cluster or its own Spark cluster
+* Polyglot → Code can be written in Python, Java, Scala and R
+* Real-time → It was developed to support ‘real-time’ use cases.
 
 **Spark Architecture:**
 
-1. **Liabrary Layer** - spark sql,spark streaming, spark Mllib, spark graphx
-2. **Api Layer** - Python, Java, Scala, R
-3. **Spark Core Layer** -Provides  RDD API for distributed data processing, task schedular for parallelism, an in-memory memory management system.
-4. **Cluster Manager** - mesos, yarn, kubernets, standalone.
-5. **Storage Layer** - HDFS, S3, ADLS GEN2, Local Storage
+1. Programming Layer
+2. Liabrary Layer
+3. Spark core engine
+4. Spark Management or cluseter layer
+5. Storage layer
 
 ---
 
@@ -256,20 +265,6 @@ Difference between Standalone, mesos and yarn cluster:
 1. Independent cluster setup without a resource manager. | Master-slave architecture with dynamic resource allocation. | Part of the Hadoop ecosystem, follows master-slave architecture.
 2. Resources managed manually, suitable for smaller  development/testing environments. | Fine-grained resource sharing across multiple frameworks. | Primarily optimized for running Hadoop MapReduce jobs.
 3. Limited scalability and resource optimization compared to yarn, mesos | Supports diverse workloads including Hadoop, Spark, containers, etc. | Integrates tightly with Hadoop ecosystem tools and workflows.
-
----
-
-**Difference between mapreduce and spark:**
-
-| MapReduce                                                 | Spark                                                                  |
-| --------------------------------------------------------- | ---------------------------------------------------------------------- |
-| read/write data to a disk                                 | spark can do it in-memory make it faster.                              |
-| developed in java                                         | developed in scala                                                     |
-| Fault tolerance is done through replication               | done throgh rdd                                                        |
-| Hard to work with real-time data                          | Easy                                                                   |
-| Less costly comparison to spark                           | more costly                                                            |
-| Hadoop can work or process far larger datasets than spark | Less compare to hadoop                                                 |
-| MapReduce requires an external scheduler for jobs.        | Spark has its own job scheduler due to the in-memory data computation. |
 
 ---
 
