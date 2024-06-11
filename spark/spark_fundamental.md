@@ -11,9 +11,9 @@
 | Less costly comparison to spark                                                       | more costly                                                            |
 | Hadoop can work or process far larger datasets than spark                             | Less compare to hadoop                                                 |
 | MapReduce requires an external scheduler for jobs.                                    | Spark has its own job scheduler due to the in-memory data computation. |
-| A program written using map reduce has more lines of code<br />when compared to spark | A program written using spark has less lines of code<br />             |
+| A program written using map reduce has more lines of code<br />when compared to spark | A program written using spark has less lines of code                   |
 
-**Features:** 
+**Features:**
 
 * Speed → Due to in-memory processing
 * Caching → Spark has a caching layer to cache the data which makes the processing even faster
@@ -83,7 +83,7 @@ SparkSession: spark2.0 introduced as unified entry point that encapsulates spark
 | -------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
 | preferred way to work with the lower-level API like RDD,<br />Accumulator and broadcast variable                           | prefered way when to work with data structure like<br />dataframe and datasets as it provides simpler interface |
 | can be created only once in spark application at any time                                                                  | can be created multiple times                                                                                   |
-| provides method for creating RDD's accumulator and broadcasying variable<br />as well as method to start task on executors | provides method for creating dataframe and datasets<br />as well as methods for reading and writting data.      |
+| provides method for creating RDD's accumulator and broadcasting variable<br />as well as method to start task on executors | provides method for creating dataframe and datasets<br />as well as methods for reading and writting data.      |
 
 ---
 
