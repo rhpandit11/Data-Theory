@@ -23,11 +23,11 @@
 
 **Spark Architecture:**
 
-1. Programming Layer
-2. Liabrary Layer
-3. Spark core engine
-4. Spark Management or cluseter layer
-5. Storage layer
+1. Programming Layer (Java, Scala, R, Python)
+2. Liabrary Layer - (MLlib, SparkSQL, Graphx, Streaming)
+3. Spark core engine - (Apache Spark)
+4. Spark Management or cluseter layer - (Kubernetes, Apache Hadoop YARN, Mesos, Apache Spark)
+5. Storage layer - (Local FS, s3, blob storage, HDFS)
 
 ---
 
@@ -60,7 +60,7 @@
 
 **Spark Internally Working:**
 
-1. **Job Submission:** The user submits a Spark application using the SparkContext in the driver program.
+1. **Job Submission:** The user submits a Spark application using the SparkContext/session in the driver program.
 2. **DAG Construction:** The driver builds a logical Directed Acyclic Graph (DAG) of stages representing transformations and actions.
 3. **Task Scheduling:** The DAG is divided into smaller sets of tasks, which are then submitted to the cluster manager.
 4. **Task Execution:** The cluster manager allocates resources and schedules the tasks on available executors.
@@ -176,6 +176,28 @@ Note: Because dag represent dependencies between task that must be executed in p
 
 ---
 
+Lazy Evoluation: In spark it's a powerful concept that allows the optimization of data processing tasks by postponing the execution of transformations until an action is called.
+
+work: When we apply a transformations, spark records it but doesn't executes it immediately, meaning it builds dag of transformations and the execution occurs only when an action is triggered.
+
+Benefits:
+
+1. Optimization: Spark can optimize the entire computation plan by evaluating only the required transformations, skipping unnecessary work.
+2. Fault tolerance: Lazy evaluation allows Spark to recompute only the lost or incomplete data, ensuring fault tolerance.
+3. Performance: It enables pipelining of tasks, reducing the need to write intermediate results to disk.
+
+What if Mapreduce has lazy evoluation:
+
+1. On-demand processing 2. Resource Optimization 3.Pipeline Fusion 4. Reducing Redundant computations
+
+What if spark does not have lazy evoluation:
+
+Without lazy evaluation, Spark would need to execute transformations immediately, leading to unnecessary computations and increased memory usage.
+
+This could result in performance degradation, especially for complex data processing tasks involving multiple transformations.
+
+---
+
 Catalyst Optimizer: It is a robust query optimization framework, responsible for transforming and optimizing Logical and Physical query plans.
 
 How It Works:
@@ -209,28 +231,6 @@ Optimization Techniques:
 6. Persistent Storage: Intermediate data generated during transformations can be stored in memory or on disk. This allows Spark to use persisted data in case of node failures instead of recomputing it.
 7. Driver Recovery: If the driver node fails, the driver's state can be recovered by restarting the application and re-executing the driver code.
 8. Dynamic Resource Allocation: Spark supports dynamic allocation of cluster resources. This means that if a node fails, its resources can be reclaimed and reallocated to other tasks, ensuring efficient resource utilization.
-
----
-
-Lazy Evoluation: In spark it's a powerful concept that allows the optimization of data processing tasks by postponing the execution of transformations until an action is called.
-
-work: When we apply a transformations, spark records it but doesn't executes it immediately, meaning it builds dag of transformations and the execution occurs only when an action is triggered.
-
-Benefits:
-
-1. Optimization: Spark can optimize the entire computation plan by evaluating only the required transformations, skipping unnecessary work.
-2. Fault tolerance: Lazy evaluation allows Spark to recompute only the lost or incomplete data, ensuring fault tolerance.
-3. Performance: It enables pipelining of tasks, reducing the need to write intermediate results to disk.
-
-What if Mapreduce has lazy evoluation:
-
-1. On-demand processing 2. Resource Optimization 3.Pipeline Fusion 4. Reducing Redundant computations
-
-What if spark does not have lazy evoluation:
-
-Without lazy evaluation, Spark would need to execute transformations immediately, leading to unnecessary computations and increased memory usage.
-
-This could result in performance degradation, especially for complex data processing tasks involving multiple transformations.
 
 ---
 
