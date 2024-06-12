@@ -29,6 +29,13 @@
 4. Spark Management or cluseter layer - (Kubernetes, Apache Hadoop YARN, Mesos, Apache Spark)
 5. Storage layer - (Local FS, s3, blob storage, HDFS)
 
+* Engine — Spark Core: It is the basic core component of Spark ecosystem on top of which the entire ecosystem is built. It performs the tasks of
+  scheduling/monitoring and basic IO functionality
+* Management — Spark cluster can be managed by Hadoop YARN, Mesos or Spark cluster manager.
+* Library — Spark ecosystem comprises of Spark SQL (for running SQL like queries on RDD or data from external sources), Spark Mlib (for ML),Spark Graph X (for constructing graphs for better visualisation of data), Spark streaming (for batch processing and streaming of data in the same application)
+* Programming can be done in Python, Java, Scala and R
+* Storage — Data can be stored in HDFS, S3, local storage and it supports both SQL and NoSQL databases.
+
 ---
 
 **Spark Execution Model:**
