@@ -151,6 +151,18 @@ reasons for denormalizing the data: We de-normalize data when we need better per
 
 **VIEW:** kind of virtual table not stored in database and give query result through real tables.
 
+****Materialized Views:**** When the results of a view expression are stored in a database system, they are called materialized views.
+
+
+| Views                                                                                                                                                                                 | Materialized Views                                                                                                                                                                       |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Query expression are stored in the databases system,<br />and not the resulting tuples of the query expression.                                                                       | Resulting tuples of the query expression are stored in the databases system.                                                                                                             |
+| Views needs not to be updated every time the relation<br />on which view is defined is updated, as the tuples of the views<br /> are computed every time when the view is accessed. | Materialized views are updated as the tuples are stored in the database<br />system. It can be updated in one of three ways depending on the databases <br />system as mentioned above. |
+| It does not have any storage cost associated with it.                                                                                                                                 | It does have a storage cost associated with it.                                                                                                                                          |
+| It does not have any updation cost associated with it.                                                                                                                                | It does have updation cost associated with it.                                                                                                                                           |
+| There is an SQL standard of defining a view.                                                                                                                                          | There is no SQL standard for defining a materialized view, and the<br /> functionality is provided by some databases systems as an extension.                                           |
+| Views are useful when the view is accessed infrequently.                                                                                                                              | Materialized views are efficient when the view is accessed frequently as it<br />saves the computation time by storing the results before hand.                                          |
+
 **Advantages:**
 
 1. not store data in a physical location
@@ -175,12 +187,78 @@ reasons for denormalizing the data: We de-normalize data when we need better per
 
 **Types:**
 
-1. Clustered Index: Index which have primary key define
-2. Non-Clustered Index: index which have non-primary key
+1. Clustered Index: Index which have primary key define.You can create only one clustered index in a table.In this index contain a pointer to block but not direct data.If  we create a table with primary key then automatically clustered index created.If you have one clustered index on multiple columns, and that type of index is called a composite index.
+
+   * The data or file, that you are moving into secondary memory should be in sequential or sorted order.
+   * There should be a key value, meaning it can not have repeated values.
+2. Non-Clustered Index: The non-Clustered Index is similar to the index of a book. The index of a book consists of a chapter name and page number, if you want to read any topic or chapter then you can directly go to that page by using the index of that book. No need to go through each and every page of a book. The data is stored in one place, and the index is stored in another place. Since the data and non-clustered index is stored separately, then you can have multiple non-clustered indexes in a table.
+
+   ```sql
+   Create table Student
+   ( Roll_No int primary key, 
+   Name varchar(50), 
+   Gender varchar(30), 
+   Mob_No bigint );
+
+   insert into Student 
+   values (4, 'afzal', 'male', 9876543210 );
+
+   insert into Student 
+   values (3, 'sudhir', 'male', 9675432890 );
+
+   insert into Student 
+   values (5, 'zoya', 'female', 8976453201 );
+
+   create nonclustered index NIX_FTE_Name
+   on Student (Name ASC);
+   ```
+
+Difference Between Clustered and Non-Clustered Index :
+
+
+| CLUSTERED INDEX                                                                                                | NON-CLUSTERED INDEX                                                                                                                                                      |
+| -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| A clustered index is faster.                                                                                   | A non-clustered index is slower.                                                                                                                                         |
+| The clustered index requires less memory for operations.                                                       | A non-Clustered index requires more memory for operations.                                                                                                               |
+| In a clustered index, the clustered index is the main data.                                                    | In the Non-Clustered index, the index is the copy of data.                                                                                                               |
+| A table can have only one clustered index.                                                                     | A table can have multiple non-clustered indexes.                                                                                                                         |
+| The clustered index has the inherent ability to store data on the disk.                                        | A non-Clustered index does not have the inherent ability to store<br />data<br />on the disk.                                                                            |
+| Clustered index store pointers to block not data.                                                              | The non-clustered index stores both the value and a pointer to the<br />actual<br /> row that holds the data                                                             |
+| In Clustered index leaf nodes are actual data itself.                                                          | In Non-Clustered index leaf nodes are not the actual data itself<br />rather<br /> they only contain included columns.                                                   |
+| In a Clustered index, Clustered key defines the order<br />of data within a table.                             | In a Non-Clustered index, the index key defines the order of data<br />within the index.                                                                                 |
+| A Clustered index is a type of index in which table records<br /> are physically reordered to match the index. | A Non-Clustered index is a special type of index in which the logical<br />order of the index does not match the physical stored order of the <br />rows on the disk. |
+| The size of The primary clustered index is large.                                                              | The size of the non-clustered index is compared relativelyThe composite<br />is smaller.                                                                                 |
+| Primary Keys of the table by default are clustered indexes.                                                    | The[composite key](https://www.geeksforgeeks.org/composite-key-in-sql/) when used with unique constraints of the table act <br />as the non-clustered index.                |
+
+Use:
+
+****Index Clustering****
+
+* Perfect for tables where range queries, in particular, place a high value on data retrieval efficiency.
+* Ideal for tables with few updates or relatively static data because moving data around can slow down insert and update operations.
+
+****Non-Clustered index****
+
+* allows for the optimization of various query types without changing the data’s physical order on disk.
+* Ideal for tables where data changes often since inserts and updates are typically quicker than with clustered indexes.
 
 ---
 
-Cursor:
+**Correlated subquery:** n Correlated Query,  Outer query executes first and for every Outer query row Inner query is executed. Hence, the Inner query uses values from the Outer query.
+
+**Non-Correlated subquery** - In non-correlated query inner query does not dependent on the outer query. They both can run separately.
+
+
+| Sr. No.     | Key                             | Correlated subquery                                                                 | Non-Correlated subquery                                                                   |
+| ----------- | ------------------------------- | ----------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| **1** | **Basic**                 | **In correlated subquery, inner query is <br />dependent on the outer query** | **In non-correlated query inner query does not dependent <br />on the outer query** |
+| **2** | **IN and NOT In clause**  | **It does not use IN and NOT In clause**                                      | **Non-Correlated subquery are used along-with IN and<br /> NOT IN clause**          |
+| **3** | **Run Separately**        | **Inner query can not run alone**                                             | Inner query can not run alone and it's not depended on <br />outer quer**y** ``     |
+| **4** | **Performance**           | correlated subqueries are slower queries                                            | **They are faster than correlated subqueries**                                      |
+
+---
+
+Can you explain the difference between a CTE (Common Table Expression) and a subquery in SQL, and give an example of when to use each type?
 
 **LOGICAL ORDER OF OPERATIONS IN SQL:**
 
