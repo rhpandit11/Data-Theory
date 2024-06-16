@@ -32,7 +32,7 @@ dataframe Reader API Access -> spark.read
 
 Example:
 
-```
+```python
 spark.read.format("csv")\
           .option("header","true")\
           .option("inferschema","true")\
@@ -52,7 +52,7 @@ Schema We can create using two method
 1. structType (which defines our structure of DF),StructField(list of struct field)
 2. DDL
 
-```
+```python
 schema = structType([
 		   	structField("Id",IntegerType(),True),#nullable
 			structField("name",StringType(),True),
