@@ -59,9 +59,37 @@
 
 **Spark Programming Model:**
 
-1. **Job** - an action encountered in the application
-2. **Stage** - Jobs are divide into stages or A suffle dependency in the application
-3. **Task** - smaller unit of execution because one task is launched per partition
+1. **Job** - in spark refers to a sequence of transformations on data.whenever an action like count(), first() and save is called on RDD  a job is created.collect(), saveAsTextFile(), or count()
+2. **Stage** - in spark represents a sequence of tranformations that can be executed in a single pass i.e without shuffling of data.(e.g., reduceByKey, groupByKey, sortByKey)
+3. **Task** - in spark is the samallest unit of work that can be scheduled. Each stage is divided into task.A task is a unit of execution that runs on a single machine.
+
+```python
+import org.apache.spark.sql.SparkSession
+
+// Create a Spark Session
+val spark = SparkSession.builder
+  .appName("Spark Job Stage Task Example")
+  .getOrCreate()
+
+// Read a CSV file - this is a transformation and doesn't trigger a job
+val data = spark.read.option("header", "true").csv("path/to/your/file.csv")
+
+// Perform a transformation to create a new DataFrame with an added column
+// This also doesn't trigger a job, as it's a transformation (not an action)
+val transformedData = data.withColumn("new_column", data("existing_column") * 2)
+
+// Now, call an action - this triggers a Spark job
+val result = transformedData.count() 
+
+println(result)
+
+spark.stop()
+```
+
+1. A Job is triggered when we call the action `count()`. This is where Spark schedules tasks to be run.
+2. Stages are created based on transformations. In this example, we have two transformations (`read.csv` and `withColumn`). However, these two transformations belong to the same stage since there's no data shuffling between them.
+3. Tasks are the smallest unit of work, sent to one executor. The number of tasks depends on the number of data partitions. Each task performs
+   transformations on a chunk of data.
 
 ---
 
@@ -119,14 +147,14 @@ Difference Between RDD, Dataframe, Dataset:
 
 **Difference Between Dataframe, Dataset:**
 
-| Category          | Dataframe                                                                                         | Dataset                                                      |
-| ----------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
-| Data Type:        | Tabular data structure with rows and columns                                                      | collection of strongly typed JVM objects and it is type safe |
-| performance       | faster than dataset it used code generation and build on top of rdd and optimized for performance | slow because of JVM                                          |
-| API               | wide variety of API's than dataset and more flexible for data manipulation                        | limited API's but more concise and expressive               |
-| Type Safety       | Runtime Errors                                                                                    | Compile Time errors                                          |
-| Memory Management | Use High Memory                                                                                   | Low memory because of Tungsten                               |
-| launguages        | Java, Python, Scala, R                                                                            | Scala, Java                                                  |
+| Category          | Dataframe                                                                                              | Dataset                                                           |
+| ----------------- | ------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------- |
+| Data Type:        | Tabular data structure with rows and columns                                                           | collection of strongly typed JVM objects<br />and it is type safe |
+| performance       | faster than dataset it used code generation and build<br />on top of rdd and optimized for performance | slow because of JVM                                               |
+| API               | wide variety of API's than dataset and more flexible<br />for data manipulation                        | limited API's but more concise and<br />expressive               |
+| Type Safety       | Runtime Errors                                                                                         | Compile Time errors                                               |
+| Memory Management | Use High Memory                                                                                        | Low memory because of Tungsten                                    |
+| launguages        | Java, Python, Scala, R                                                                                 | Scala, Java                                                       |
 
 **Use:**
 
@@ -142,44 +170,30 @@ Transformation: are operations on RDD/Dataframes/Dataset that produce a new dist
 
 Action: are operations that trigger the execution of transformation and return value to the driver program or write data to external storage system.ex: collect,count,first,saveAsTextFile.
 
+| Features     | Transformation                             | Action                                                |
+| ------------ | ------------------------------------------ | ----------------------------------------------------- |
+| output       | New Dataset(RDD or Dataframe)              | value, side effect(e.g writting data)                 |
+| execution    | Lazy only planned                          | Triggered by an action, immediate computation         |
+| Optimization | spark optimized the overall execution plan | spark optimized the overall execution plan            |
+| Use case     | Defining data manipulation pipeline        | Retrieving results, interacting with external systems |
+
 ---
 
 **2. DAG:**  represents the logical execution plan for a set of stages in a Spark job.It is a combination of vertices as well as edges where vertices represents RDDs and edges represents operation to be applied on RDD.
+
+**DAG Execution:**
+
+1. Action Triggering: When an [action](https://medium.com/@think-data/dont-overlook-this-pyspark-foundation-f835d528ca7f) is called (e.g., `collect()`, `count()`), Spark triggers the execution. This action causes the DAG to be executed.
+2. Job and Stage Creation: Spark breaks the DAG into smaller units called stages. Each stage contains tasks that can be executed in parallel.
+3. Task Scheduling and Execution: Spark’s scheduler assigns tasks to individual executors across the cluster. Tasks within a stage can run concurrently whenever possible.
+4. Result Collection: The final results of the computation are collected back to the driver node (in the case of actions like `collect()`).
 
 Components: Stages | DAG Scheduler
 
 * Stages: set of tasks execute together in a single wave of computation.
 * DAG Scheduler: High - level scheduling layer implements stage-oriented scheduling.
 
-  Works:
-
-1. computes the stages of each job and schdule it, 2.subimt Task set to TaskScheduler 3. convert Logical Execution Plan to Physical Execution Plan. 4. React on fault tolerance
-
-Step1: DAG Creation: set of Transformation of rdd generated through Lazy Evoluation
-
-Step2: DAG optimization: Logical to Physical
-
-Step3: DAG Execution: Action Triggering -> Stages breaks into Tasks -> DAG Scheduler to Task Scheduler .
-
----
-
-**Lineage Graph:** Lineage Graph is a historical record of transformations, tracing back to the original data. It represent the dependency in between rdds.
-
-**Use:**
-
-1. It's the basis for Spark's lazy evaluation strategy, only executing transformations when an action is invoked.
-2. Allows Spark to recover lost data by re-computing it from the lineage graph.
-
-**DAG VS Lineage Graph:**
-
-|                | DAG                                                                          | Lineage                                                                                     |
-| -------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| Representation | dependencies between tasks or events                                         | history of data transformations or processing steps                                         |
-| Cycle          | A DAG does not contain cycles                                                | lineage graph can contain cycles.                                                           |
-| Direction      | direction of edges represent the flow<br />of dependencies between tasks     | the direction of edges represent the flow of data transformations<br />or processing steps. |
-| Use            | used in task scheduling, workflow<br />management, and distributed computing | used in data lineage and data quality analysis.                                             |
-
-Note: Because dag represent dependencies between task that must be executed in particular order while lineage Represent history of data transformations that may be repeated or looped over.
+  Works: 1.computes the stages of each job and schdule it, 2.subimt Task set to TaskScheduler 3. convert Logical Execution Plan to Physical Execution Plan. 4. React on fault tolerance
 
 ---
 
@@ -193,15 +207,11 @@ Benefits:
 2. Fault tolerance: Lazy evaluation allows Spark to recompute only the lost or incomplete data, ensuring fault tolerance.
 3. Performance: It enables pipelining of tasks, reducing the need to write intermediate results to disk.
 
-What if Mapreduce has lazy evoluation:
+What if Mapreduce has lazy evoluation: 1. On-demand processing 2. Resource Optimization 3.Pipeline Fusion 4. Reducing Redundant computations
 
-1. On-demand processing 2. Resource Optimization 3.Pipeline Fusion 4. Reducing Redundant computations
+What if spark does not have lazy evoluation: Without lazy evaluation, Spark would need to execute transformations immediately, leading to unnecessary computations and increased memory usage. This could result in performance degradation, especially for complex data processing tasks involving multiple transformations.
 
-What if spark does not have lazy evoluation:
-
-Without lazy evaluation, Spark would need to execute transformations immediately, leading to unnecessary computations and increased memory usage.
-
-This could result in performance degradation, especially for complex data processing tasks involving multiple transformations.
+Advantagaes: 1. Optimization 2. **Reduced Disk I/O and Memory Usage** 3. **Integration with External Systems**
 
 ---
 
@@ -228,6 +238,47 @@ Optimization Techniques:
 
 ---
 
+**Deployment Mode:**
+
+1. Local Mode: Execution not done in distributed manner, means single JVM process is used to produce both driver and executor.
+2. Client Mode: Driver is present in Client machine, means driver is not the part of cluster and on the other side executors run within the cluster.
+3. Cluster Mode: Driver and executor both run inside the cluster. Spark job submitted from local to cluster machine.
+
+---
+
+Shared Variables: There are two different types of Shared Variables in spark -Broadcast Variable and Accumulator
+
+1. Broadcast Variables: are read-only Variables distributed across worker nodes in-memory. The data Broadcasted this way is cached in serialized form and deserialized before running each task. Used for cache a value in memory on all nodes generally small datasets only Broadcasted.
+2. Accumulator: Which are used to update the variables in parallel during execution/runtime and share results from worker to driver.similar to counters in Mapreduce. used for performing associative and commutative operations such as counters or sums.
+
+---
+
+coalesce and repartition:
+
+coalesce: is used to decrease the number of partitions without invoking Shuffling. It used in when output partitions is less than the input.
+
+repartition: helps to increase or decrease the number of partitions by doing Shuffling of data.
+
+---
+
+difference between Persist and Cache: are optimization techniques for both iterative and interactive Spark applications to improve the performance of the jobs or applications.
+
+iterative -> Reuse intermediate results
+
+interactive  -> allowing a two-way flow of information
+
+cache() -> MEMORY_ONLY
+
+Persist(level) -> MEMORY_ONLY, MEMORY_AND_DISK, MEMORY_ONLY_SER, MEMORY_AND_DISK_SER, DISK_ONLY (disk, or off-heap memory)
+
+unpersist() can be used to Freeing up space from the Storage memory.
+
+Checkpoint: used for fault-tolerance and to cut down the lineage of RDDs/dataframes especially in long and complex computations. It breaks the lineage and stores data to a reliable Storage(HDFS), used in scenario where lineage graph is too long or when you want to recover from failures efficiently.
+
+Note: use cache() -> for optimization purpose Checkpoint() -> for fault tolerance purpose, and reduce the lineage length in complex computations.
+
+---
+
 **Spark handle fault tolerance:**
 
 1. RDDs:  When node fails, spark can reconstruct lost RDD partitions using lineage information, which represents the sequence of transformations applied to create the RDD. The lineage allow spark to recompute the lost data without needing to store the entire dataset.
@@ -238,40 +289,6 @@ Optimization Techniques:
 6. Persistent Storage: Intermediate data generated during transformations can be stored in memory or on disk. This allows Spark to use persisted data in case of node failures instead of recomputing it.
 7. Driver Recovery: If the driver node fails, the driver's state can be recovered by restarting the application and re-executing the driver code.
 8. Dynamic Resource Allocation: Spark supports dynamic allocation of cluster resources. This means that if a node fails, its resources can be reclaimed and reallocated to other tasks, ensuring efficient resource utilization.
-
----
-
-**Deployment Mode:**
-
-1. Local Mode: Execution not done in distributed manner, means single JVM process is used to produce both driver and executor.
-2. Client Mode: Driver is present in Client machine, means driver is not the part of cluster and on the other side executors run within the cluster.
-3. Cluster Mode: Driver and executor both run inside the cluster. Spark job submitted from local to cluster machine
-
----
-
-**Resource Allocation:**
-
-1. Static Resource Allocation: resources are pre-allocated to the spark application before it starts running, amount of resources are fixed and cannot be changed during runtime.
-   **Disadvantages:** 1. Inefficient Resource Utilization  2. Limited Flexibility
-2. Dynamic Resource Allocation: It is a feature in spark that allows for automatic adjustment of the number of executors allocated to an application a run time.Useful for applications that have varying workloads and need to scale up or down depending on the amount of data being processed.
-   **Advantages:** 1. Resource efficiency  2. Scalability  3. Cost Savings  4. Fairness
-   **Disadvantages:** 1. Overhead  2. Latency  3. Configuration Complexity  4. Unpredictability  5. Increased Network Traffic.
-
----
-
-Resources Isolation achieved in spark:
-
-1. Utilize resource managers like YARN, Mesos, etc. These managers allocate independent resources for each Spark application, such as memory, CPU, etc., to ensure there is no interference between different applications.
-2. Spark's built-in scheduler can dynamically allocate resources based on the application's requirements, ensuring that each application receives enough resources and avoiding resource contention issues.
-3. Utilize Spark’s dynamic resource allocation feature. Spark can dynamically adjust resource allocation based on the needs of the application, enabling dynamic isolation of resources to ensure each application receives sufficient resources.
-
----
-
-Difference between Standalone, mesos and yarn cluster:
-
-1. Independent cluster setup without a resource manager. | Master-slave architecture with dynamic resource allocation. | Part of the Hadoop ecosystem, follows master-slave architecture.
-2. Resources managed manually, suitable for smaller  development/testing environments. | Fine-grained resource sharing across multiple frameworks. | Primarily optimized for running Hadoop MapReduce jobs.
-3. Limited scalability and resource optimization compared to yarn, mesos | Supports diverse workloads including Hadoop, Spark, containers, etc. | Integrates tightly with Hadoop ecosystem tools and workflows.
 
 ---
 
@@ -301,36 +318,3 @@ Fix Data Skewness:
 6. Salting Technique: salting involves artificially increasing the number of distinct keys in a dataset by appending a random or unique identifier, known as salt helps to distribute data more evenly across partitions.
    Example: (A,10), (B,15), (A,5), (c,8), (B,20), (A,7)
    (A_1,10), (B_2,15), (A_3,5), (c_4,8), (B_5,20), (A_6,7) -> adding salt
-
----
-
-Shared Variables: There are two different types of Shared Variables in spark -Broadcast Variable and Accumulator
-
-1. Broadcast Variables: are read-only Variables distributed across worker nodes in-memory. The data Broadcasted this way is cached in serialized form and deserialized before running each task. Used for cache a value in memory on all nodes generally small datasets only Broadcasted.
-2. Accumulator: Which are used to update the variables in parallel during execution/runtime and share results from worker to driver.similar to counters in Mapreduce. used for performing associative and commutative operations such as counters or sums.
-
----
-
-difference between Persist and Cache: are optimization techniques for both iterative and interactive Spark applications to improve the performance of the jobs or applications.
-
-iterative -> Reuse intermediate results
-
-interactive  -> allowing a two-way flow of information
-
-cache() -> MEMORY_ONLY
-
-Persist(level) -> MEMORY_ONLY, MEMORY_AND_DISK, MEMORY_ONLY_SER, MEMORY_AND_DISK_SER, DISK_ONLY (disk, or off-heap memory)
-
-unpersist() can be used to Freeing up space from the Storage memory.
-
-Checkpoint: used for fault-tolerance and to cut down the lineage of RDDs/dataframes especially in long and complex computations. It breaks the lineage and stores data to a reliable Storage(HDFS), used in scenario where lineage graph is too long or when you want to recover from failures efficiently.
-
-Note: use cache() -> for optimization purpose Checkpoint() -> for fault tolerance purpose, and reduce the lineage length in complex computations.
-
----
-
-coalesce and repartition:
-
-coalesce: is used to decrease the number of partitions without invoking Shuffling. It used in when output partitions is less than the input.
-
-repartition: helps to increase or decrease the number of partitions by doing Shuffling of data.
