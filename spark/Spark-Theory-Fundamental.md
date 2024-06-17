@@ -60,7 +60,8 @@
 **Spark Programming Model:**
 
 1. **Job** - in spark refers to a sequence of transformations on data.whenever an action like count(), first() and save is called on RDD  a job is created.collect(), saveAsTextFile(), or count()
-2. **Stage** - in spark represents a sequence of tranformations that can be executed in a single pass i.e without shuffling of data.(e.g., reduceByKey, groupByKey, sortByKey)
+2. **Stage** - A stage represents a set of tasks that can be executed in parallel. There are two types of stages in Spark: shuffle stages and non-shuffle
+   stages. Shuffle stages involve the exchange of data between nodes, while non-shuffle stages do not.(groupByKey, sortByKey).
 3. **Task** - in spark is the samallest unit of work that can be scheduled. Each stage is divided into task.A task is a unit of execution that runs on a single machine.
 
 ```python
