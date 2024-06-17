@@ -433,9 +433,35 @@ Execution:
 6. in this ex, leaf node would count the number of rows in the partitions that have timestap greate than and return the result to intermediate nodes.
 7. Intermediate nodes than pass the result back up to serving tree to the root node which result final query such as "count(*) = 1000000" to the user.
 
+Big Query Time Travel:(ex: avenger endgame)
+
+In bigquery time travel is used to access historical data for analysis and troubleshooting.This means that you can query data that was stored, updated, or deleted in the past.
+
+You can set the duration of the time travel window, from a **minimum of two** days to a  **maximum of seven days** . Seven days is the  **default** .You can query a table’s historical data from any point in time within the time travel window by using a clause SYSTEM_TIMEASOF TIMESTAMP_SUB.	
+
+**Note:** To restore data from a deleted table, you need to have the admin role on the corresponding table.
+
+How to Enable:
+
+1. In the **Explorer** panel, expand your project and select a dataset.
+2. Expand the **Actions** option and click  **Open** .
+3. In the **Details** panel, click  **Edit details** .
+4. Expand  **Advanced options** , then select the **Time travel window** to use.
+5. Click  **Save** .
+
+benefits:
+
+* Troubleshoot problems with historical data.
+* Recover data that was accidentally deleted.
+* Analyze data trends over time.
+* Compare data from different points in time.
+
+**What is fail-safe?**
+
+What is your critical data deleted before 7 days and now you want to restore it???? Again here Google came to our rescue , BigQuery provides a **fail-safe** period.During the fail-safe period, deleted data is automatically retained for an additional seven days after the time travel window, so that the data is available for emergency recovery. Data is recoverable at the table level. The fail-safe period is not configurable. You can’t query or directly recover data in fail-safe storage. To recover data from fail-safe storage, contact Cloud customer support.
+
+
 ---
-
-
 
 Big Query
 
