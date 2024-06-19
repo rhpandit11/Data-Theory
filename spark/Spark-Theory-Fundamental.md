@@ -45,7 +45,6 @@
 **Driver Works:**
 
 * creating the sparkcontext/session which serves as a entry point for spark functionality
-* Defining the main logic of the Spark application.
 * compute the application requirement resoures and also manage dynamic allocation lifecycle
 * Tasks distributor among the executors
 * react on executor failure
