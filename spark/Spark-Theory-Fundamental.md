@@ -29,8 +29,7 @@
 4. Spark Management or cluseter layer - (Kubernetes, Apache Hadoop YARN, Mesos, Apache Spark)
 5. Storage layer - (Local FS, s3, blob storage, HDFS)
 
-* Engine — Spark Core: It is the basic core component of Spark ecosystem on top of which the entire ecosystem is built. It performs the tasks of
-  scheduling/monitoring and basic IO functionality
+* Engine — Spark Core: It is the basic core component of Spark ecosystem on top of which the entire ecosystem is built. It performs the tasks of scheduling/monitoring and basic IO functionality
 * Management — Spark cluster can be managed by Hadoop YARN, Mesos or Spark cluster manager.
 * Library — Spark ecosystem comprises of Spark SQL (for running SQL like queries on RDD or data from external sources), Spark Mlib (for ML),Spark Graph X (for constructing graphs for better visualisation of data), Spark streaming (for batch processing and streaming of data in the same application)
 * Programming can be done in Python, Java, Scala and R
@@ -60,37 +59,8 @@
 **Spark Programming Model:**
 
 1. **Job** - in spark refers to a sequence of transformations on data.whenever an action like count(), first() and save is called on RDD  a job is created.collect(), saveAsTextFile(), or count()
-2. **Stage** - A stage represents a set of tasks that can be executed in parallel. There are two types of stages in Spark: shuffle stages and non-shuffle
-   stages. Shuffle stages involve the exchange of data between nodes, while non-shuffle stages do not.(groupByKey, sortByKey).
+2. **Stage** - A stage represents a set of tasks that can be executed in parallel. There are two types of stages in Spark: shuffle stages and non-shuffle stages. Shuffle stages involve the exchange of data between nodes, while non-shuffle stages do not.(groupByKey, sortByKey).
 3. **Task** - in spark is the samallest unit of work that can be scheduled. Each stage is divided into task.A task is a unit of execution that runs on a single machine.
-
-```python
-import org.apache.spark.sql.SparkSession
-
-// Create a Spark Session
-val spark = SparkSession.builder
-  .appName("Spark Job Stage Task Example")
-  .getOrCreate()
-
-// Read a CSV file - this is a transformation and doesn't trigger a job
-val data = spark.read.option("header", "true").csv("path/to/your/file.csv")
-
-// Perform a transformation to create a new DataFrame with an added column
-// This also doesn't trigger a job, as it's a transformation (not an action)
-val transformedData = data.withColumn("new_column", data("existing_column") * 2)
-
-// Now, call an action - this triggers a Spark job
-val result = transformedData.count() 
-
-println(result)
-
-spark.stop()
-```
-
-1. A Job is triggered when we call the action `count()`. This is where Spark schedules tasks to be run.
-2. Stages are created based on transformations. In this example, we have two transformations (`read.csv` and `withColumn`). However, these two transformations belong to the same stage since there's no data shuffling between them.
-3. Tasks are the smallest unit of work, sent to one executor. The number of tasks depends on the number of data partitions. Each task performs
-   transformations on a chunk of data.
 
 ---
 
@@ -186,7 +156,7 @@ Action: are operations that trigger the execution of transformation and return v
 
 1. Action Triggering: When an [action](https://medium.com/@think-data/dont-overlook-this-pyspark-foundation-f835d528ca7f) is called (e.g., `collect()`, `count()`), Spark triggers the execution. This action causes the DAG to be executed.
 2. Job and Stage Creation: Spark breaks the DAG into smaller units called stages. Each stage contains tasks that can be executed in parallel.
-3. Task Scheduling and Execution: Spark’s scheduler assigns tasks to individual executors across the cluster. Tasks within a stage can run concurrently whenever possible.
+3. Task Scheduling and Execution: Spark's scheduler assigns tasks to individual executors across the cluster. Tasks within a stage can run concurrently whenever possible.
 4. Result Collection: The final results of the computation are collected back to the driver node (in the case of actions like `collect()`).
 
 Components: Stages | DAG Scheduler
