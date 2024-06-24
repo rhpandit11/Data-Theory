@@ -96,40 +96,39 @@ Data abstraction refers to the difference between how the data is stored and how
 
 **Two Main Abstraction of Spark:**
 
-1. **RDD**(Low Level Abstraction):  Fundamental datastructure of spark, it is immutable distributed collection of object that can be any type.
+1. **RDD**(Low Level Abstraction):  **fault-tolerant and Immuatble collection of data elements partitioned across the cluster nodes** that can be operated on in parallel using Sparks APIs.
 
-   **Spark Dataframe**(High Level Abstraction): distributed data structure which store data in two-dimensional table with named columns and defined schema(column name, datatype).
+   **Spark Dataframe**(High Level Abstraction): A DataFrame is a dataset organized into  **named columns** . At a conceptual level, it is equivalent to a table in a relational database or to a Pandas dataframe in Python.
 
-   **Spark Dataset**(High Level Abstraction): spark rdd + dataset uses all the capabilities of both (type-safety -> through error on compilation time).
+   **Spark Dataset**(High Level Abstraction): A Dataset is a distributed collection of data which  **combines the benefits of RDDs and the power of Spark SQL engine** .
 
-Difference Between RDD, Dataframe, Dataset:
+**Difference:** 
 
-| RDD                                | Dataframe          | Dataset                 |
-| ---------------------------------- | ------------------ | ----------------------- |
-| No schema                          | schema             | schema                  |
-| slow on non JVM launguages         | fast               | fast                    |
-| No execution optimization          | catalyst optimizer | catalyst optimizer      |
-| Low Level                          | High               | High                    |
-| No SQL support                     | SQL support        | SQL support             |
-| Type safe                          | No Type Safe       | Type Safe               |
-| Analysis error detect compile time | Runtime            | compile time            |
-| High memory used                   | High               | Low because of Tungsten |
+1. Both RDDs and Datasets provide an OOP-style API, while DataFrames provide a SQL-style API.
+2. In RDDs, we specify to the Spark engine how to achieve a certain task, whereas with DataFrames and Datasets, we specify what to do, and the Spark Engine takes care of the rest. This is why DataFrames and Datasets inherently have optimization techniques.
+3. In RDDs, only on-heap objects are used, while in DataFrames and Datasets, both on-heap and off-heap memory can be utilized. Off-heap objects are employed when there is additional data in memory.
+4. Since RDDs use only on-heap objects, serialization is unavoidable because additional data needs to be transferred from RAM to disk. This is avoidable in DataFrames and Datasets due to the presence of off-heap space.
+5. In RDDs, *garbage collection (GC) impacts performance, but in DataFrames and Datasets, GC impact is resolved.
 
-**Difference Between Dataframe, Dataset:**
+*GC - Garbage Collector: When memory is full in RDD, GC will start scanning entire memory and it will start removing the data which is old and obselete.
 
-| Category          | Dataframe                                                                                              | Dataset                                                           |
-| ----------------- | ------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------- |
-| Data Type:        | Tabular data structure with rows and columns                                                           | collection of strongly typed JVM objects<br />and it is type safe |
-| performance       | faster than dataset it used code generation and build<br />on top of rdd and optimized for performance | slow because of JVM                                               |
-| API               | wide variety of API's than dataset and more flexible<br />for data manipulation                        | limited API's but more concise and<br />expressive               |
-| Type Safety       | Runtime Errors                                                                                         | Compile Time errors                                               |
-| Memory Management | Use High Memory                                                                                        | Low memory because of Tungsten                                    |
-| launguages        | Java, Python, Scala, R                                                                                 | Scala, Java                                                       |
+6) RDD and Datasets provide strong type safety that is at the time of you writing the code it'll give the error if something is wrong and thus they provide run-time compilation error. But, in the case of, DataFrames there's no type safety, so error will be known only once the code is executed and thus, they provides error at compile team.
 
-**Use:**
+Use Cases of RDD:
 
-◽DataFrames: Perfect for structured data and SQL-like queries. They offer excellent performance and ease of use, making them ideal for ETL operations and data analysis.
-◽Datasets: Ideal when you need the optimizations of DataFrames along with the type safety of RDDs. They are great for complex transformations that benefit from compile-time type checking.
+* Handling unstructured data or requiring low-level transformations and actions in a distributed computing environment.
+* When fine-grained transformations and actions are needed for a distributed computing environment.
+* For performance optimization and fine-tuning in scenarios where the schema is not defined in a distributed computing environment.
+
+Use DataFrames:
+
+Use DataFrames when dealing with structured data, similar to an SQL table, to improve performance through optimized execution plans and built-in optimizations.
+
+Use Datasets:
+
+* Grouping data: Utilize Datasets when you need strong typing for a group of data and when you want to benefit from the features like grouping, aggregation, and windowing functions.
+* Language support: Datasets are the go-to choice when language-specific encoders for objects are required, ensuring type safety at compile time.
+* **Schema support** : Datasets should be used when a structured and typed API with the benefits of Spark SQLs optimized execution engine is necessary.
 
 ---
 
