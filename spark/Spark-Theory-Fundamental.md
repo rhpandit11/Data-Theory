@@ -102,7 +102,7 @@ Data abstraction refers to the difference between how the data is stored and how
 
    **Spark Dataset**(High Level Abstraction): A Dataset is a distributed collection of data which  **combines the benefits of RDDs and the power of Spark SQL engine** .
 
-**Difference:** 
+**Difference:**
 
 1. Both RDDs and Datasets provide an OOP-style API, while DataFrames provide a SQL-style API.
 2. In RDDs, we specify to the Spark engine how to achieve a certain task, whereas with DataFrames and Datasets, we specify what to do, and the Spark Engine takes care of the rest. This is why DataFrames and Datasets inherently have optimization techniques.
@@ -163,6 +163,26 @@ Components: Stages | DAG Scheduler
 * DAG Scheduler: High - level scheduling layer implements stage-oriented scheduling.
 
   Works: 1.computes the stages of each job and schdule it, 2.subimt Task set to TaskScheduler 3. convert Logical Execution Plan to Physical Execution Plan. 4. React on fault tolerance
+
+---
+
+**Lineage Graph:** Lineage Graph is a historical record of transformations, tracing back to the original data. It represent the dependency in between rdds.
+
+**Use:**
+
+1. It's the basis for Spark's lazy evaluation strategy, only executing transformations when an action is invoked.
+2. Allows Spark to recover lost data by re-computing it from the lineage graph.
+
+**DAG VS Lineage Graph:**
+
+|                | DAG                                                                             | Lineage                                                                                        |
+| -------------- | ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| Representation | dependencies between tasks or events                                            | history of data transformations or processing steps                                            |
+| Cycle          | A DAG does not contain cycles                                                   | lineage graph can contain cycles.                                                              |
+| Direction      | direction of edges represent the flow``of dependencies between tasks     | the direction of edges represent the flow of data transformations``or processing steps. |
+| Use            | used in task scheduling, workflow``management, and distributed computing | used in data lineage and data quality analysis.                                                |
+
+Note: Because dag represent dependencies between task thatmust be executed in particular order while lineage Represent history of data transformations that may be repeated or looped over.
 
 ---
 
