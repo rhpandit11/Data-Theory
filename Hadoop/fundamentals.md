@@ -19,7 +19,7 @@
    3. Handles the client's read and writes requests
    4. datanodes synchronized to communicate and ensure the data is balanced accross the cluster starting from copying to moving.
 
-**Secondary Namenode:** maintains the edit log and namespace image information in sync with the namenode server. At times the namespace images from the namenode server are not updated therefore, you can not totaly rely on the secondary namenode server for the recovery process.
+**Secondary Namenode:** Periodically merges the namespace image with the edit log from the NameNode to create a new checkpoint, which helps in reducing the startup time of the NameNode and maintaining a compact edit log.
 
 **FS Image:** file stored on the os filesystem that contains the complete directory structure with details about the location of the data on the data blocks and which are stored on which node.
 
@@ -33,26 +33,32 @@
 
 **Rack:** collection of 30-40 data nodes or machines in a hadoop cluster located in a single data center or location. These datanodes in a rack are connected to the namenode throgh traditional network design via a network switch.
 
+**Client**: Initiates read and write requests, communicates with the NameNode for metadata, and interacts with DataNodes for data transfer. reassembles file blocks for reads and breaks files into blocks for writes.
+
 **HDFS Read Operations:**
 
-1. Client call -> open() method on the filesystem object.
-2. filesystem calls -> namenode using RPC -> get the location of the blocks of a file -> return the address of close datanodes
-3. filesystem -> return the FSDataInputStream to the client.
-4. client-> calls read() method on FSDataInputStream object.
-5. DFSInputStream(wraped in FSDataInputStream) contain the address of blocks of the file -> connects to the closet data nodes-> read the first block of the file.
-6. after reaching end of the file -> DFSInputStream close the connection with that data node -> finds the next nearest block.
-7. client reading completed -> it calls close() on FSDataInputStream.
+1. User sends a read request and a process called ClientAPI is created on the client side.
+2. ClientAPI then forwards the write request to the Name Node, which is the Master Node in the cluster.
+3. Name Node gets the metadata information from the Journal Node and sends it as a response to the clientAPI.
+4. The client directly contacts the DataNodes to read the blocks. For each block, the client selects the closest DataNode to minimize latency and network traffic. The client reads the blocks in sequence, reassembling them to form the complete file.
+
+**Error Handling and Fault Tolerance:**
+
+* If a DataNode is unavailable or a block is corrupted, the client automatically retries with another DataNode that holds a replica of the
+  block.
 
 **HDFS Write Operations:**
 
-1. client calls -> create() method-> on filesystem to create a file.
-2. filesystem -> interacts with namenode throgh RPC -> call create a new file in the filesystem namespace with (file-size,dest_path..)
-3. namnode make sure that file doesn't already exists and permission to create a file.
-4. filesystem -> returns FSDataOutputStream to start writing data to datanode.
-5. as clients start writing the data -> DFSOutputStream(wrapped) splits the clients data into packets and writes it to an internal queue callled data queue.
-6. Datastreamer responsible for telling the namenode to allocate new blocks by choosing the list of suitable data nodes to store the replicas.
-7. client -> close() method on the stream when it finishes writing data.
-8. FSDataOutputStream -> sends acknowledgment to Namenode.
+1. The user sends a write request to stored a new file in HDFS, A process called ClientAPI is created on the client side
+2. ClientAPI then forwards the write request to the Name Node, which is the Master Node in the cluster.
+3. The NameNode verifies if the file already exists (to avoid duplicates) and checks for permissions.
+4. If everything is in order, the NameNode creates a new file entry in its namespace and returns the file handle to the client.
+5. The Name node determines the number of block to create on the specified block size and replication count, then its divide the data ex: 500mb | 128mb block size, so, 4 blocks with replication count 3 = total 12 copies. This information is the metadata and stored in separate node called journal Node.
+6. After the creation of metadata, it is sent as a response to the clientAPI.
+7. Once the clientAPI receives the information, it starts to split the file into data blocks and transfers all the blocks to the Data Node.
+8. The data blocks are stored in their designated data nodes, with any remaining data forwarded to respective data nodes. This iterative
+   process continues until all data blocks are stored in the assigned data nodes, known as a pipeline. Once the blocks get stored, an
+   acknowledgement is sent to the Name Node.
 
 **Replication Factor:** HDFS creates replicas of block based on the replication factor (a number that defines the total copies of a block of a file.) be default 3.means 3 copies of each block are created and stored accross multiple nodes.
 
@@ -65,7 +71,8 @@
 3. HDFS is high-fault tolerance because of replica of the data may be available from different node through replication.
 4. HDFS is famous for rack awareness to avoid data loss which result in increased latency.
 5. HDFS is scalable, includes vertical and horizontal scalability mechanism by adjusting the resources according to size of your file system.
-6. Streaming read are made possible throgh HDFS.
+6. HDFS is designed for high-throughput access to large datasets, favouring large data reads and writes over low-latency access.
+7. HDFS is capable of storing very large files, even in the range of terabytes and petabytes.
 
 ---
 
