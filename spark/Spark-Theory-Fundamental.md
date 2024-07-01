@@ -78,6 +78,19 @@
 - Executors send the results of their computations back to the driver.
 - The driver program consolidates these results and performs any final actions required.
 
+
+1.  User submits a Spark application.
+
+2. Driver process starts and sets up the SparkContext.
+3. The SparkContext connects to the cluster manager to negotiate resources.
+4. The cluster manager launches executors on worker nodes.
+5. Executors register with the driver.
+6. Driver creates a logical plan (DAG) and converts it into a physical plan (tasks).
+7. Tasks are sent to executors by the driver.
+8. Executors execute tasks, process data, and store intermediate results.
+9. Executors return results to the driver.
+10. Driver compiles the results and completes the job.
+
 ---
 
 SparkContext: was the primary entry point for interacting with spark, represent the connection to the spark cluster and was responsible for co-ordinating task execution.
@@ -175,12 +188,12 @@ Components: Stages | DAG Scheduler
 
 **DAG VS Lineage Graph:**
 
-|                | DAG                                                                             | Lineage                                                                                        |
-| -------------- | ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| Representation | dependencies between tasks or events                                            | history of data transformations or processing steps                                            |
-| Cycle          | A DAG does not contain cycles                                                   | lineage graph can contain cycles.                                                              |
+|                | DAG                                                                      | Lineage                                                                                 |
+| -------------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
+| Representation | dependencies between tasks or events                                     | history of data transformations or processing steps                                     |
+| Cycle          | A DAG does not contain cycles                                            | lineage graph can contain cycles.                                                       |
 | Direction      | direction of edges represent the flow``of dependencies between tasks     | the direction of edges represent the flow of data transformations``or processing steps. |
-| Use            | used in task scheduling, workflow``management, and distributed computing | used in data lineage and data quality analysis.                                                |
+| Use            | used in task scheduling, workflow``management, and distributed computing | used in data lineage and data quality analysis.                                         |
 
 Note: Because dag represent dependencies between task thatmust be executed in particular order while lineage Represent history of data transformations that may be repeated or looped over.
 
@@ -280,6 +293,56 @@ Note: use cache() -> for optimization purpose Checkpoint() -> for fault toleranc
 8. Dynamic Resource Allocation: Spark supports dynamic allocation of cluster resources. This means that if a node fails, its resources can be reclaimed and reallocated to other tasks, ensuring efficient resource utilization.
 
 ---
+
+**Optimizing**
+
+* Data Partitioning: Partitioning divides data into smaller, manageable chunks.
+
+```python
+from pyspark.sql import SparkSession
+spark = SparkSession.builder.appName("OptimizationExample").getOrCreate()
+df = spark.read.csv("large_dataset.csv", header=True, inferSchema=True)
+# Repartition data
+df = df.repartition(100) # Repartition into 100 partitions
+# Coalesce data
+df = df.coalesce(50) # Coalesce into 50 partitions
+```
+
+* Caching and Persistence: Caching frequently accessed data in memory reduces the need for repeated computations.
+
+```python
+# Cache data
+df.cache()
+# Persist data with different storage levels
+df.persist(StorageLevel.MEMORY_AND_DISK)
+```
+
+* Broadcast Variables: Broadcast variables distribute read-only data across all worker nodes, minimizing data transfer overhead. This technique is useful for joining a large dataset with a small one.
+
+```python
+# Create a small DataFrame to broadcast
+small_df = spark.read.csv("small_dataset.csv", header=True, inferSchema=True)
+broadcast_small_df = spark.sparkContext.broadcast(small_df.collect())
+# Use broadcast variable in a join
+large_df = spark.read.csv("large_dataset.csv", header=True, inferSchema=True)
+joined_df = large_df.join(small_df, "key_column")
+```
+
+* Efficient Joins: Joins can be resource-intensive, especially with skewed data. Optimize joins by using broadcast joins for small datasets, or by using bucketing and sorting techniques to reduce shuffling.
+
+  ```python
+  # Broadcast join
+  broadcasted_small_df = broadcast(small_df)
+  joined_df = large_df.join(broadcasted_small_df, "key_column")
+  # Bucketing and sorting
+  large_df.write.bucketBy(10, "key_column").sortBy("key_column").saveAsTable("bucketed_table")
+  bucketed_df = spark.table("bucketed_table")
+  ```
+* Optimized File Formats: Choosing the right file format can drastically impact performance. Parquet and ORC are columnar storage formats that offer efficient compression and faster read/write operations compared to plain text formats like CSV or JSON.
+
+---
+
+
 
 Data Skewness: In scenario where some of the partitioned data has more data compared to others.
 
