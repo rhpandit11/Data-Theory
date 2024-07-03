@@ -118,6 +118,29 @@ reasons for denormalizing the data: We de-normalize data when we need better per
 
 **Types of Triggers: 1.** DDL Triggers, 2. DML Triggers, 3. TCL Triggers
 
+* ***Create Trigger***
+  These two keywords are used to specify that a trigger block is going to be declared.
+* ***Trigger_Name***
+  It specifies the name of the trigger. Trigger name has to be unique and shouldn’t repeat.
+* **( *Before | After ***This specifies when the trigger will be executed. It tells us the time at which the trigger is initiated, i.e, either before the ongoing event or after.
+* *Before Triggers* are used to update or validate record values before they’re saved to the database.
+* *After Triggers* are used to access field values that are set by the system and to effect changes in other records. The records that activate the after trigger are read-only. We cannot use the After trigger if we want to update a record because it will lead to a read-only error.
+* **[ * Insert | Update | Delete * ]**
+  These are the DML operations and we can use either of them in a given trigger.
+* ** *on * [ *Table_Name ***We need to mention the table name on which the trigger is being applied. Don’t forget to use **on **keyword and also make sure the selected table is present in the database.
+* **[ for each row | for each column ]**
+
+1. Row-level trigger gets executed before or after *any column value of a row *changes
+2. Column Level Trigger gets executed before or after the *specified column *changes
+
+```sql
+CREATE TRIGGER calculate
+before INSERT
+ON student
+FOR EACH ROW
+SET new.marks = new.marks+100;
+```
+
 **Advantages:**
 
 1. maintain integrity constrainsts when primary key and foreign key constrain are not defined.
@@ -126,7 +149,7 @@ reasons for denormalizing the data: We de-normalize data when we need better per
 
 **Disadvantages:**
 
-1. Only provide extended validators
+1. Triggers can only provide extended  **validations** , i.e, not all kinds of validations. For simple validations, you can use the NOT NULL, UNIQUE, CHECK, and FOREIGN KEY constraints
 2. increase overhead
 3. difficult to troubleshoot because they execute automatically
 
@@ -152,7 +175,6 @@ reasons for denormalizing the data: We de-normalize data when we need better per
 **VIEW:** kind of virtual table not stored in database and give query result through real tables.
 
 ****Materialized Views:**** When the results of a view expression are stored in a database system, they are called materialized views.
-
 
 | Views                                                                                                                                                                                 | Materialized Views                                                                                                                                                                       |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -215,7 +237,6 @@ reasons for denormalizing the data: We de-normalize data when we need better per
 
 Difference Between Clustered and Non-Clustered Index :
 
-
 | CLUSTERED INDEX                                                                                                | NON-CLUSTERED INDEX                                                                                                                                                      |
 | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | A clustered index is faster.                                                                                   | A non-clustered index is slower.                                                                                                                                         |
@@ -248,13 +269,12 @@ Use:
 
 **Non-Correlated subquery** - In non-correlated query inner query does not dependent on the outer query. They both can run separately.
 
-
-| Sr. No.     | Key                             | Correlated subquery                                                                 | Non-Correlated subquery                                                                   |
-| ----------- | ------------------------------- | ----------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| **1** | **Basic**                 | **In correlated subquery, inner query is <br />dependent on the outer query** | **In non-correlated query inner query does not dependent <br />on the outer query** |
-| **2** | **IN and NOT In clause**  | **It does not use IN and NOT In clause**                                      | **Non-Correlated subquery are used along-with IN and<br /> NOT IN clause**          |
-| **3** | **Run Separately**        | **Inner query can not run alone**                                             | Inner query can not run alone and it's not depended on <br />outer quer**y** ``     |
-| **4** | **Performance**           | correlated subqueries are slower queries                                            | **They are faster than correlated subqueries**                                      |
+| Sr. No.     | Key                            | Correlated subquery                                                                 | Non-Correlated subquery                                                                   |
+| ----------- | ------------------------------ | ----------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| **1** | **Basic**                | **In correlated subquery, inner query is <br />dependent on the outer query** | **In non-correlated query inner query does not dependent <br />on the outer query** |
+| **2** | **IN and NOT In clause** | **It does not use IN and NOT In clause**                                      | **Non-Correlated subquery are used along-with IN and<br /> NOT IN clause**          |
+| **3** | **Run Separately**       | **Inner query can not run alone**                                             | Inner query can not run alone and it's not depended on<br />outer quer**y** ``      |
+| **4** | **Performance**          | correlated subqueries are slower queries                                            | **They are faster than correlated subqueries**                                      |
 
 ---
 
