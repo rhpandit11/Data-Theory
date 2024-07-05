@@ -78,9 +78,7 @@
 - Executors send the results of their computations back to the driver.
 - The driver program consolidates these results and performs any final actions required.
 
-
-1.  User submits a Spark application.
-
+1. User submits a Spark application.
 2. Driver process starts and sets up the SparkContext.
 3. The SparkContext connects to the cluster manager to negotiate resources.
 4. The cluster manager launches executors on worker nodes.
@@ -342,8 +340,6 @@ joined_df = large_df.join(small_df, "key_column")
 
 ---
 
-
-
 Data Skewness: In scenario where some of the partitioned data has more data compared to others.
 
 How it Occurs:
@@ -370,3 +366,21 @@ Fix Data Skewness:
 6. Salting Technique: salting involves artificially increasing the number of distinct keys in a dataset by appending a random or unique identifier, known as salt helps to distribute data more evenly across partitions.
    Example: (A,10), (B,15), (A,5), (c,8), (B,20), (A,7)
    (A_1,10), (B_2,15), (A_3,5), (c_4,8), (B_5,20), (A_6,7) -> adding salt
+
+
+
+
+
+
+
+
+
+---
+
+
+
+1. **Spill** : This issue arises when data exceeds memory limits and gets ‘spilled’ or written onto disk, resulting in slower processing.
+2. **Skew** : Skew refers to the uneven distribution of data, causing some tasks to take much longer than others.
+3. **Shuffle** : This process, which redistributes data across various partitions, can be expensive in terms of computational resources.
+4. **Storage** : The way you store and retrieve data can significantly affect Spark’s performance.
+5. **Serialization** : This is the process of converting data into a format for easy storage or transmission.
