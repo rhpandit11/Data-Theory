@@ -367,20 +367,38 @@ Fix Data Skewness:
    Example: (A,10), (B,15), (A,5), (c,8), (B,20), (A,7)
    (A_1,10), (B_2,15), (A_3,5), (c_4,8), (B_5,20), (A_6,7) -> adding salt
 
-
-
-
-
-
-
-
-
 ---
-
-
 
 1. **Spill** : This issue arises when data exceeds memory limits and gets ‘spilled’ or written onto disk, resulting in slower processing.
 2. **Skew** : Skew refers to the uneven distribution of data, causing some tasks to take much longer than others.
 3. **Shuffle** : This process, which redistributes data across various partitions, can be expensive in terms of computational resources.
 4. **Storage** : The way you store and retrieve data can significantly affect Spark’s performance.
 5. **Serialization** : This is the process of converting data into a format for easy storage or transmission.
+
+---
+
+**Predicate Pushdown:** Predicate Pushdown is an optimization technique that pushes the filtering predicates (i.e., conditions in WHERE clauses) as close to the data source as possible. By doing so, it minimizes the amount of data that needs to be loaded into memory and processed. This optimization reduces network I/O, CPU usage, and even storage requirements, thereby improving the performance of your data querying.Predicate Pushdown points to the where or **filter **clause which affects the number of rows returned. It basically relates to** which rows**  **will be filtered, not which columns** .
+
+```python
+val result = spark.read.parquet("data.parquet").filter("age > 25").select("name", "city")
+result.show()
+```
+
+by default enabled in parquet and ORC. Only support by olumnar storage formats such as Parquet and ORC. Non-columnar formats like CSV or text files do not support predicate pushdown.
+
+```python
+val spark = SparkSession.builder
+  .appName("Predicate Pushdown Example")
+  .config("spark.sql.parquet.filterPushdown", "true")
+  .getOrCreate()
+```
+
+For confirmation that it is enabled.
+
+Projection Pushdown: Projection Pushdown stands for the selected column(s) with the **select clause which affects the number of columns returned. It stores data in  columns , so when your projection limits the query to specified columns, specifically those columns will be returned.
+
+**Projection Pushdown** is distinguished by **column-based** and **Predicate Pushdown** by  **row-based filtering** .
+
+---
+
+**The Impact of Catalyst Optimizer:** The Catalyst Optimizers rule-based and cost-based optimizations translate into faster execution times and reduced resource usage. The following are some examples of optimizations done by Catalyst:

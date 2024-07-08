@@ -30,10 +30,9 @@ Immutable Type -> not change in run time ex: string, tuple
 | **Mutability**     | Mutable (can add or remove elements).       | Mutable (can add, modify, or remove key-value pairs). |
 | **Access Method**  | Elements are accessed directly.             | Values are accessed using keys.                       |
 | **Use Case**       | To store unique elements.                   | To store related pieces of information.               |
-| **Example**        | my_set = {1, 2, 3}                          | my_dict = {“name”: “Alice”, “age”: 30}<br />    |
+| **Example**        | my_set = {1, 2, 3}                          | my_dict = {“name”: “Alice”, “age”: 30}          |
 
 ****Differentiate between List and Tuple?****
-
 
 | ****List****                                                      | ****Tuple****                                   |
 | ----------------------------------------------------------------------------- | ----------------------------------------------------------- |
@@ -41,7 +40,6 @@ Immutable Type -> not change in run time ex: string, tuple
 | Lists consume more memory                                                     | Tuple consumes less memory as compared to the list          |
 | The list is better for performing operations, such as insertion and deletion. | A Tuple data type is appropriate for accessing the elements |
 | The implication of iterations is Time-consuming                               | The implication of iterations is comparatively Faster       |
-
 
 **What is Lambda Function?**
 
@@ -71,7 +69,7 @@ For loop used to iterate through the element lik list,tuple,set,dict, use for lo
 
 Yes, we can pass a function as an argument inside another function because its an object.
 
-**What are *args and *kwargs?**** 
+**What are *args and *kwargs?****
 
 *args(Non-Keyword Arguments/Positional Arguments) -> allow functions to accept any number of positional arguments i.e non-keyword arguments(key,value)
 
@@ -157,3 +155,29 @@ class is like a blueprint of object constructor where we build object.
 **What is Namespaces in python?**
 
 Namespace in python is like a container holds the identifier(name of variables, functions, classes etc) and map it with it's object name. It work like boundary for assuring that name must be unique and not get any conflict.
+
+What is __init__?
+
+`__init__` is a contructor method in Python and is automatically called to allocate memory when a new object/instance is created. All classes have a **__init__** method associated with them. It helps in distinguishing methods and attributes of a class from local variables.
+
+What is the difference between Python Arrays and lists?
+
+* Arrays in python can only contain elements of same data types i.e., data type of array should be homogeneous. It is a thin wrapper around C language arrays and consumes far less memory than lists.
+* Lists in python can contain elements of different data types i.e., data type of lists can be heterogeneous. It has the disadvantage of
+  consuming large memory.
+
+---
+
+**Python Data Types:**
+
+* ****Numeric****
+  * Integers - This value is represented by int class. It contains positive or negative whole numbers (without fractions or decimals) with no limit
+  * Float - represented by float class, specified by decimal point ex: 10.0
+  * Complex Numbers - represented by complex class, specified by (real part) + (imaginary part) ex: 2 + 3j
+* ****Sequence Type****
+  * String - collection of one or more character put in a single quote, double-quote, or triple-quote, represented by str class.
+  * List - collection of things, enclosed in [ ] and separated by commas.
+  * 
+* ****Boolean****
+* ****Set****
+* ****Dictionary****
