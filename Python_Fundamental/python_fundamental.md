@@ -168,16 +168,48 @@ What is the difference between Python Arrays and lists?
 
 ---
 
-**Python Data Types:**
+**built-in data types in Python:**
 
-* ****Numeric****
-  * Integers - This value is represented by int class. It contains positive or negative whole numbers (without fractions or decimals) with no limit
-  * Float - represented by float class, specified by decimal point ex: 10.0
-  * Complex Numbers - represented by complex class, specified by (real part) + (imaginary part) ex: 2 + 3j
-* ****Sequence Type****
-  * String - collection of one or more character put in a single quote, double-quote, or triple-quote, represented by str class.
-  * List - collection of things, enclosed in [ ] and separated by commas.
-  * 
-* ****Boolean****
-* ****Set****
-* ****Dictionary****
+**Immutable Data Types:**
+
+1. int: Represents a whole number, such as 42 or -10.
+2. float: Represents a decimal number, like 3.14 or -0.01.
+3. complex: Comprises a real and an imaginary part, like 3 + 4j.
+4. bool: Represents a boolean value, True or False.
+5. str: A sequence of unicode characters enclosed within quotes.
+6. tuple: An ordered collection of items, often heterogeneous, enclosed within parentheses.
+7. frozenset: A set of unique, immutable objects, similar to sets, enclosed within curly braces.
+8. bytes: Represents a group of 8-bit bytes, often used with binary data, enclosed within brackets.
+9. bytearray: Resembles the 'bytes' type but allows mutable changes.
+10. NoneType: Indicates the absence of a value.
+
+**Mutable Data Types:**
+
+1. list: A versatile ordered collection that can contain different data types and offers dynamic sizing, enclosed within square brackets.
+2. set: Represents a unique set of objects and is characterized by curly braces.
+3. dict: A versatile key-value paired collection enclosed within braces.
+4. memoryview: Points to the memory used by another object, aiding efficient viewing and manipulation of data.
+5. array: Offers storage for a specified type of data, similar to lists but with dedicated built-in functionalities.
+6. deque: A double-ended queue distinguished by optimized insertion and removal operations from both its ends.
+7. object: The base object from which all classes inherit.
+8. types.SimpleNamespace: Grants the capability to assign attributes to it.
+9. types.ModuleType: Represents a module body containing attributes.
+10. types.FunctionType: Defines a particular kind of function.
+
+**difference between a mutable and immutable object:**
+
+| mutable                        | Immutable                         |
+| ------------------------------ | --------------------------------- |
+| Can be modified after creation | Cannot be modified after creation |
+| Lists, Sets, Dictionaries      | Tuples, Strings, Numbers          |
+
+**difference between list and  tuple:**
+
+| List                                                                          | Tuple                                                       |
+| ----------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| Lists are mutable                                                             | Tuples are immutable                                        |
+| The implication of iterations is Time-consuming                               | The implication of iterations is comparatively Faster       |
+| The list is better for performing operations, such as insertion and deletion. | A Tuple data type is appropriate for accessing the elements |
+| Lists consume more memory                                                     | Tuple consumes less memory as compared to the list          |
+| Lists have several built-in methods                                           | Tuple does not have many built-in methods.                  |
+| Unexpected changes and errors are more likely to occur                        | Because tuples don’t change they are far less error-prone. |
