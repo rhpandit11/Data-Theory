@@ -401,4 +401,18 @@ Projection Pushdown: Projection Pushdown stands for the selected column(s) with 
 
 ---
 
-**The Impact of Catalyst Optimizer:** The Catalyst Optimizers rule-based and cost-based optimizations translate into faster execution times and reduced resource usage. The following are some examples of optimizations done by Catalyst:
+Bucketing and Partitioning in Spark: 
+
+Partitioning in Spark:Partitioning is an integral concept in Spark that controls how the data is physically distributed across various nodes in the cluster during data processing. Spark, by default, performs data partitioning, which can also be manually optimized based on the workload.
+
+Work: In Spark, an RDD (Resilient Distributed Dataset), DataFrame, or Dataset is divided into a number of partitions, each of which can be computed on different nodes in the cluster. Data in each partition is processed in parallel, ensuring efficient use of cluster resources and enhancing the speed of computation.
+
+Why is Partitioning important:
+
+**Load Balancing**: proper distribution of data across partitions ensures all nodes utilized, avoiding data skew and preventing nodes being overloaded while others are idle.
+
+**Network Optimization**: transformations like join or group by minimize the data transferred over the network.
+
+**Parallelism**: Each partitions can be processed independently and in parallel on different nodes.
+
+Bucketing: is a technique to be able to divide dataset into managable chunks, and the division of data depends on hash value, by this we can improve the performance of spark query(ex: filter, agg, joins).
