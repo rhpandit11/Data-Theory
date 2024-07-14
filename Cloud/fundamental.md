@@ -6,7 +6,7 @@ characteristics:
 * Broad Network Access - Access from any devices
 * Resource Pooling -  EX: car pooling, micro sd card in phone use as external or internal
 * Rapid Elasticity - pay as you go
-* Measured Services - billing of resources user uesed
+* Measured Services - billing of resources user used
 
 Types Of Cloud Computing Services:
 
@@ -395,7 +395,6 @@ Types of Service Accounts:
 A service account is also a resource with IAM policies attached to it, which means you can define who can use the account and who can perform specific actions on the service account.0
 
 ---
-
 
 Big Query
 
