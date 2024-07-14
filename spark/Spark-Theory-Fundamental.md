@@ -12,6 +12,9 @@
 | Hadoop can work or process far larger datasets than spark                             | Less compare to hadoop                                                 |
 | MapReduce requires an external scheduler for jobs.                                    | Spark has its own job scheduler due to the in-memory data computation. |
 | A program written using map reduce has more lines of code<br />when compared to spark | A program written using spark has less lines of code                   |
+| Lazy evolution                                                                        | Linear - Run steps one by one                                          |
+| Till the Action is triggered none of the Transaction will work.                      | Operation run step by step                                             |
+|                                                                                       |                                                                        |
 
 **Features:**
 
@@ -401,7 +404,7 @@ Projection Pushdown: Projection Pushdown stands for the selected column(s) with 
 
 ---
 
-Bucketing and Partitioning in Spark: 
+Bucketing and Partitioning in Spark:
 
 Partitioning in Spark:Partitioning is an integral concept in Spark that controls how the data is physically distributed across various nodes in the cluster during data processing. Spark, by default, performs data partitioning, which can also be manually optimized based on the workload.
 
