@@ -205,11 +205,96 @@ What is the difference between Python Arrays and lists?
 
 **difference between list and  tuple:**
 
-| List                                                                          | Tuple                                                       |
-| ----------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| Lists are mutable                                                             | Tuples are immutable                                        |
-| The implication of iterations is Time-consuming                               | The implication of iterations is comparatively Faster       |
-| The list is better for performing operations, such as insertion and deletion. | A Tuple data type is appropriate for accessing the elements |
-| Lists consume more memory                                                     | Tuple consumes less memory as compared to the list          |
-| Lists have several built-in methods                                           | Tuple does not have many built-in methods.                  |
-| Unexpected changes and errors are more likely to occur                        | Because tuples don’t change they are far less error-prone. |
+| List                                                                                | Tuple                                                       |
+| ----------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| Lists are mutable                                                                   | Tuples are immutable                                        |
+| The implication of iterations is Time-consuming                                     | The implication of iterations is comparatively Faster       |
+| The list is better for performing operations, such as <br />insertion and deletion. | A Tuple data type is appropriate for accessing the elements |
+| Lists consume more memory                                                           | Tuple consumes less memory as compared to the list          |
+| Lists have several built-in methods                                                 | Tuple does not have many built-in methods.                  |
+| Unexpected changes and errors are more likely to occur                              | Because tuples don’t change they are far less error-prone. |
+
+---
+
+**LIST DATA TYPE:**
+
+*Built-in List Functions & Methods:*
+
+* len(list) -- Returns the total length of the list
+* max(list) -- returns list's with the maximum or greatest value
+* min(list) -- returns list's with the minimum or greatest value
+* list(req) -- converts the tuple, dict and set etc into the list
+
+List Methods:
+
+* list.append(object) -- append object to the given list
+* list.count(object) -- returns count of how many times the object occues in the list
+* list.extend(sequence) -- appends the contents of sequence into the list
+* list.index(object) -- give the least index in the list that the object appears
+* list.insert(index,object) -- inserts object into the list at the offset index
+* list.pop(object=list[-1) -- removes and returns the last object from the list
+* list.remove(object) -- removes the object from the given list
+* list.reverse() -- reverses objects of the list in the place
+* list.sort([function]) -- sorts the objects of the list and use the compare function if its given
+
+Difference Between append() and extend() in Python
+
+| Append()                                                                                                   | Extend()                                                                                                                  |
+| ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| To add a single entry to the end of a list,<br />use the append() function.                                | To add additional elements or an iterable to the end of a list,<br />use the extend() function.                           |
+| accepts only one input element.                                                                            | accepts as input an iterable (such as a list or tuple).                                                                   |
+| The append() function adds the full input to the<br />list as a single item.                               | extend() adds each item to the list independently after iterating<br />through each one in the input.                     |
+| Since append() only executes one operation, it is<br />typically quicker and more effective than extend(). | When adding elements from numerous iterables or with huge inputs,<br />extend() could take longer.                        |
+| ****Append**** has constant time complexity i.e.,O(1)                                          | ****Extend**** has a time complexity of O(k). Where k is the length of the <br />list which need to be added. |
+
+
+
+TUPLE Data Type:
+
+* len(tup) -- it gives the total limit/length of the tuple
+* max(tup) -- return maximum/greatest value
+* min(tup) -- returns minimum/least value
+* tuple(sequence) -- converts a list into the tuple
+
+DICTIONARY DATA TYPE:
+
+* dict.clear() -- removes all the elements of the dict
+* dict.copy() -- returns copy of dict
+* dict.fromkeys() -- creates a new dict with the keys from the sequence and the values/items that are set to the value.
+* dict.get(key,default=None) -- for key key, it returns the item/value or the default output if the respective key is not present in the dict.
+* dict.has_key(key) -- returns true if the key is found or false
+* dict.items() -- it returns a list of the given dictionary's (key,value) pair of the tuple
+* dict.keys() -- returns the list of a dict keys
+* dict.setdefault(key, default=none) -- similar to get(), but it will set the dict[key] = default if the key is not found in the given dict.
+* dict.update(dict1) -- it adds the dictionary dict1's key-values pairs to the dict
+* dict.values() -- it returns the list of the dict values
+
+THE SET DATA TYPE:
+
+s1.add(element) -- adds element in s1
+
+s1.union(s2) -- combines all the elements of both sets and returns them together
+
+s1.intersection(s2) -- returns the elements which are common in both of the given sets.
+
+s1.difference(s2) -- removes all elements of s2 that are present in s1 and then returns the rest elements of s1
+
+s1.symmetric_difference(s2) -- removes all common elements of s1 and s2 and then returns rest of the elements together
+
+s1==s2 -- returns true if boths the sets are symmetric
+
+s1!=s2 -- returns true if both sets are not symmetric
+
+s1<=s2 -- returns tru if the set s1 is the subset of set2
+
+s1<s2 -- returns true if the set s1 is the proper/applicable subset of the set s2
+
+s1>=s2 -- returns true if s2 is subset of s1
+
+set.clear() -- removes all the elements of sets
+
+set.remove() -- remove the specified elements from the set
+
+set.copy() -- returns a copy of the respective set
+
+frozenset(s1) -- returns true if s1 is forzenset
