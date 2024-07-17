@@ -205,14 +205,14 @@ What is the difference between Python Arrays and lists?
 
 **difference between list and  tuple:**
 
-| List                                                                                | Tuple                                                       |
-| ----------------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| Lists are mutable                                                                   | Tuples are immutable                                        |
-| The implication of iterations is Time-consuming                                     | The implication of iterations is comparatively Faster       |
-| The list is better for performing operations, such as <br />insertion and deletion. | A Tuple data type is appropriate for accessing the elements |
-| Lists consume more memory                                                           | Tuple consumes less memory as compared to the list          |
-| Lists have several built-in methods                                                 | Tuple does not have many built-in methods.                  |
-| Unexpected changes and errors are more likely to occur                              | Because tuples don’t change they are far less error-prone. |
+| List                                                                               | Tuple                                                       |
+| ---------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| Lists are mutable                                                                  | Tuples are immutable                                        |
+| The implication of iterations is Time-consuming                                    | The implication of iterations is comparatively Faster       |
+| The list is better for performing operations, such as<br />insertion and deletion. | A Tuple data type is appropriate for accessing the elements |
+| Lists consume more memory                                                          | Tuple consumes less memory as compared to the list          |
+| Lists have several built-in methods                                                | Tuple does not have many built-in methods.                  |
+| Unexpected changes and errors are more likely to occur                             | Because tuples don’t change they are far less error-prone. |
 
 ---
 
@@ -247,14 +247,14 @@ Difference Between append() and extend() in Python
 | Since append() only executes one operation, it is<br />typically quicker and more effective than extend(). | When adding elements from numerous iterables or with huge inputs,<br />extend() could take longer.                        |
 | ****Append**** has constant time complexity i.e.,O(1)                                          | ****Extend**** has a time complexity of O(k). Where k is the length of the <br />list which need to be added. |
 
-
-
 TUPLE Data Type:
 
 * len(tup) -- it gives the total limit/length of the tuple
 * max(tup) -- return maximum/greatest value
 * min(tup) -- returns minimum/least value
 * tuple(sequence) -- converts a list into the tuple
+* [count()](https://www.w3schools.com/python/ref_tuple_count.asp) -- Returns the number of times a specified value occurs in a tuple
+* [index()](https://www.w3schools.com/python/ref_tuple_index.asp) -- Searches the tuple for a specified value and returns the position of where it was found
 
 DICTIONARY DATA TYPE:
 
