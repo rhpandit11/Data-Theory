@@ -419,3 +419,42 @@ Why is Partitioning important:
 **Parallelism**: Each partitions can be processed independently and in parallel on different nodes.
 
 Bucketing: is a technique to be able to divide dataset into managable chunks, and the division of data depends on hash value, by this we can improve the performance of spark query(ex: filter, agg, joins).
+
+---
+
+**Spark Optimization Techniques:** 
+
+1. Use the higher version of Apache Spark to utilize default optimization features provided by Spark.
+2. Use DataFrames/Datasets over RDDs, to get advantage of Catalyst and Tungsten feature of Spark.
+3. Partitioning of data — If joining a very large table with a smaller table, pre partition the large table before joining with the smaller table to minimize the amount of data getting shuffled.
+4. Rearrange the joins and their joining condition in your query as per the table size. Means smaller tables should be joined first and larger tables should be at the last.
+5. Broadcast — Broadcasting plays an important role while tuning Spark jobs. Broadcast all small datasets/tables used in your code. This will load the data into memory for joining with large dataset to avoid shuffling.
+   Don’t forget to enable the below properties in your config file.
+   * **spark.sql.broadcastTimeout**
+   * **spark.sql.autoBroadcastJoinThreshold**
+6. Make use of Accumulators.
+7. Caching/persist — Spark provides its own caching mechanisms like persist() and cache(). Caching is the best technique for Apache Spark Optimization when we need to refer the dataset multiple times in your code.
+   Caching the data does not work always. We should wisely cache/persist the tables/views or dataframes, so that spark should not execute same dataset again and again.
+8. unpersist() the persisted dataframes/views and drop the created temp views using method droptempview() after their usage (at the end) to release memory.
+9. Avoid UDFs (User Defined Functions)
+10. Skewed data: Skewing happens when you don’t distribute the data evenly across the cluster nodes. One or two nodes will be processing most of the data. For example, when you join two tables by keys and say 60% of the keys are say either null or a particular value, then 60% of all the data will be processed by a single node. This will adversely impact performance in a distributed computing environment.
+11. Define Right driver and executor memory configuration, with right number of Executor cores.
+12. Avoid using count() function. Instead used limit(1)/take(1) to avoid unnecessary data collection.
+13. Shuffles are heavy operation which consume a lot of memory. While coding in Spark, the developer should always try to avoid shuffle operation. High shuffling may give rise to an OutOfMemory Error. To avoid such an error, the user can increase the level of parallelism by setting below properties in config file.**spark.default.parallelism  spark.sql.shuffle.partitions**
+14. Use reduceByKey instead of groupByKey.
+15. Spark jobs can be optimized by choosing the parquet file with snappy compression which gives the high performance and best analysis. Parquet file is native to Spark which carries the metadata along with its footer.
+16. Small file generation — Check the number of files getting created at hdfs directory for each table. If table is not partitioned, and it is getting loaded on daily basis, then there might be lot of small files getting created at backend, which may cause slowness during the table scan.
+
+Either perform compaction on table or limit the number of files creation in your code using repartition/coalesce function.
+
+These above-mentioned factors for spark optimization, if properly used, -
+
+· Achieve improvement in job execution time.
+
+· Can eliminate the long-running job.
+
+· Improve performance time by managing resources in better way.
+
+· Reduce the number of stage creation (Can be monitored in DAG)
+
+· Utilize less number of system resources during the execution time.
