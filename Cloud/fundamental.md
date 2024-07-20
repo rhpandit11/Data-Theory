@@ -302,7 +302,7 @@ Underlying Technology of Google Cloud Load Balancers:
 * IAM lets you grant granular access to specific google cloud resources and helps to prevent access to other resources.
 * IAM lets you adopt the security principle of least priviledged which states that nobody should have more permissions than they actually need.
 * With IAM, you manage access control by defining who('Identity') has what access(role) for which resources.
-* IAM permission to access a resource is n9it granted directly to the end user. Instead permissions are grouped into roles, and roles are granted to authenticated principles(members).
+* IAM permission to access a resource is not granted directly to the end user. Instead permissions are grouped into roles, and roles are granted to authenticated principles(members).
 * Policy defines and enforces what roles are granted to which principles.Each allow policy is attached to a resource.(Member+role)
 * When an authenticated principla attempts to access a resource IAM checks the resource's allow policy to determine whether the action is permitted.
 
