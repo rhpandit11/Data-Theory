@@ -268,6 +268,7 @@ DICTIONARY DATA TYPE:
 * dict.setdefault(key, default=none) -- similar to get(), but it will set the dict[key] = default if the key is not found in the given dict.
 * dict.update(dict1) -- it adds the dictionary dict1's key-values pairs to the dict
 * dict.values() -- it returns the list of the dict values
+* dict(zip(keys, values)) -- The zip() function in Python is used to combine two or more iterable [dictionaries](https://www.geeksforgeeks.org/python-dictionary/) into a single iterable
 
 THE SET DATA TYPE:
 
@@ -298,3 +299,19 @@ set.remove() -- remove the specified elements from the set
 set.copy() -- returns a copy of the respective set
 
 frozenset(s1) -- returns true if s1 is forzenset
+
+---
+
+Difference between Generator and Normal Function:
+
+| ****Scope**** | ****Generator****                                | ****Normal****                                      |
+| ------------------------- | ------------------------------------------------------------ | --------------------------------------------------------------- |
+| Execution                 | They can be paused in the middle of execution and resumed    | They runs to completion and returns a value                     |
+| Return value              | They can return multiple values through multiple iterations. | They returns a single value (or none)                           |
+| Memory usage              | They keeps the current value in memory,                      | They create a large amount of memory overhead                   |
+| Usage                     | They are used generate values that can be iterated over.     | They are used when to perform a task and return a <br />result. |
+
+---
+
+1. Can we make set as a ordered set .
+2. What is list compression and how it is different than lambda in python.
