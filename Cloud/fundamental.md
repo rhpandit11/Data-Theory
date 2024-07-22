@@ -352,23 +352,23 @@ Types of roles:
 | Delete & create projects         | Configure service  |           |                              |                                   |
 | Setup Billing for project        | Stop start service |           |                              |                                   |
 
-2. Predifined Roles:
+2. Predefined Roles:
    * Provides granular access for a specific service and is managed and defined by google cloud.
-   * Prevents unwanted access to othe resources
+   * Prevents unwanted access to other resources
    * Google is responsible for updating and adding permissions as necessary
    * You can grant multiple roles to the same user
-3. Custome Roles
+3. Custom Roles
    * provide granular access according to a user defined list of permissions.
    * you can create a custom IAM role with one or more permissions and then grant that custom role to users or groups
    * custom roles are not maintained by google
    * You can grant multiple roles to a user or a group
 
-**Policy(principle+role+condition) :** You cant grant roles to users by creating an allow policy which is a collection of statements that define who has what tyep of access.
+**Policy(principle+role+condition) :** You cant grant roles to users by creating an allow policy which is a collection of statements that define who has what type of access.
 
 * A policy is a collection of bindings audit configuration and metadata.
 * A binding associates one or more members with a single role and any context-specific conditions that change how and when the role is granted.
 * Each binding includes that following fields
-* A member known as an identity or principla can be a
+* A member known as an identity or principle can be a
   * user account
   * service account
   * google group
@@ -378,7 +378,7 @@ Types of roles:
 
 Service Accounts:
 
-* A service account is a special kind of account used by an application or a vitual machine not a person.
+* A service account is a special kind of account used by an application or a virtual machine not a person.
 * Application use service accounts to make authorized API calls, authorized as either
   * the service account itself
   * as google workspace
@@ -392,7 +392,7 @@ Types of Service Accounts:
 1. Default service account
 2. user-managed service account
 
-A service account is also a resource with IAM policies attached to it, which means you can define who can use the account and who can perform specific actions on the service account.0
+A service account is also a resource with IAM policies attached to it, which means you can define who can use the account and who can perform specific actions on the service account.
 
 ---
 
