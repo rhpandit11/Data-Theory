@@ -64,6 +64,12 @@
 2. **Stage** - A stage represents a set of tasks that can be executed in parallel. There are two types of stages in Spark: shuffle stages and non-shuffle stages. Shuffle stages involve the exchange of data between nodes, while non-shuffle stages do not.(groupByKey, sortByKey).
 3. **Task** - in spark is the samallest unit of work that can be scheduled. Each stage is divided into task.A task is a unit of execution that runs on a single machine.
 
+
+* **Application:** When we submit the Spark code to a cluster it creates a Spark Application.
+* **Job:** The Job is the top-level execution for any Spark application. A Job corresponds to an Action in a Spark application.
+* **Stage:** Jobs will be divided into stages. The Transformations work in a lazy fashion and will not be executed until an Action is called. Actions might include one or many Transformations and the Transformations define the breakdown of jobs into stages, which corresponds to a shuffle dependency.
+* **Task:** Stages will be further divided into various tasks. The task is the most granular unit in Spark applications.  =Each task represents a local computation on a particular node in the Spark Cluster= .
+
 ---
 
 **Spark Internally Working:**
@@ -461,8 +467,6 @@ These above-mentioned factors for spark optimization, if properly used, -
 
 ---
 
-
-
 1️⃣ Repartition vs. Coalesce: Repartition changes the number of partitions, while coalesce reduces partitions without full shuffle.
 
 2️⃣ Sort By vs. Order By: Sort By sorts data within each partition and may result in partially ordered final results if multiple reducers are used. Order By guarantees total order across all partitions in the final output.
@@ -502,3 +506,40 @@ These above-mentioned factors for spark optimization, if properly used, -
 1️⃣9️⃣ Internal Table vs. External Table: Internal managed by Spark, External managed externally (e.g., Hive).
 
 2️⃣0️⃣ Executor vs. Driver: Executor runs tasks on worker nodes, Driver manages job execution.
+
+---
+
+Spark-Submit : 
+
+```apache
+\bin\spark-submit\
+-- master local[s]
+-- deploy-mode cluster  \
+-- class main-class.scala \  -> optional(for java/scala)
+-- jars c:\my-sql-jar\my-sql-connector.jar \
+-- conf spark.dynamicAllocation.enabled = true \
+-- conf spark.dynamicAllocation.minExecutors = 1 \
+-- conf spark.dynamicAllocation.maxExecutors = 10 \
+-- conf spark.sql.broadcastTimeout = 3600 \
+-- conf spark.sql.autoBroadcastJoinThreshold = 100000 \
+-- driver-memory 1G \
+-- executor-memory 2G \
+-- num-executors 5 \
+-- executor-cores 2 \
+-- py-files SparkSession.py, logging-config.py,...\
+--files config.py \
+c:\user\Rahul\Desktop\my_folder_name\main.py testing-project
+
+```
+
+
+Edge Node:
+
+Client mode Vs Cluster mode:
+
+| Client                                                                | Cluster                                                                               |
+| --------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| Logs are generated on client machine.It is easy to debug.             | Logs are generated in std out or std err file. It is suitable for production-workload |
+| Network latency is high                                               | Network latency is low                                                                |
+| Driver OOM can be there                                               | Driver can go into oom but chances are less.                                          |
+| Driver goes away once the edge node server is disconnected or closed. | Even if edge server closed process still runs on cluster                              |

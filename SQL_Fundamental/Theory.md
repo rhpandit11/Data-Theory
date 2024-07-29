@@ -172,18 +172,23 @@ SET new.marks = new.marks+100;
 
 ---
 
-**VIEW:** kind of virtual table not stored in database and give query result through real tables.
+**VIEW:** kind of virtual table not stored in database and give query result through real tables. ex. 
+
+CREATE VIEW *view_name* AS
+SELECT  *column1* ,  *column2* , ...
+FROM *table_name*
+WHERE  *condition* ;
 
 ****Materialized Views:**** When the results of a view expression are stored in a database system, they are called materialized views.
 
 | Views                                                                                                                                                                                 | Materialized Views                                                                                                                                                                             |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Query expression are stored in the databases system,<br />and not the resulting tuples of the query expression.                                                                       | Resulting tuples of the query expression are stored in the databases <br />system.                                                                                                             |
+| Query expression are stored in the databases system,<br />and not the resulting tuples of the query expression.                                                                       | Resulting tuples of the query expression are stored in the databases<br />system.                                                                                                              |
 | Views needs not to be updated every time the relation<br />on which view is defined is updated, as the tuples of the views<br /> are computed every time when the view is accessed. | Materialized views are updated as the tuples are stored in the database<br />system. It can be updated in one of three ways depending on the <br />databases <br />system as mentioned above. |
 | It does not have any storage cost associated with it.                                                                                                                                 | It does have a storage cost associated with it.                                                                                                                                                |
 | It does not have any updation cost associated with it.                                                                                                                                | It does have updation cost associated with it.                                                                                                                                                 |
 | There is an SQL standard of defining a view.                                                                                                                                          | There is no SQL standard for defining a materialized view, and the<br /> functionality is provided by some databases systems as an extension.                                                 |
-| Views are useful when the view is accessed infrequently.                                                                                                                              | Materialized views are efficient when the view is accessed frequently <br />as it<br />saves the computation time by storing the results before hand.                                          |
+| Views are useful when the view is accessed infrequently.                                                                                                                              | Materialized views are efficient when the view is accessed frequently<br />as it<br />saves the computation time by storing the results before hand.                                           |
 
 **Advantages:**
 
@@ -209,7 +214,11 @@ SET new.marks = new.marks+100;
 
 **Types:**
 
-1. Clustered Index: Index which have primary key define.You can create only one clustered index in a table.In this index contain a pointer to block but not direct data.If  we create a table with primary key then automatically clustered index created.If you have one clustered index on multiple columns, and that type of index is called a composite index.
+1. Clustered Index: Index which have primary key define.You can create only one clustered index in a table.In this index contain a pointer to block but not direct data.If  we create a table with primary key then automatically clustered index created.If you have one clustered index on multiple columns, and that type of index is called a composite index. ex:
+
+   ```sql
+   CREATE INDEX idx_LastName ON Employees (LastName);
+   ```
 
    * The data or file, that you are moving into secondary memory should be in sequential or sorted order.
    * There should be a key value, meaning it can not have repeated values.

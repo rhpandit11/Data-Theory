@@ -304,14 +304,84 @@ frozenset(s1) -- returns true if s1 is forzenset
 
 Difference between Generator and Normal Function:
 
-| ****Scope**** | ****Generator****                                | ****Normal****                                      |
-| ------------------------- | ------------------------------------------------------------ | --------------------------------------------------------------- |
-| Execution                 | They can be paused in the middle of execution and resumed    | They runs to completion and returns a value                     |
-| Return value              | They can return multiple values through multiple iterations. | They returns a single value (or none)                           |
-| Memory usage              | They keeps the current value in memory,                      | They create a large amount of memory overhead                   |
-| Usage                     | They are used generate values that can be iterated over.     | They are used when to perform a task and return a <br />result. |
+| ****Scope**** | ****Generator****                                | ****Normal****                                          |
+| ------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------- |
+| Execution                 | They can be paused in the middle of execution and resumed    | They runs to completion and returns a value                         |
+| Return value              | They can return multiple values through multiple iterations. | They returns a single value (or none)                               |
+| Memory usage              | They keeps the current value in memory,                      | They create a large amount of memory<br />overhead                  |
+| Usage                     | They are used generate values that can be iterated over.     | They are used when to perform a task and<br />return a<br />result. |
 
 ---
 
 1. Can we make set as a ordered set .
 2. What is list compression and how it is different than lambda in python.
+
+---
+
+python follows a protocol to decide the scope of variable - LEGB(Local -> Enclosed -> Global -> Built-in).
+
+**Local Scope:** when we declare a variable inside a function, it's a local variable, Its scope is limited to the function itself, means it can't be accessed outside of it.
+
+**Enclosed Scope:** Enclosed scope refers to variables in the local scope of enclosing functions. This term becomes relevant when you have nested functions; where one function is wrapped inside another function.
+
+**Global Scope:** global variables are variables defined outside all functions. python can recognize a global variable anywhere in the code be it inside or outside.
+
+**Built-in Scope:** Built-in scope refers to names in Python’s built-in namespace, including all the built-in functions and types such as `str`, `list`, `dict`, `print()`, `len()`, etc. Python recognises these names anywhere in the code.
+
+**Nested Functions:** function declared inside another function known as the ‘enclosing function’. These inner functions have access to the variables and names defined in the enclosing function.
+
+```python
+def outer_func():
+    outer_var = 'I am in the outer function'
+  
+    def inner_func():
+        inner_var = 'I am in inner function'
+        print(outer_var)  # I can access outer_var
+        print(inner_var)
+ 
+    inner_func()
+
+outer_func()
+```
+
+**Closures:** A closure is a nested function that remembers and has access to variables in the scope in which it was created, even if the outer function has finished execution.
+
+```python
+def outer_func(message):
+    # This is the outer enclosing function
+
+    def inner_func():
+        # This is the nested function
+        print(message)
+
+    return inner_func  # Return without Parenthesis
+
+my_func = outer_func("Hello World")
+my_func()  # Output: "Hello World"
+```
+
+Free Variables: A free variable in Python is a variable used in a function that is not local or in the global scope. its part of the enclosing scope of the function.
+
+```python
+def outer_func(message):
+    # Here, 'message' is a free variable
+    def inner_func():
+        print(message)
+    return inner_func
+
+my_func = outer_func("Hello World")
+my_func()  # Output: "Hello World"
+
+#message -> free variable
+
+```
+
+When and Why to Use Closures:
+
+Data Hiding: Closures can be used to avoid the use of global values and provide some form of data hiding.
+
+Function Factories: Closures can also be used to create function factories. A function factory is a function that returns a new function for each invocation, which can act on different data.
+
+Lightweight, Anonymous Functions.
+
+---

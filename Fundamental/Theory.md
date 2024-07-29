@@ -101,3 +101,17 @@ Google BigQuery
 | Productivity        | Improves the efficiency of business analysts.                                                                                   | Enhances the user’s productivity.                                                                                                                      |
 
 Framework: A framework is a pre-built foundation for application development, offering tools and templates to speed up the process and avoid starting from scratch.
+
+Purpose of Serialization and Deserialization: we store data in data structures like string, list, dict format but transporting them in the same data structure is inefficient.So in order to transfer data accross network we need to transform(serialize) the data into byte stream with enough information in a way that it can be retransformed (deserialized) back into its original format at its destination.
+
+Database: A database is a collection of data or information.
+
+Datawarehouse: A datawarehouse is a system that stores highly structured information from various sources. Typically  store current and hiostorical data from one or more systems.The goal is to utilize it to analyze the data, look for insights and create BI in the form of reports and dashboards.
+
+DataLake: A datalake is a repository of data from disparate sources that is stored in its orginal/raw format.what sets data lake apart is their ability to store data in varity of formats including JSON, BSON, CSV, TSV, AVRO, ORC and parquet.
+
+Difference:
+
+* A database stores the current data required to power an application.
+* A datawarehouse store current and historical data from one or more systems in a predefined and fixed schema which allows to easily analze the data.
+* A datalake stores current and historical data from one or more systems in its raw format.
