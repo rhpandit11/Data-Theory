@@ -434,3 +434,157 @@ names = ['Alice', 'Bob', 'Charlie']
 ages = [25, 30, 35]
 result = zip(names, ages)
 print(list(result))  # Output: [('Alice', 25), ('Bob', 30), ('Charlie', 35)]
+
+---
+
+List: A list is a collection that is ordered and changeable. Allows duplicate members.
+
+Tuple: Tuple is a collection that is ordered and unchangeable. Allows duplicate members.
+
+Set:: Set is a collection that is unordered, unchangeable, and unindexed. No duplicate members.
+
+Dictionary: A dictionary is a collection that is ordered and changeable. No duplicate members.
+
+---
+
+List Items:
+
+* List items are ordered, changeable, and allow duplicate values.
+* List items are indexed, the first item has an index[0], the second item has an index[1], etc.
+
+---
+
+Tuple: Tuple is the same as List except that it is immutable, i.e. once we create a tuple object, we cannot perform any changes in that object.
+
+Tuple items are  **ordered** ,  **indexed** , **unchangeable,** and  **allow duplicate values** .
+
+Since tuples are immutable, they do not have built-in methods like append(), extend(), insert(), remove(), etc. So if we are going to apply
+these methods directly on tuples then it will throw an error.
+
+But there are other ways to apply these functions on tuples, by directly converting tuples to lists and after updating values again converting
+that list to tuples.
+
+---
+
+Sets
+
+* Set is an unordered, unchangeable, unindexed collection and does not allow duplicates.Set items are unchangeable, but you can remove items and add new items means we can not update the set but can add or remove items.
+
+The main difference between a set and a tuple is that in a set we can add or remove items but in the case of the tuple, once it’s created we
+can not do anything on it.
+
+Properties of sets:
+
+Unordered, Unchangeable, Duplicates Not Allowed, Heterogeneous.
+
+Why duplicates are not allowed in sets, and allowed in lists or tuples?
+
+In the case of list or tuple they are indexed so, the index of duplicate item is different, and they are accessed by using an index, so duplicates are allowerd.But in the case of sets, there are no indexes so no duplicates members are allowed.
+
+In list or tuple they are ordered meaning everything dependent on the index and hence duplicates are allowed, but in set everything is dependent on value and because it is unordered, that's why no duplicates members are allowed in sets.
+
+If we use duplicates values in then it will not give an error but will print only one value and duplicates are not going to printed.
+
+To access sets element there are three methods:
+
+1. Using **in** keyword
+2. Using **For loop**
+3. Using **if-else** statements
+
+Lists & Tuples Vs Set
+
+* Wecan not use the update( ) method on a list or tuple, because there is no such method present for it, if we use then it will give an error.
+* **We can use insert( ), append( ), extend( ) methods for lists or tuples but not for sets**
+* **We can use add( ), and update( ) methods for sets but not for lists or tuples.**
+
+frozenset: Frozenset is a set in which we can not do changes or do any updations in it.Python frozenset( ) Method creates an immutable Set object from an iterable. It is a built-in Python function.
+
+---
+
+Dictionary: A dictionary is an ordered, changeable collection and **does not allow duplicate keys. **Values can be duplicated but keys can not be duplicated****
+
+Dictionary Properties
+
+* A Python dictionary consists of a key and then an associated value. The value can be almost any Python object.
+* Duplicate keys are not allowed but values can be duplicated.
+* Heterogeneous objects are allowed for both keys and values.
+* Dictionaries are mutable(can change or update values).
+* Indexing and slicing concepts are not applicable.
+
+Dictionary Items
+
+* Dictionary items are **ordered, and changeable, and do not allow duplicate keys.**
+* Dictionary items are presented in key: value pairs and can be referred to by using the key name.
+
+Accessing dictionary items:
+
+**Using keys, we can access values but using values we can not access keys**
+
+1. Using square brackets and specifying the key name in it
+2. Using the get( ) method by specifying the key name in it
+
+Duplicate Keys Not Allowed:
+
+* Dictionaries cannot have two items with the same key.
+* If so, then it will consider the recent values of duplicates.
+* **Dictionaries will not allow duplicates of keys**
+* **Dictionaries will allow duplicates of values**
+
+---
+
+A function is a collection of related assertions that performs a mathematical, analytical, or evaluative operation.
+
+Types of Functions
+
+* Built-in Functions: function which are coming along with python software automatically, are called built-in or pre-defined functions. EX: id(), type(), input()
+* user-defined functions: function which are developed by programmers.
+
+Benefits/Advantages:
+
+* larger code can be broken up into pieces.
+* works on philosophy of write once use forever.
+* code is organized and coherent.
+
+Keywrod Use: 
+
+* def (mandaotry)
+* return (optional)
+
+Diff between return and print:
+
+return will save the result of the output of a dunction as a variable.Print() will simply displays the output.
+
+Function Arguments:
+
+* Defualt Arguments: is kind of parameter that takes input a default vlue if not value is supplied for the argument when the function is called.
+* Keyword Arguments: the parameter name and argument name must be the same.here order of argument is not important but the number of arguments must be matched.
+* Required Arguments: also called positional arguments, tese are the arguments need to passed in the correct positional order. Number of parameters = number of arguments.
+* Variable - length Arguments: we can use special characters in python functions to pass many arguments as we want in a function. There are two types of characters we can use:
+  * *args: These are Non-Keyword Arguments
+  * **kwargs: these are keyword arguments
+
+Recursive Functions: when a function call itself is known as recursive(getting repeated again and again) function.
+
+Advantages : reduce the length of code.
+
+Lambda Function: is a small anonymous function. it can take any number of arguments, but can only have one expression.it is a one-liner dunction means we are giving defination, expression and arguments in one line.
+
+Advantages: good for simple logical operations, good when ou want a function that you will use just one time.
+
+Disadvantages: They can only perform one expression. It's not posiible to have multiple independent operations in one lambda function.
+
+Diff between Lambda function and UDF function:
+
+* there is only one expression in lambda function and there are n number of exceptions in UDF.
+* we use lambda for lambda function for udf we use def.
+* we can not call lambda function multiple time but we can call udf function may time.
+* we use return keyword in udf but in lambda there is no need of return keyword.
+
+Filter() Function - to filter values from the given sequence based on some condition.
+
+map() Function - the function can be applied to each element of the sequence and generates a new sequence, ex: for every element present in the list perform a double and generates a new list of doubles.
+
+reduce() function: reduces the sequence of elements into a single element by applying the specified function. available in functools module to use we have to import.
+
+
+Enumerate Function: adds a counter to an iterable and returns it in a form of an enumerating object. this enumerated object can be directly used for loops or converted into a list using list() method. enumerate(iterable, start = 0)
