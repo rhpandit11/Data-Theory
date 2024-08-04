@@ -385,3 +385,52 @@ Function Factories: Closures can also be used to create function factories. A fu
 Lightweight, Anonymous Functions.
 
 ---
+
+What is list comprehension and provide an example?
+
+**Answer:**List comprehension is a concise way to create lists in Python.
+
+```
+squared_numbers = [x**2 for x in range(10)]
+```
+
+**Question:**
+What is the difference between `==` and `is`?
+
+**Answer:**
+`==` checks for value equality, while `is` checks for identity (whether two references point to the same object in memory).
+
+What are Python's magic (dunder) methods, and how are they used? Provide an example.
+
+**Answer:**
+Magic or dunder (double underscore) methods in Python are special methods that have double underscores at the beginning and end of their
+names. They allow developers to emulate built-in behavior or implement operator overloading.
+
+**Question:**
+What is the difference between `__new__` and `__init__` in a class?
+
+**Answer:**
+`__new__` is responsible for creating and returning a new instance of the class, while `__init__` is responsible for initializing the created object.
+
+What is the difference between an `Iterable` and an `Iterator`?
+
+**Answer:**
+
+* **Iterable** : An object which has an `__iter__` method that returns an iterator.
+* **Iterator** : An object that can return its items one at a time using the `__next__` method and implements the `__iter__` method.
+
+**32. Question:**
+How does the `map` function work in Python?
+
+**Answer:**
+The `map` function applies a given function to all the items in an input list (or another iterable). For example:
+
+What does the `zip` function do in Python?
+
+**Answer:**
+The `zip` function takes two or more iterables as argumentsand returns an iterator that generates tuples containing elements from the input iterables. Elements are paired based on their order.
+
+names = ['Alice', 'Bob', 'Charlie']
+ages = [25, 30, 35]
+result = zip(names, ages)
+print(list(result))  # Output: [('Alice', 25), ('Bob', 30), ('Charlie', 35)]

@@ -172,7 +172,7 @@ SET new.marks = new.marks+100;
 
 ---
 
-**VIEW:** kind of virtual table not stored in database and give query result through real tables. ex. 
+**VIEW:** kind of virtual table not stored in database and give query result through real tables. ex.
 
 CREATE VIEW *view_name* AS
 SELECT  *column1* ,  *column2* , ...

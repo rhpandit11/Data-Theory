@@ -113,10 +113,11 @@ ex: select SESSION_USER()
 
 Tables Type:
 
-* Managed Tables - tables backed by native BigQuery Storage
-* External Tables - tables backed by storage external to BQ that enables live queries against data held in other storage systems.
-* Standard views - virtual tables defined by a sql query which is resolved at run time.
-* Materialized Views - Precoumputed views that periodically caches results of the query and persist within native BQ storage.
+* External Tables - External tables are stored outside out of BigQuery storage and refer to data that's stored outside of BigQuery.
+* Standard Tables- Standard BigQuery tables contain structured data and are stored in BigQuery storage in a columnar format.
+* Materialized Views - [Materialized views](https://cloud.google.com/bigquery/docs/materialized-views-intro), which are precomputed views that periodically cache the results of the view query. The cached
+  results are stored in BigQuery storage.
+* [Views](https://cloud.google.com/bigquery/docs/views-intro), which are logical tables that are defined by using SQL queries. These queries define the view that is run each time the view is queried.
 
 ---
 

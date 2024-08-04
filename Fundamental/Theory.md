@@ -115,3 +115,74 @@ Difference:
 * A database stores the current data required to power an application.
 * A datawarehouse store current and historical data from one or more systems in a predefined and fixed schema which allows to easily analze the data.
 * A datalake stores current and historical data from one or more systems in its raw format.
+
+Different File Formats:
+
+File Should:
+
+* Get Read Fast
+* Get Writtent Fast
+* Be splittable i.e multiple tasks can run parallel on parts of file
+* Support schema evolution, allowing us to change schema of file
+* support advanced compression through various available compression codescs(Bzip2,LZO, Snappy etc)
+
+Text Files(csv,tsv):
+
+* Behaviour: Each line is a record/data, and lines are terminated by a newline character(\n).
+* Read/Write: Good write perrformance but slow reads
+* compression: Do not support block compression
+* splitable: Text-files are inherently splittable on \n character
+* Schema Evolution: Limited schema evolution(New fields can only be appended to existing fields while old fields can never be deleted).
+
+Sequence File:
+
+* Behaviour: Each record is stored as a key value pair in binary format
+* Read/Write: Good write performance than text files
+* compression: support block compression
+* Splitable: sequence files are splittable
+* Schema Evolution: Limited schema evolution(New fields can only be appended to existing fields while old fields can never be deleted).
+
+Avro File:
+
+* Behaviour: It is a file format plus a serialization and deserialization framework. Avro uses JSON for defining data types and serializes data in compact binary format.
+* Read/Write: Average read/write performance
+* compression: support block compression
+* Splitable: Avro files are splittable
+* Schema Evolution: was mainly designed for schema evolution. Fields can renamed, added, deleted while old files can still be read with the new schema.
+
+Columnar File Formats:
+
+* In columnar file format instead of just storing rows of data adjacent to one another we also store column values adjacent to each other.
+* So datasets are partitioned both horizontally and vertically
+
+RC(Record Columnar) File:
+
+* Behaviour: These are flat files consisting of binary key/value pairs and it shares much similarity with sequnce file.
+* Read/Write: was developed for faster reads but with a compromise with write peformance
+* compression: provides significant block compression, can be compressed with high compression ratios.
+* Splitable: RC files are splittable
+* Schema Evolution: Was mainly designed for Faster reads so No schema evolution.
+
+ORC File:
+
+* Behaviour: A better version fot RC file
+* Read/Write: was developed for faster reads but with a compromise with write peformance(better than RC file)
+* compression: provides significant block compression, can be compressed with high compression ratios.(better than RC file)
+* Splitable: ORC files are splittable
+* Schema Evolution: Was mainly designed for Faster reads so No schema evolution.
+
+Parquet File:
+
+* Behaviour: It is a columnar file format, similar to RC and ORC. Parquet stores nested data structures in a flat columnar format.
+* Read/Write: Faster reads with slow writes
+* compression: Support compression mostly with snappy algorithm
+* Splitable: parquet files are conditionally splittable
+* Schema Evolution: Limited schema evolution(New Fields can only be appended to existing fields while old fields can never be deleted).
+
+
+- Use **CSV** for simple and small datasets.
+- Use **JSON** for semi-structured data and ease of readability.
+- Use **Avro** for efficient data serialization with schema evolution.
+- Use **Parquet** or **ORC** for high-performance analytics on large datasets.
+- Use *SequenceFile* for key-value pair data storage in Hadoop.
+- Use *RCFile* for efficient columnar storage in Hadoop environments.
