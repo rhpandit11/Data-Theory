@@ -545,7 +545,7 @@ Benefits/Advantages:
 * works on philosophy of write once use forever.
 * code is organized and coherent.
 
-Keywrod Use: 
+Keywrod Use:
 
 * def (mandaotry)
 * return (optional)
@@ -586,5 +586,28 @@ map() Function - the function can be applied to each element of the sequence and
 
 reduce() function: reduces the sequence of elements into a single element by applying the specified function. available in functools module to use we have to import.
 
-
 Enumerate Function: adds a counter to an iterable and returns it in a form of an enumerating object. this enumerated object can be directly used for loops or converted into a list using list() method. enumerate(iterable, start = 0)
+
+---
+
+Class: A class is a blueprint for creating objects, defining their attributes (data) and methods (functions). It encapsulates related data and behavior, providing a clear structure to work with.
+
+Objects: Objects are instances of a class. They are created based on the class blueprint and can have their own unique data and behavior.
+
+Inheritance: Inheritance allows us to create new classes based on existing ones, and allow classes to inherit common properties from the parent class.
+
+Encapsulation: means it binds data and code together into one unit.
+
+Polymorphism: is the ability to exist in many forms.
+
+Abstraction: it displays only the important information by hiding the implementation part.
+
+
+Diff between Abstraction and Encapsulation:
+
+| Abstraction                                                                                                                                                      | Encapsulation                                                                                                                                                                                                      |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Abstraction solve the problem in the design level.                                                                                                               | Encapsulation solves the problem in the implementation level.                                                                                                                                                      |
+| Abstraction is used for hiding the unwanted data and giving relevant data.                                                                                       | Encapsulation means hiding the code and data into a single unit<br /> to protect the data from the outside world.                                                                                                  |
+| Abstraction lets you focus on what the object does instead of how it does it.                                                                                    | Encapsulation means hiding the internal details or mechanics of<br />how an object does something.                                                                                                                 |
+| Abstraction - outer layout, used in terms of design.<br />Ex: outer look of a mobile phone, like it has display screen and keypad buttons<br />to dial a number. | Encapuslation - Inner Layout , used in terms of implementation<br />EX: inner implementation details of a mobile phone, how keypad<br />button and display screen are connect with each other using <br />circuits |
