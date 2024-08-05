@@ -1,4 +1,4 @@
-**Pyspark:** PySpark is an Apache Spark interface in Python. It is used forcollaborating with Spark using APIs written in Python. It also supports Spark's features like Spark DataFrame, Spark SQL, Spark Streaming, Spark MLlib and Spark Core.
+**Pyspark:** PySpark is an Apache Spark interface in Python. It is used for collaborating with Spark using APIs written in Python. It also supports Spark's features like Spark DataFrame, Spark SQL, Spark Streaming, Spark MLlib and Spark Core.
 
 **advantages:**
 
