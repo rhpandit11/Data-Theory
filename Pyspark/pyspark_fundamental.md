@@ -134,3 +134,70 @@ Pyspark's startsWith() and endsWith() methods: methods belongs to column class a
 
 * **startsWith()** – returns boolean Boolean value. It is true when the value of the column starts with the specified string and False when the match is not satisfied in that column value.
 * **endsWith()** – returns boolean Boolean value. It is true when the value of the column ends with the specified string and False when the match is not satisfied in that column value.
+
+---
+
+PySpark is the Python API to Apache Spark, meaning that we can write Python code that calls Spark automatically.
+
+
+how to read file in pyspark:
+
+```python
+spark.read.format('csv') \
+	  .option('header','true') \
+          .option('inferSchema','false') \
+	  .option('skipRows',1) \
+	  .schema(my_schema ) \
+          .option('mode','FAILFAST') \
+          .load('c:\user\download\data.csv')
+```
+
+mode:
+
+* FailFast - fail execution if mailformed record in dataset
+* Dropmalformed - drop the corrupted record
+* Permissive(default) - set null value to all corrupted fields
+
+How to create a schema in pyspark:
+
+Using two methods:
+
+* StructType - (which defines our structure of DF. collection of StructField),   StructField
+* DDL
+
+using StructType and field method:
+
+```python
+from pyspark.sql.types import StructType, StructField
+my_schema = StructType ([
+		   	  StructField("id", IntegerType(), True),
+		          StructField("name", StringType(), True),
+			  StructField("age", IntegerType(), True),
+			  StructField("_corrupt_record", StringType(), True), #for handling bad records
+			])
+```
+
+DDL Method:
+
+ddl_my_schema = "id integer, name string, age integer"
+
+
+Corrupted Record Handling: To handle corrupt record we will define our own schema with "_courrupt_record" filed name and make this string type.Later we can access that by loading the badRecordsPath.
+
+```python
+spark.read.format('csv') \
+	  .option('header','true') \
+          .option('inferSchema','false') \
+	  .schema(my_schema) \
+	  .option('badRecordsPath', 'c:\user\download\bad_records') \ #by default in .json format
+          .load('c:\user\download\data.csv')
+
+```
+
+
+Read Json File:
+
+
+Parquet: columnar based hybrid structured binary file format
+
+by default 128mb

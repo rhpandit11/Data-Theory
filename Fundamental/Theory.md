@@ -98,7 +98,7 @@ Google BigQuery
 | Updates             | With lengthy, scheduled batch operations,<br />data is refreshed on a regular basis.                                            | The user initiates data updates, which are<br />brief and quick.                                                                                        |
 | Nature of audience  | The process is focused on the customer.                                                                                         | The process is focused on the market.                                                                                                                   |
 | Database Design     | Design with a focus on the subject.                                                                                             | Design that is focused on the application.                                                                                                              |
-| Productivity        | Improves the efficiency of business analysts.                                                                                   | Enhances the user’s productivity.                                                                                                                      |
+| Productivity        | Improves the efficiency of business analysts.                                                                                   | Enhances the user's productivity.                                                                                                                       |
 
 Framework: A framework is a pre-built foundation for application development, offering tools and templates to speed up the process and avoid starting from scratch.
 
@@ -178,7 +178,6 @@ Parquet File:
 * compression: Support compression mostly with snappy algorithm
 * Splitable: parquet files are conditionally splittable
 * Schema Evolution: Limited schema evolution(New Fields can only be appended to existing fields while old fields can never be deleted).
-
 
 - Use **CSV** for simple and small datasets.
 - Use **JSON** for semi-structured data and ease of readability.
