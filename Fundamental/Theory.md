@@ -120,11 +120,11 @@ Different File Formats:
 
 File Should:
 
-* Get Read Fast
-* Get Writtent Fast
-* Be splittable i.e multiple tasks can run parallel on parts of file
-* Support schema evolution, allowing us to change schema of file
-* support advanced compression through various available compression codescs(Bzip2,LZO, Snappy etc)
+1. Faster read times
+2. Faster write times
+3. Splittable files
+4. Schema evolution support
+5. Advanced compression support
 
 Text Files(csv,tsv):
 
