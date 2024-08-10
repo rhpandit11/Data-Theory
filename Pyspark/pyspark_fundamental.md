@@ -139,7 +139,6 @@ Pyspark's startsWith() and endsWith() methods: methods belongs to column class a
 
 PySpark is the Python API to Apache Spark, meaning that we can write Python code that calls Spark automatically.
 
-
 how to read file in pyspark:
 
 ```python
@@ -181,7 +180,6 @@ DDL Method:
 
 ddl_my_schema = "id integer, name string, age integer"
 
-
 Corrupted Record Handling: To handle corrupt record we will define our own schema with "_courrupt_record" filed name and make this string type.Later we can access that by loading the badRecordsPath.
 
 ```python
@@ -194,10 +192,165 @@ spark.read.format('csv') \
 
 ```
 
-
 Read Json File:
-
 
 Parquet: columnar based hybrid structured binary file format
 
 by default 128mb
+
+How to write data to disk:
+
+```python
+df.write.format("csv") \ 
+	.option("header","true") \
+	.option("mode","overwrite") \
+	.option("path", "/Filestore/tables/csv_write") \
+	.save()
+```
+
+write data with partition:
+
+```python
+df.repartition(3).write.format("csv") \ 
+	.option("header","true") \
+	.option("mode","overwrite") \
+	.option("path", "/Filestore/tables/csv_write") \
+	.save()  ## it will store data in 3 files
+
+```
+
+Modes in Dataframe writer API:
+
+* Append - This mode appends the data to the file, preserving any existing data in the file. If the file does not exist, it will be created.
+* Overwrite - This mode overwrites any existing data in the file. If the file does not exist, it will be created.
+* errorIfExists - This mode raises an error if the file already exists.
+* ignore - This mode writes the data to the file only if the file does not already exist. If the file already exists, the write operation is ignored.
+
+Partitioning and Bucketing:
+
+```python
+df.write.format("csv") \ 
+	.option("header","true") \
+	.option("mode","overwrite") \
+	.option("path", "/Filestore/tables/csv_write/partitionby_address_gender") \
+	.partitionBy("address","gender") \
+	.save()
+
+
+```
+
+Bucketing:
+
+```python
+df.write.format("csv") \ 
+	.option("header","true") \
+	.option("mode","overwrite") \
+	.option("path", "/Filestore/tables/csv_write/bucket_by_id") \
+	.bucketBy(3,"id") \
+	.saveAsTable("bucket_by_id_table")
+```
+
+Bucket Purning
+
+How to create DataFrame:
+
+```python
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder.appName('creating datafram').getOrCreate()
+```
+
+Using PySpark to read PostgreSQL DB remotely:
+
+* Initialize Spark Session
+
+```python
+spark = SparkSession\
+    .builder\
+    .appName("Connecting to JDBC")\
+    .config("spark.driver.extraClassPath", "/path/to/postgresql-<version>.jar")\
+    .getOrCreate()
+```
+
+* Define JDBC connection properties
+
+```python
+driver = "org.postgresql.Driver"
+url = "jdbc:postgresql://<ip_address>:5432/<name_of_db>"
+user = "my_unique_user_name"
+password = "my_unique_password"
+```
+
+* read data
+
+```python
+spark.read\
+    .format("jdbc")\
+    .option("driver", driver)\
+    .option("url", url)\
+    .option("user", user)\
+    .option("password", password)\
+    .option("dbtable", "db.table_name")\
+    .load()
+```
+
+Dataframe Transformation:
+
+schema = column Name + Column Data type
+
+Dataframe = column + rows
+
+multiple way to select columns:
+
+```python
+df.select("id",col("name"), df["salary"], df.address).show())
+```
+
+use of expr:
+
+```python
+df.select(expr("id as employee_id"), expr("name as employee_name"), expr("concat(name,address)")).show()
+```
+
+Filter a Column:
+
+```python
+df.filter(col("salary")>1500000).show()
+df.where(col("salary")>1500000).show()
+
+
+#multiple condition
+df.filter((col("salary")>1500000) & (col("age")<18)).show()
+```
+
+using of literal:
+
+```python
+df.select("*",lit("kumar").alias("last_name")).show()
+```
+
+Adding/overriding new column:
+
+```python
+df.withColumn("sur_name",lit("singh")).show()
+```
+
+Renaming column:
+
+```python
+df.withColumnRenamed("id","employee_df").show()
+```
+
+change Data Type:
+
+```python
+df.withColumn("id",col("id").cast("string")) \
+  .withColumn("salary",col("salary").cast("long")) \
+.printSchema()
+```
+
+drop column
+
+```python
+df.drop("id").show())
+```
