@@ -354,3 +354,79 @@ drop column
 ```python
 df.drop("id").show())
 ```
+
+union VS unionAll
+
+**If we are using union or unionAll in df then both will provide same output.
+
+** but in spark sql union will give only distinct records while unionAll will give all records including duplicates.
+
+**unionByName - it will check both dataframes column name if they are same then only it gives result.
+
+If-else in pyspark:
+
+```python
+df.withColumn("adult", when(col("age")<18, "No")
+			.when(col("age")>18, "Yes")
+			.otherwise("NoValue")).show()
+```
+
+in purpose of update:
+
+```python
+df.withColumn("age",when(col("age").isNull(),lit(19))
+		    .otherwise(col("age"))) \
+		    .withColumn("adult",when(col("age")>18,"Yes")
+		    .otherwise("No")).show()
+```
+
+more than one command:
+
+```python
+df.withColumn("age_wise", when((col("age")>0) & (col("age")<18),"minor")
+			  .when((col("age")>18) & (col("age")<30,"mid")
+		          .otherwise("major"))\
+			  .show()
+```
+
+Unique and sorted records:
+
+df.distinct().show() -- give distinct record count
+
+df.select("id","name").distinct().show() -- with multiple table
+
+df.drop_duplicates(["id","name","sal","manager_id"]).show()
+
+sorting:
+
+df.sort(col("sal")).show() -- asc
+
+df.sort(col("sal").desc()).show() -- desc
+
+df.sort(col("sal").desc(),col("name").desc()).show()
+
+
+Aggregate Function:
+
+count() - is action as well as 	transformation.
+
+**if we perform count on single col then it will skip null and if we perform on all col then only it will take null count.
+
+
+df.select(sum("salary"),count("salary"),avg("salary").cast("int")).show()
+
+GroupBy:
+
+df.groupBy("id")
+
+JOIN:
+
+Types of joins:
+
+* Inner join
+* full outer join
+* Left join
+* Right join
+* Left semi join
+* Left anti join
+* Cross join
