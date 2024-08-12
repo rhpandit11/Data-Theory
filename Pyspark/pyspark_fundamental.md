@@ -405,13 +405,11 @@ df.sort(col("sal").desc()).show() -- desc
 
 df.sort(col("sal").desc(),col("name").desc()).show()
 
-
 Aggregate Function:
 
 count() - is action as well as 	transformation.
 
 **if we perform count on single col then it will skip null and if we perform on all col then only it will take null count.
-
 
 df.select(sum("salary"),count("salary"),avg("salary").cast("int")).show()
 
@@ -430,3 +428,13 @@ Types of joins:
 * Left semi join
 * Left anti join
 * Cross join
+
+Window Function in spark:
+
+```python
+from pyspark.sql.window import Window
+
+window = Window.partitionBy('col').orderBy('col')
+your_df = df.withColumn('rank',row_number().over(window))
+your_df.show()
+```
