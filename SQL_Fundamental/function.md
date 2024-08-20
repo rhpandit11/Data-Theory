@@ -14,9 +14,9 @@ Joins : combines data from two tables.
 
 Difference:
 
-| **INNER JOIN**                                    | **LEFT JOIN**                                                                          | **RIGHT JOIN**                                                                        | **FULL JOIN**                                            | **SELF JOIN**                                                                                                                     | CARTESIAN JOIN                                                                                       |
-| ------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| returns rows when there<br />is a match in both tables. | returns all rows from the left table, even<br /> if there are no matches in the right table. | returns all rows from the right table,<br />even if there are no matches in the left table. | combines the results of both<br /> left and right outer joins. | joins a table to itself as <br />if the table were two tables,<br />temporarily renaming at least <br />one table in the SQL statement. | returns the Cartesian product of the <br />sets of records from the two or more<br /> joined tables. |
+| **INNER JOIN**                                    | **LEFT JOIN**                                                                          | **RIGHT JOIN**                                                                        | **FULL JOIN**                                            | **SELF JOIN**                                                                                                                    | CARTESIAN JOIN                                                                                      |
+| ------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | -------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| returns rows when there<br />is a match in both tables. | returns all rows from the left table, even<br /> if there are no matches in the right table. | returns all rows from the right table,<br />even if there are no matches in the left table. | combines the results of both<br /> left and right outer joins. | joins a table to itself as<br />if the table were two tables,<br />temporarily renaming at least <br />one table in the SQL statement. | returns the Cartesian product of the<br />sets of records from the two or more<br /> joined tables. |
 
 ---
 
@@ -54,6 +54,19 @@ SUBQUERIES: A subquery is a query that is nested inside another query, or inside
   );
   ```
 
+Key differences
+
+* Execution: Non-correlated runs once, correlated runs for each row in the outer query.
+* Dependency: Non-correlated is independent, correlated needs data from the outer query.
+* Performance: Non-correlated can be faster due to fewer executions.
+* Complexity: Correlated queries can be more complex and harder to read.
+
+**Best Practices:**
+
+* Prefer non-correlated subqueries whenever possible: If the required information can be obtained independently of the outer query, use a non-correlated subquery for potential performance benefits.
+* Optimize correlated subqueries carefully: If correlated subqueries are necessary, consider techniques like using indexes and optimizing the subquery logic to minimize execution time.
+* Test and measure: Always test and measure the performance of different query approaches with your specific data and workload to determine the most efficient solution for your use case.
+
 ---
 
 Window Functions: SQL function where the input values are taken from a "window" of one or more rows in the results set of a SELECT statement.
@@ -61,7 +74,6 @@ Window Functions: SQL function where the input values are taken from a "window" 
 AGGREGATE FUNCTIONS VS. WINDOW FUNCTIONS: unlike aggregate functions, window functions do not collapse rows.
 
 PARTITION BY: divides rows into multiple groups, called partitions, to which the window function is applied.
-
 
 1. Aggregate Functions
    * avg() - average value for rows within the window frame
@@ -118,3 +130,9 @@ Disadvantages:
 
 * You cannot use the CTE's result in different statements
 * You cannot use indexes, statistics to optimize your CTE's set (although it will implicitly use existing indexes and statistics of the targeted objects - if appropriate).
+
+difference between Subquery and CTE:
+
+* **CTE can be reusable:** One advantage of using CTE is CTE is reusable by design. Instead of having to declare the same subquery in every place you need to use it, you can use CTE to define a temporary table once, then refer to it whenever you need it.
+* **CTE can be more readable:** Another advantage of CTE is CTE is more readable than Subqueries. Since CTE can be reusable, you can write less code using CTE than using a subquery. Also, **people tend to follow logic and ideas easier in sequence than in a nested fashion. **When you write a query, it is easier to break down a complex query into smaller pieces using CTE.
+* **CTEs can be recursive:** A CTE can run recursively, which a subquery cannot. This makes it especially well suited to tree structures, in which information in a given row is based on the information from the previous row(s). The recursion feature can be implemented with `RECURSIVE` and `UNION ALL`.

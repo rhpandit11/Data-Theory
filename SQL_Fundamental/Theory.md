@@ -201,6 +201,11 @@ WHERE  *condition* ;
 1. when physical table drop associated view irrelevant.
 2. when views are created for large tables it occupy more memory.
 
+ **Use Cases** :
+
+* **View** : Suitable for dynamic, frequently changing data where real-time accuracy is important.
+* **Materialized View** : Suitable for scenarios where query performance is critical and the data does not need to be real-time, or can be refreshed periodically.
+
 ---
 
 **Index:** is like organized catalog for your database. It's a data structure that help's you quickly locate specific rows in a table.Just like the index at the back of a book.
