@@ -18,6 +18,21 @@
 4. Spark Management or cluseter layer - (Kubernetes, Apache Hadoop YARN, Mesos, Apache Spark)
 5. Storage layer - (Local FS, s3, blob storage, HDFS)
 
+**Difference between mapreduce and spark:**
+
+| MapReduce                                                                             | Spark                                                                  |
+| ------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| read/write data to a disk                                                             | spark can do it in-memory make it faster.                              |
+| developed in java                                                                     | developed in scala                                                     |
+| Fault tolerance is done through replication                                           | done throgh rdd                                                        |
+| Hard to work with real-time data                                                      | Easy                                                                   |
+| Less costly comparison to spark                                                       | more costly                                                            |
+| Hadoop can work or process far larger datasets than spark                             | Less compare to hadoop                                                 |
+| MapReduce requires an external scheduler for jobs.                                    | Spark has its own job scheduler due to the in-memory data computation. |
+| A program written using map reduce has more lines of code<br />when compared to spark | A program written using spark has less lines of code                   |
+| Linear - Run steps one by one                                                         | Lazy evolution                                                         |
+| Operation run step by step                                                            | Till the Action is triggered none of the Transaction will work.       |
+
 **Spark Execution Model:**
 
 * **Driver** - brain of spark framework that runs the main() function of the application and also creates the SparkContext/session. Also host bunch of process which are part of application like (SparkEnv,DagScheduler, TaskScheduler, SparkUI)
@@ -82,11 +97,13 @@ Data abstraction refers to the difference between how the data is stored and how
 2. In RDDs, we specify to the Spark engine how to achieve a certain task, whereas with DataFrames and Datasets, we specify what to do, and the Spark Engine takes care of the rest. This is why DataFrames and Datasets inherently have optimization techniques.
 3. In RDDs, only on-heap objects are used, while in DataFrames and Datasets, both on-heap and off-heap memory can be utilized. Off-heap objects are employed when there is additional data in memory.
 4. Since RDDs use only on-heap objects, serialization is unavoidable because additional data needs to be transferred from RAM to disk. This is avoidable in DataFrames and Datasets due to the presence of off-heap space.
-5. In RDDs, *garbage collection (GC) impacts performance, but in DataFrames and Datasets, GC impact is resolved.
+5. In RDDs, *garbage collection (GC) impacts performance, but in DataFrames and Datasets, GC impact is resolved because it constructs individual objects for each row in the dataset.
 
 *GC - Garbage Collector: When memory is full in RDD, GC will start scanning entire memory and it will start removing the data which is old and obselete.
 
 6) RDD and Datasets provide strong type safety that is at the time of you writing the code it'll give the error if something is wrong and thus they provide run-time compilation error. But, in the case of, DataFrames there's no type safety, so error will be known only once the code is executed and thus, they provides error at compile team.
+7) RDD can process structured and unstructured data but does not infer the schema of the ingested data, where dataframe can process structured and semi-structured data allow spark to manage schema, and datasets can also process structured and unstructured data.
+8) In RDD no inbuilt optimization engine is available, where as in dataframe and dataset optimization takes place using catalyst optimizer.
 
 RDD Use cases:
 
@@ -135,7 +152,6 @@ Components: Stages | DAG Scheduler
 * DAG Scheduler: High - level scheduling layer implements stage-oriented scheduling.
 
   Works: 1.computes the stages of each job and schdule it, 2.subimt Task set to TaskScheduler 3. convert Logical Execution Plan to Physical Execution Plan. 4. React on fault tolerance
-
 
 **Lineage Graph:** Lineage Graph is a historical record of transformations, tracing back to the original data. It represent the dependency in between rdds.
 
