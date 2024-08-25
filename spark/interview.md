@@ -162,12 +162,12 @@ Components: Stages | DAG Scheduler
 
 **DAG VS Lineage Graph:**
 
-|                | DAG                                                                      | Lineage                                                                                 |
-| -------------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
-| Representation | dependencies between tasks or events                                     | history of data transformations or processing steps                                     |
-| Cycle          | A DAG does not contain cycles                                            | lineage graph can contain cycles.                                                       |
-| Direction      | direction of edges represent the flow``of dependencies between tasks     | the direction of edges represent the flow of data transformations``or processing steps. |
-| Use            | used in task scheduling, workflow``management, and distributed computing | used in data lineage and data                                                           |
+|                | DAG                                                                            | Lineage                                                                                       |
+| -------------- | ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
+| Representation | dependencies between tasks or events                                           | history of data transformations or processing steps                                           |
+| Cycle          | A DAG does not contain cycles                                                  | lineage graph can contain cycles.                                                             |
+| Direction      | direction of edges represent the flow``of <br />dependencies between tasks     | the direction of edges represent the flow of data <br />transformations``or processing steps. |
+| Use            | used in task scheduling, workflow``management, <br />and distributed computing | used in data lineage and data                                                                 |
 
 Lazy Evoluation: In spark it's a powerful concept that allows the optimization of data processing tasks by postponing the execution of transformations until an action is called.
 
