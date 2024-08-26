@@ -162,12 +162,12 @@ Components: Stages | DAG Scheduler
 
 **DAG VS Lineage Graph:**
 
-|                | DAG                                                                            | Lineage                                                                                       |
-| -------------- | ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
-| Representation | dependencies between tasks or events                                           | history of data transformations or processing steps                                           |
-| Cycle          | A DAG does not contain cycles                                                  | lineage graph can contain cycles.                                                             |
-| Direction      | direction of edges represent the flow``of <br />dependencies between tasks     | the direction of edges represent the flow of data <br />transformations``or processing steps. |
-| Use            | used in task scheduling, workflow``management, <br />and distributed computing | used in data lineage and data                                                                 |
+|                | DAG                                                                           | Lineage                                                                                      |
+| -------------- | ----------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| Representation | dependencies between tasks or events                                          | history of data transformations or processing steps                                          |
+| Cycle          | A DAG does not contain cycles                                                 | lineage graph can contain cycles.                                                            |
+| Direction      | direction of edges represent the flow``of<br />dependencies between tasks     | the direction of edges represent the flow of data<br />transformations``or processing steps. |
+| Use            | used in task scheduling, workflow``management,<br />and distributed computing | used in data lineage and data                                                                |
 
 Lazy Evoluation: In spark it's a powerful concept that allows the optimization of data processing tasks by postponing the execution of transformations until an action is called.
 
@@ -195,3 +195,14 @@ Advantagaes: 1. Optimization 2. **Reduced Disk I/O and Memory Usage** 3. **Integ
 6. Persistent Storage: Intermediate data generated during transformations can be stored in memory or on disk. This allows Spark to use persisted data in case of node failures instead of recomputing it.
 7. Driver Recovery: If the driver node fails, the driver's state can be recovered by restarting the application and re-executing the driver code.
 8. Dynamic Resource Allocation: Spark supports dynamic allocation of cluster resources. This means that if a node fails, its resources can be reclaimed and reallocated to other tasks, ensuring efficient resource utilization.
+
+
+Catalyst optimizer: Integral part of apache spark sql. It's main goal is to reduce the time of query execution, enabling spark to analyze, organize and execute jobs more efficiently.
+
+Four Primary Phase:
+
+1. Parsing: In this phase it converts df into an abstract syntax tree(AST) which represents the structure of the query in a way that is easier for computer to understand.
+2. Analysis: Next, it verifies the AST for semantic correctness. It resolves attributes by looking at catalog information and also resolves functions. The output of this phase is a "resolved logical plan".
+3. Logical Optimization: Here it applies a series of rule based optimization to resolved logical plan. Techniques include predicate pushdown, projection pushdown and boolean simplifications.
+4. Physical Planning: Logical is now converted into one or more physical plan. Then it selects the most optimal physical plan using code-based optimization where the cost of each plan is estimated based on the sizes of its inputs.
+5. Code Generation: Finally generates JVM bytecodes to run the selected physical plan.
