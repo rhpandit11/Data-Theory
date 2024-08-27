@@ -12,23 +12,18 @@ Key features include:
 Architecture:
 
 1. Capacitor — The Storage Format - bigquery's columnar storage format
-   * columnar Storage - data is stored in columns because it is more efficient for read-heavy tasks because it allows read only desired output columns saving time and resources.
+   * columnar Storage - data is stored in columns because it is more efficient for read-heavy tasks because it allows bq to read only desired output columns saving time and resources.
    * High Compression - Capacitor compress data efficiently which reduces storage costs and speeds up data retrieval.
+   * Nested Data - BQ supports complex nested data structures capacitor handles this by storing each column in separate files.
+2. Colossus - The Distributed Storage System - provides reliability,fault tolerance scalability and geo-replication(data is copied accross diff geographic regions).
+3. Dremel - The Query Execution Engine - process query in BQ. Queries are executed through multi-level tree structure that includes root, intermediate and leaf nodes.Provides parallel processing and automatically optimizes queries to ensure they run as efficiently as possible(make use of index and data partitions).
 
+* Root Node: reads metadata from tables and responsible for communication between the client and mixers
+* Inetrmediate Nodes(mixers): optimize and distribute these tasks.
+* Leaf Nodes: perform the actual data reading and computition
 
-1. Capacitor - columnar format: store data in columnar storage format called capacitor allows BQ to store and efficiently uery semi-structured data with neseted and repeated fields.
-2. colossus - storage: distributed file system is designed to be reliable and fault-tolerant.replaced GFS and capable of handling cluster-wide replication recovery from disk crashes and distributed management.
-3. Dremel - execution engine: scalable, interactive ad-hoc query system for analysis of large scale read only nested data.
-
-* Root Node:
-  * reads metadata from tables
-  * The root server is responsible for communication between the client and mixers
-* Inetrmediate Nodes(mixer):
-  * performs query optimization and re-writes the query to include horizontal partitions of the table(shards), partial aggregation and filtering.
-* Leaf Nodes
-  * perform the heavy lifting of reading the data from colossus and performing filters and final aggregeation
-  * in a typical dremel tree, there are hundreds or thousands of leaf nodes.
-  * each node provides execution threads(slots), which BQ automatically calculates for each query based on its size and complexity.
+4. Borg - The Compute Manager - is google's cluster management system that allocates computational resources for BQ.It ensures : Resource Allocation, Fault Tolerance, Job Scheduling
+5. Jupiter - The Network Backbone - Google's high-speed network that connects all parts of the BQ Architecture.It provides: High bandwith with low latency.
 
 Execution:
 
