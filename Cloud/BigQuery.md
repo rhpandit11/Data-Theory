@@ -11,6 +11,11 @@ Key features include:
 
 Architecture:
 
+1. Capacitor — The Storage Format - bigquery's columnar storage format
+   * columnar Storage - data is stored in columns because it is more efficient for read-heavy tasks because it allows read only desired output columns saving time and resources.
+   * High Compression - Capacitor compress data efficiently which reduces storage costs and speeds up data retrieval.
+
+
 1. Capacitor - columnar format: store data in columnar storage format called capacitor allows BQ to store and efficiently uery semi-structured data with neseted and repeated fields.
 2. colossus - storage: distributed file system is designed to be reliable and fault-tolerant.replaced GFS and capable of handling cluster-wide replication recovery from disk crashes and distributed management.
 3. Dremel - execution engine: scalable, interactive ad-hoc query system for analysis of large scale read only nested data.
@@ -27,13 +32,13 @@ Architecture:
 
 Execution:
 
-1. user submits a query to BQ ex: SELECT count(*) from mytable where timestamp > '2021-01-01';
-2. query received by root node of dremel serving tree, which is starting point of query execution.
-3. root nodes route the query to intermediate nodes(mixers) of the serving tree perform query optimization and re-writes the query.
-4. In this ex, query optimizer might decide to pation the table based on timestamp and include partitions that have timestamp greate than '2021-01-01'
-5. intermediate nodes than send there rewritten query to leaf nodes for execution.Leaf node read the relevant partitions of the table from colossus and perform the filters and final aggregation specified in the query.
-6. in this ex, leaf node would count the number of rows in the partitions that have timestap greate than and return the result to intermediate nodes.
-7. Intermediate nodes than pass the result back up to serving tree to the root node which result final query such as "count(*) = 1000000" to the user.
+1. Query Submission : You submit a query, like `SELECT COUNT(*) FROM mytable WHERE date > ‘2023–01–01’`.
+2. Root Node Processing : The root node of Dremel receives the query and reads metadata to understand the table structure.
+3. Task Distribution : The query is divided into smaller tasks, which are sent to intermediate nodes.
+4. Optimization : Intermediate nodes optimize the tasks, determining the best way to execute them (e.g., which data partitions to read).
+5. Data Retrieval and Computation : Leaf nodes read the necessary data from Colossus, apply filters, and perform calculations.
+6. Aggregation : Results are aggregated by intermediate nodes and sent back to the root node.
+7. Final Result : The root node compiles the final result and returns it to you.
 
 ---
 
