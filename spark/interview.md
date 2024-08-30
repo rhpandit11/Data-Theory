@@ -146,12 +146,21 @@ Diff: If a function returns a `DataFrame`, `Dataset`, or `RDD`, it is a transfor
 3. Task Scheduling and Execution: Spark's scheduler assigns tasks to individual executors across the cluster. Tasks within a stage can run concurrently whenever possible.
 4. Result Collection: The final results of the computation are collected back to the driver node (in the case of actions like `collect()`).
 
+* Spark creates DAG.
+
+- Once action is triggered on the RDD, DAG is submitted to the DAGScheduler.
+- DAGScheduler looks at RDD lineage and comes up with the best execution plan by dividing it into stages of the task
+- Stages set is given to TaskScheduler and TaskScheduler will launch tasks through Cluster manager.
+- TaskScheduler with help of cluster manager will check the data/resources availability in different nodes to execute the tasks. It will distribute the tasks to different executors.
+
 Components: Stages | DAG Scheduler
 
 * Stages: set of tasks execute together in a single wave of computation.
 * DAG Scheduler: High - level scheduling layer implements stage-oriented scheduling.
 
   Works: 1.computes the stages of each job and schdule it, 2.subimt Task set to TaskScheduler 3. convert Logical Execution Plan to Physical Execution Plan. 4. React on fault tolerance
+
+The number of tasks for a job is = ( no of your stages * no of your partitions ) -- number of stages creation.
 
 **Lineage Graph:** Lineage Graph is a historical record of transformations, tracing back to the original data. It represent the dependency in between rdds.
 
@@ -196,8 +205,7 @@ Advantagaes: 1. Optimization 2. **Reduced Disk I/O and Memory Usage** 3. **Integ
 7. Driver Recovery: If the driver node fails, the driver's state can be recovered by restarting the application and re-executing the driver code.
 8. Dynamic Resource Allocation: Spark supports dynamic allocation of cluster resources. This means that if a node fails, its resources can be reclaimed and reallocated to other tasks, ensuring efficient resource utilization.
 
-
-Catalyst optimizer: Integral part of apache spark sql. It's main goal is to reduce the time of query execution, enabling spark to analyze, organize and execute jobs more efficiently.
+Catalyst optimizer: It is a robust query optimization framework, It's main goal is to reduce the time of query execution, enabling spark to analyze, organize and execute jobs more efficiently.
 
 Four Primary Phase:
 
@@ -206,3 +214,41 @@ Four Primary Phase:
 3. Logical Optimization: Here it applies a series of rule based optimization to resolved logical plan. Techniques include predicate pushdown, projection pushdown and boolean simplifications.
 4. Physical Planning: Logical is now converted into one or more physical plan. Then it selects the most optimal physical plan using code-based optimization where the cost of each plan is estimated based on the sizes of its inputs.
 5. Code Generation: Finally generates JVM bytecodes to run the selected physical plan.
+
+**Logical Plan:** •The logical plan represents the abstract, high-level representation of the Spark job's computation. •It describes the sequence of operations to be performed on the input data to achieve the desired result. •The logical plan is built using DataFrame or Dataset operations such as `select`, `filter`, `groupBy`, `join`, etc. • The logical plan is constructed based on the user's code or query and is independent of the underlying data sources and execution strategies.
+
+**Physical Plan:** •The physical plan represents the actual execution steps that Spark will perform to execute the job on the cluster. •It is derived from the logical plan and takes into account the characteristics of the input data, available resources, and optimization strategies. •The physical plan specifies how the data will be read, processed, and transformed across the distributed Spark cluster. •It includes details such as data partitioning, shuffle operations, join strategies, and optimization techniques. •The physical plan is optimized for performance and resource utilization based on Spark's Catalyst optimizer and execution engine.
+
+Optimization Techniques:
+
+1. Predicate Pushdown: data need to filter out in source level before entering in the Processing pipeline, it push filter condition as close  to the data sources as possible.
+2. Column Purining / projection Pushdown: It reads only necessary columns and load it.
+3. Broadcast Join: In this small tables copy send to every worker nodes during join with large tables.
+4. Join ReOrdering: It re-orders the join's condition to minize the data Shuffle through that it enhance the parallelism and reduce overall execution time.
+5. Constant Folding: During query Analysis it evaluates Constant expressions through that reducing the computational overhead.
+
+What are the different types of Cluster manager available in Spark:
+
+**Apache YARN** — YARN is the cluster manager for Hadoop. As of date, YARN is the most widely used cluster manager for Apache Spark.
+
+**Apache Mesos** — Apache Mesos is another general-purpose cluster manager. If you are not using Hadoop, you might be using Mesos for your Spark cluster.
+
+ **Kubernetes** — it's a general purpose container orchestration platform from Google.
+
+ **Standalone** — Finally, the standalone. The Standalone is a simple and basic cluster manager that comes with Apache Spark and makes it easy to set up a Spark cluster very quickly. This is basically used during development.
+
+
+**Deployment Mode:**
+
+1. Local Mode: Execution not done in distributed manner, means single JVM process is used to produce both driver and executor.
+2. Client Mode: Driver is present in Client machine, means driver is not the part of cluster and on the other side executors run within the cluster.
+3. Cluster Mode: Driver and executor both run inside the cluster. Spark job submitted from local to cluster machine.
+
+Client mode Vs Cluster mode:
+
+| Client                                                                | Cluster                                                                               |
+| --------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| Logs are generated on client machine.It is easy to debug.             | Logs are generated in std out or std err file. It is suitable for production-workload |
+| Network latency is high                                               | Network latency is low                                                                |
+| Driver OOM can be there                                               | Driver can go into oom but chances are less.                                          |
+| Driver goes away once the edge node server is disconnected or closed. | Even if edge server closed process stil                                               |
