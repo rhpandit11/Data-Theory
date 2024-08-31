@@ -215,7 +215,7 @@ Four Primary Phase:
 4. Physical Planning: Logical is now converted into one or more physical plan. Then it selects the most optimal physical plan using code-based optimization where the cost of each plan is estimated based on the sizes of its inputs.
 5. Code Generation: Finally generates JVM bytecodes to run the selected physical plan.
 
-**Logical Plan:** •The logical plan represents the abstract, high-level representation of the Spark job's computation. •It describes the sequence of operations to be performed on the input data to achieve the desired result. •The logical plan is built using DataFrame or Dataset operations such as `select`, `filter`, `groupBy`, `join`, etc. • The logical plan is constructed based on the user's code or query and is independent of the underlying data sources and execution strategies.
+**Logical Plan:** Logical plan is a high-level description of what needs to be done, but not how to do it. It has relational operators (Filter / Join) with respective expressions (column transformations, filter / join conditions)
 
 **Physical Plan:** •The physical plan represents the actual execution steps that Spark will perform to execute the job on the cluster. •It is derived from the logical plan and takes into account the characteristics of the input data, available resources, and optimization strategies. •The physical plan specifies how the data will be read, processed, and transformed across the distributed Spark cluster. •It includes details such as data partitioning, shuffle operations, join strategies, and optimization techniques. •The physical plan is optimized for performance and resource utilization based on Spark's Catalyst optimizer and execution engine.
 
@@ -237,7 +237,6 @@ What are the different types of Cluster manager available in Spark:
 
  **Standalone** — Finally, the standalone. The Standalone is a simple and basic cluster manager that comes with Apache Spark and makes it easy to set up a Spark cluster very quickly. This is basically used during development.
 
-
 **Deployment Mode:**
 
 1. Local Mode: Execution not done in distributed manner, means single JVM process is used to produce both driver and executor.
@@ -252,3 +251,25 @@ Client mode Vs Cluster mode:
 | Network latency is high                                               | Network latency is low                                                                |
 | Driver OOM can be there                                               | Driver can go into oom but chances are less.                                          |
 | Driver goes away once the edge node server is disconnected or closed. | Even if edge server closed process stil                                               |
+
+---
+
+PySpark is the Python API to Apache Spark, meaning that we can write Python code that calls Spark automatically.
+
+how to read file in pyspark:
+
+```python
+spark.read.format('csv') \
+	  .option('header','true') \
+          .option('inferSchema','false') \
+	  .option('skipRows',1) \
+	  .schema(my_schema ) \
+          .option('mode','FAILFAST') \
+          .load('c:\user\download\data.csv')
+```
+
+mode:
+
+* FailFast - fail execution if mailformed record in dataset
+* Dropmalformed - drop the corrupted record
+* Permissive(default) - set null value to all corrupted fields
