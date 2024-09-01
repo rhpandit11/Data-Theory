@@ -256,6 +256,39 @@ Client mode Vs Cluster mode:
 
 PySpark is the Python API to Apache Spark, meaning that we can write Python code that calls Spark automatically.
 
+Features:
+
+* **Python API** : enabling Python developers to leverage Spark’s distributed computing capabilities.
+* **Distributed Computing** : PySpark utilizes Spark’s distributed computing framework to process large-scale data across a cluster of machines, enabling parallel execution of tasks.
+* **Fault Tolerance** :
+* **Lazy Evaluation** :
+* **Machine Learning** :
+* **Streaming Processing** :
+* **SQL Support** :
+
+Advantages:
+
+* **Scalability**
+* **Performance**
+* **Ease of Use**
+* **Fault Tolerance**
+* **Unified Platform**
+* **Real-time Processing**
+* **Machine Learning Capabilities**
+
+**PySpark Modules & Packages:**
+
+* RDD (pyspark.RDD)
+* DataFrame and SQL (pyspark.sql)
+* Streaming (pyspark.streaming)
+* MLib (pyspark.ml, pyspark.mllib)
+* GraphFrames (GraphFrames)
+* Resource (pyspark.resource) It’s new in PySpark 3.0
+
+**Spark Web UI:** The Spark Web UI is a user interface provided to monitor and debug Spark applications. It displays information about job progress, task execution, resource utilization, and system metrics, allowing users to optimize performance, diagnose issues, and gain insights into their Spark jobs.
+
+**Access Spark History Server:** The Spark History Server stores information about completed Spark applications [(spark-submit](https://sparkbyexamples.com/spark/spark-submit-command/), spark-shell), including logs, metrics, and event timelines. It allows users to view detailed information about past job executions, such as tasks, stages, and configurations, through a web-based user interface.
+
 how to read file in pyspark:
 
 ```python
@@ -268,8 +301,47 @@ spark.read.format('csv') \
           .load('c:\user\download\data.csv')
 ```
 
+Read Json File:
+
+```python
+df = spark.read.format("json") \
+    .option("multiLine", "true") \
+    .option("mode", "PERMISSIVE") \
+    .option("columnNameOfCorruptRecord", "_corrupt_record") \
+    .load("/path/to/your/jsonfile.json")
+```
+
 mode:
 
-* FailFast - fail execution if mailformed record in dataset
-* Dropmalformed - drop the corrupted record
-* Permissive(default) - set null value to all corrupted fields
+* **FAILFAST**- fail execution if malformed record in dataset
+* **DROPMALFORMED**- drop the corrupted record
+* PERMISSIVE (Default) - set null value to all corrupted fields
+
+
+How to write data to disk:
+
+```python
+df.write.format("csv") \ 
+	.option("header","true") \
+	.option("mode","overwrite") \
+	.option("path", "/Filestore/tables/csv_write") \
+	.save()
+```
+
+write data with partition:
+
+```python
+df.repartition(3).write.format("csv") \ 
+	.option("header","true") \
+	.option("mode","overwrite") \
+	.option("path", "/Filestore/tables/csv_write") \
+	.save()  ## it will store data in 3 files
+
+```
+
+Modes in Dataframe writer API:
+
+* Append - This mode appends the data to the file, preserving any existing data in the file. If the file does not exist, it will be created.
+* Overwrite - This mode overwrites any existing data in the file. If the file does not exist, it will be created.
+* errorIfExists - This mode raises an error if the file already exists.
+* ignore - This mode writes the data to the file only if the file does not already exist. If the file already exists, the write operation is ignored.
