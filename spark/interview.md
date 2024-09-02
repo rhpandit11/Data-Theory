@@ -355,7 +355,7 @@ To query a database table using jdbc() method, you would need the following.
 * Table name,
 * User and Password.
 
-JDBC is a Java standard to connect to any database as long as you provide the right JDBC connector jar in the classpath and provide a JDBC  driver using the JDBC API
+JDBC (Java Database Connectivity) is an API (Application Programming Interface) that enables Java applications to interact with databases. It provides a standard way for Java applications to connect to various types of databases (such as MySQL, Oracle, PostgreSQL, SQL Server, etc.)
 
 * Initialize Spark Session
 
