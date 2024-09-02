@@ -317,13 +317,13 @@ mode:
 * **DROPMALFORMED**- drop the corrupted record
 * PERMISSIVE (Default) - set null value to all corrupted fields
 
-
 How to write data to disk:
 
 ```python
 df.write.format("csv") \ 
 	.option("header","true") \
 	.option("mode","overwrite") \
+        .partitionBy("column_name","column_name") \ 
 	.option("path", "/Filestore/tables/csv_write") \
 	.save()
 ```
@@ -345,3 +345,75 @@ Modes in Dataframe writer API:
 * Overwrite - This mode overwrites any existing data in the file. If the file does not exist, it will be created.
 * errorIfExists - This mode raises an error if the file already exists.
 * ignore - This mode writes the data to the file only if the file does not already exist. If the file already exists, the write operation is ignored.
+
+Using PySpark to read PostgreSQL DB remotely:
+
+To query a database table using jdbc() method, you would need the following.
+
+* Server IP or Host name and Port,
+* Database name,
+* Table name,
+* User and Password.
+
+JDBC is a Java standard to connect to any database as long as you provide the right JDBC connector jar in the classpath and provide a JDBC  driver using the JDBC API
+
+* Initialize Spark Session
+
+```python
+spark = SparkSession\
+    .builder\
+    .appName("Connecting to JDBC")\
+    .config("spark.driver.extraClassPath", "/path/to/postgresql-<version>.jar")\
+    .getOrCreate()
+```
+
+* Define JDBC connection properties
+
+```python
+driver = "org.postgresql.Driver"
+url = "jdbc:postgresql://<ip_address>:5432/<name_of_db>:emp"
+user = "my_unique_user_name"
+password = "my_unique_password"
+```
+
+* read data
+
+```python
+spark.read\
+    .format("jdbc")\
+    .option("driver", driver)\
+    .option("query", "select id,age from employee where gender='M'") \ # to query specific columns 
+    .option("url", url)\
+    .option("user", user)\
+    .option("password", password)\
+    .option("dbtable", "table_name")\
+    .load()
+```
+
+* write data
+
+```python
+url = "jdbc:postgresql://<ip_address>:5432/<name_of_db>:emp"
+properties = {
+    "user": "<username>",
+    "password": "<password>",
+    "driver": "org.postgresql.Driver"
+}
+table_name = "<table_name>"
+mode = "overwrite"
+df.write.jdbc(url=url, table=table_name, mode=mode, properties=properties)
+```
+
+Dataframe Transformation:
+
+schema = column Name + Column Data type
+
+Dataframe = column + rows
+
+union VS unionAll
+
+**If we are using union or unionAll in df then both will provide same output.
+
+** but in spark sql union will give only distinct records while unionAll will give all records including duplicates.
+
+**unionByName - it will check both dataframes column name if they are same then only it gives result.
