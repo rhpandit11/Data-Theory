@@ -80,3 +80,342 @@ Example:
 | Composite Key | Combined attributes used as a single key.           | Required     | Not Allowed | Specialized unique identification.          | Creates Composite Index | Within same table | May be complex, impact performance.  |
 | Unique Key    | Ensures column(s) have unique values.               | Required     | Allowed     | Enforce uniqueness, no primary key.         | Creates Unique Index    | Within same table | May be used as primary key.          |
 | Surrogate Key | Artificial keys assigned for record identification. | Required     | Not Allowed | Enhanced data privacy, data warehousing.    | Creates Unique Index    | Within same table | Generally static, non-changing.      |
+
+---
+
+**Dependency:** it is a constraint defines relationship between attributes, also define relationship knowing that one attribute is enough to tell you the value of another attribute in the same table.
+
+1. **Functional Dependency:** fundamental concept describe the relationship between attributes in a table, shows how the values in one or more attributes determine the value in another.
+2. **Fully Functional Dependency:** type of dependency that exists between two sets of attributes in a database table.
+
+**Types of Functional Dependency:**
+
+1. Partial Dependency: exists when a non-primary column depends upon a single column that is a part of a composite primary key.
+2. Transitive Functional Dependecy: It occurs when one attribute's value determines another's value through an intermediary(a third) attribute.
+
+**Normalization:** is the process of minimizing redundancy and correcting table structure in a relational table.
+
+**Why we need?**
+
+* eliminating redundant data, so we can handle data integrity, because of repeated data data inconsitent chances increases.
+* breaking down large tables into smaller tables with relationship, so it makes database structure more scalable and adaptable.
+* ensuring data stored logically.
+
+**Normal Forms:**
+
+* First normal Form (1NF): It removes all duplicate columns from the table. Creates table for related data and identifies unique column values
+* First Normal Form (2NF): Follows 1NF and creates and places data subsets in an individual table and defines relationship between tables using primary key
+* Third Normal Form (3NF): Follows 2NF and removes those columns which are not related through primary key
+* Fourth Normal Form (4NF): Follows 3NF and do not define multi-valued dependencies. 4NF also known as BCNF
+
+**Denormalization:** database optimization technique in which we add redundant data to one or more tables. (OLAP).
+
+reasons for denormalizing the data: We de-normalize data when we need better performance. Sometimes there are many joins in a query due to highly normalized data. In that case, for faster data retrieval it becomes essential to de-normalize data.
+
+---
+
+**Relationship in SQL:**
+
+1. One-to-one Relationship
+1. One-to-many Relationship
+1. Many-to-many Relationship
+1. Many-to-one Relationship
+1. Self-referencing Relationship
+
+---
+
+**Trigger:** is a stored procedure that can be executed in response to one of three conditions 1. An UPDATE, 2.An INSERT, 3. A DELETE. automatically invokes whenever a special event in the database occurs.
+
+**Types of Triggers: 1.** DDL Triggers, 2. DML Triggers, 3. TCL Triggers
+
+* ***Create Trigger***
+  These two keywords are used to specify that a trigger block is going to be declared.
+* ***Trigger_Name***
+  It specifies the name of the trigger. Trigger name has to be unique and shouldn’t repeat.
+* **( *Before | After ***This specifies when the trigger will be executed. It tells us the time at which the trigger is initiated, i.e, either before the ongoing event or after.
+* *Before Triggers* are used to update or validate record values before they’re saved to the database.
+* *After Triggers* are used to access field values that are set by the system and to effect changes in other records. The records that activate the after trigger are read-only. We cannot use the After trigger if we want to update a record because it will lead to a read-only error.
+* **[ * Insert | Update | Delete * ]**
+  These are the DML operations and we can use either of them in a given trigger.
+* ** *on * [ *Table_Name ***We need to mention the table name on which the trigger is being applied. Don’t forget to use **on **keyword and also make sure the selected table is present in the database.
+* **[ for each row | for each column ]**
+
+1. Row-level trigger gets executed before or after *any column value of a row *changes
+2. Column Level Trigger gets executed before or after the *specified column *changes
+
+```sql
+CREATE TRIGGER calculate
+before INSERT
+ON student
+FOR EACH ROW
+SET new.marks = new.marks+100;
+```
+
+**Advantages:**
+
+1. maintain integrity constrainsts when primary key and foreign key constrain are not defined.
+2. SQL code short
+3. give alternative way to run scheduled tasks.
+
+**Disadvantages:**
+
+1. Triggers can only provide extended  **validations** , i.e, not all kinds of validations. For simple validations, you can use the NOT NULL, UNIQUE, CHECK, and FOREIGN KEY constraints
+2. increase overhead
+3. difficult to troubleshoot because they execute automatically
+
+---
+
+**Store Procedures:** group of sql statements stored together in a database, based on procedure and parameters you pass, it can perform one or multiiple DML operations, allow to pass same statement multiple times, thereby enabling reusability.
+
+**Advantages:**
+
+* Reusable: multiple user and applications can easly reuse store procedure by calling it.
+* Easy to Modify: with the help of alter command we can change the store procedure statement.
+* Security: store procedure enhance the security by restricting the user from direct access the table.
+* Low Network Traffic: server only passes the procedue name not the whole statement reducing network traffic
+
+**Drawbacks:**
+
+* Increased Overhead: when we do complex operations stored procedure consume more resources than a simple sql statement.
+* Limited Portability: often specific for a particular DBMS, not easy to portable to other business.
+* Debugging Challeneges: if there multiple layers of code involved debugging the store procedure is challenging.
+
+syntax:
+
+```sql
+create procedure GetAllEmployee    --Create stored procedure syntax
+as 
+begin
+select * from Employee;
+end
+```
+
+---
+
+**VIEW:** kind of virtual table not stored in database and give query result through real tables. ex.
+
+CREATE VIEW *view_name* AS
+SELECT  *column1* ,  *column2* , ...
+FROM *table_name*
+WHERE  *condition* ;
+
+****Materialized Views:**** When the results of a view expression are stored in a database system, they are called materialized views.
+
+| Views                                                                                                                                                                                 | Materialized Views                                                                                                                                                                             |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Query expression are stored in the databases system,<br />and not the resulting tuples of the query expression.                                                                       | Resulting tuples of the query expression are stored in the databases<br />system.                                                                                                              |
+| Views needs not to be updated every time the relation<br />on which view is defined is updated, as the tuples of the views<br /> are computed every time when the view is accessed. | Materialized views are updated as the tuples are stored in the database<br />system. It can be updated in one of three ways depending on the <br />databases <br />system as mentioned above. |
+| It does not have any storage cost associated with it.                                                                                                                                 | It does have a storage cost associated with it.                                                                                                                                                |
+| It does not have any updation cost associated with it.                                                                                                                                | It does have updation cost associated with it.                                                                                                                                                 |
+| There is an SQL standard of defining a view.                                                                                                                                          | There is no SQL standard for defining a materialized view, and the<br /> functionality is provided by some databases systems as an extension.                                                 |
+| Views are useful when the view is accessed infrequently.                                                                                                                              | Materialized views are efficient when the view is accessed frequently<br />as it<br />saves the computation time by storing the results before hand.                                           |
+
+**Advantages:**
+
+1. not store data in a physical location
+2. used to hide some of the column from table
+3. provide access restriction, since data insertion, delete, update not possible.
+
+**Disadvantages:**
+
+1. when physical table drop associated view irrelevant.
+2. when views are created for large tables it occupy more memory.
+
+ **Use Cases** :
+
+* **View** : Suitable for dynamic, frequently changing data where real-time accuracy is important.
+* **Materialized View** : Suitable for scenarios where query performance is critical and the data does not need to be real-time, or can be refreshed periodically.
+
+---
+
+**Index:** is like organized catalog for your database. It's a data structure that help's you quickly locate specific rows in a table.Just like the index at the back of a book.
+
+**Benefits:**
+
+* Improved search performance
+* Efficient data retrieval
+* Enhanced query performance
+* sorting and ordering
+
+**Types:**
+
+1. Clustered Index: Index which have primary key define.You can create only one clustered index in a table.In this index contain a pointer to block but not direct data.If  we create a table with primary key then automatically clustered index created.If you have one clustered index on multiple columns, and that type of index is called a composite index. ex:
+
+   ```sql
+   CREATE INDEX idx_LastName ON Employees (LastName);
+   ```
+
+   * The data or file, that you are moving into secondary memory should be in sequential or sorted order.
+   * There should be a key value, meaning it can not have repeated values.
+2. Non-Clustered Index: The non-Clustered Index is similar to the index of a book. The index of a book consists of a chapter name and page number, if you want to read any topic or chapter then you can directly go to that page by using the index of that book. No need to go through each and every page of a book. The data is stored in one place, and the index is stored in another place. Since the data and non-clustered index is stored separately, then you can have multiple non-clustered indexes in a table.
+
+   ```sql
+   Create table Student
+   ( Roll_No int primary key, 
+   Name varchar(50), 
+   Gender varchar(30), 
+   Mob_No bigint );
+
+   insert into Student 
+   values (4, 'afzal', 'male', 9876543210 );
+
+   insert into Student 
+   values (3, 'sudhir', 'male', 9675432890 );
+
+   insert into Student 
+   values (5, 'zoya', 'female', 8976453201 );
+
+   create nonclustered index NIX_FTE_Name
+   on Student (Name ASC);
+   ```
+
+Difference Between Clustered and Non-Clustered Index :
+
+| CLUSTERED INDEX                                                                                                | NON-CLUSTERED INDEX                                                                                                                                                      |
+| -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| A clustered index is faster.                                                                                   | A non-clustered index is slower.                                                                                                                                         |
+| The clustered index requires less memory for operations.                                                       | A non-Clustered index requires more memory for operations.                                                                                                               |
+| In a clustered index, the clustered index is the main data.                                                    | In the Non-Clustered index, the index is the copy of data.                                                                                                               |
+| A table can have only one clustered index.                                                                     | A table can have multiple non-clustered indexes.                                                                                                                         |
+| The clustered index has the inherent ability to store data on the disk.                                        | A non-Clustered index does not have the inherent ability to store<br />data<br />on the disk.                                                                            |
+| Clustered index store pointers to block not data.                                                              | The non-clustered index stores both the value and a pointer to the<br />actual<br /> row that holds the data                                                             |
+| In Clustered index leaf nodes are actual data itself.                                                          | In Non-Clustered index leaf nodes are not the actual data itself<br />rather<br /> they only contain included columns.                                                   |
+| In a Clustered index, Clustered key defines the order<br />of data within a table.                             | In a Non-Clustered index, the index key defines the order of data<br />within the index.                                                                                 |
+| A Clustered index is a type of index in which table records<br /> are physically reordered to match the index. | A Non-Clustered index is a special type of index in which the logical<br />order of the index does not match the physical stored order of the <br />rows on the disk. |
+| The size of The primary clustered index is large.                                                              | The size of the non-clustered index is compared relativelyThe composite<br />is smaller.                                                                                 |
+| Primary Keys of the table by default are clustered indexes.                                                    | The[composite key](https://www.geeksforgeeks.org/composite-key-in-sql/) when used with unique constraints of the table act <br />as the non-clustered index.                |
+
+Use:
+
+****Index Clustering****
+
+* Perfect for tables where range queries, in particular, place a high value on data retrieval efficiency.
+* Ideal for tables with few updates or relatively static data because moving data around can slow down insert and update operations.
+
+****Non-Clustered index****
+
+* allows for the optimization of various query types without changing the data’s physical order on disk.
+* Ideal for tables where data changes often since inserts and updates are typically quicker than with clustered indexes.
+
+---
+
+Joins : combines data from two tables.
+
+1. LEFT JOIN : LEFT JOIN returns all rows from the left table with matching rows from the right table. Rows without a match are filled
+   with NULLs. LEFT JOIN is also called LEFT OUTER JOIN.
+2. RIGHT JOIN: RIGHT JOIN returns all rows from the right table with matching rows from the left table. Rows without a match are
+   filled with NULLs. RIGHT JOIN is also called RIGHT OUTER JOIN.
+3. FULL JOIN: FULL JOIN returns all rows from the left table and all rows from the right table. It fills the non-matching rows with
+   NULLs. FULL JOIN is also called FULL OUTER JOIN.
+4. CROSS JOIN: CROSS JOIN returns all possible combinations of rows from the left and right tables.cartesian product of the two tables included in the join.
+5. SELF JOIN: You can join a table to itself.
+6. NATURAL JOIN: If the tables have columns with the same name, you can use NATURAL JOIN instead of JOIN.
+
+Difference:
+
+| **INNER JOIN**                                    | **LEFT JOIN**                                                                          | **RIGHT JOIN**                                                                        | **FULL JOIN**                                            | **SELF JOIN**                                                                                                                    | CARTESIAN JOIN                                                                                      |
+| ------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | -------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| returns rows when there<br />is a match in both tables. | returns all rows from the left table, even<br /> if there are no matches in the right table. | returns all rows from the right table,<br />even if there are no matches in the left table. | combines the results of both<br /> left and right outer joins. | joins a table to itself as<br />if the table were two tables,<br />temporarily renaming at least <br />one table in the SQL statement. | returns the Cartesian product of the<br />sets of records from the two or more<br /> joined tables. |
+
+---
+
+SUBQUERIES: A subquery is a query that is nested inside another query, or inside another subquery. There are different types of subqueries.
+
+* SINGLE VALUE: The simplest subquery returns exactly one column and exactly one row. It can be used with comparison operators =, <, <=, >, or >=. Appear in SELECT statements, clause like where and having or from.
+
+  ```sql
+  SELECT name FROM city
+  WHERE rating = (
+  SELECT rating
+  FROM city
+  WHERE name = 'Paris'
+  ```
+* MULTIPLE VALUES: A subquery can also return multiple columns or multiple rows. Such subqueries can be used with operators IN, EXISTS, ALL, or ANY.Appear in SELECT statements, clause like where and having or from.
+
+  ```sql
+  SELECT name
+  FROM city
+  WHERE country_id IN (
+  SELECT country_id
+  FROM country
+  WHERE population > 20000000
+  );
+  ```
+* CORRELATED: A correlated subquery refers to the tables introduced in the outer query. A correlated subquery depends on the outer query. It cannot be run independently from the outer query.
+
+  ```sql
+  SELECT *
+  FROM city main_city
+  WHERE population > (
+  SELECT AVG(population)
+  FROM city average_city
+  WHERE average_city.country_id = main_city.country_id
+  );
+  ```
+
+Key differences
+
+* Execution: Non-correlated runs once, correlated runs for each row in the outer query.
+* Dependency: Non-correlated is independent, correlated needs data from the outer query.
+* Performance: Non-correlated can be faster due to fewer executions.
+* Complexity: Correlated queries can be more complex and harder to read.
+
+**Best Practices:**
+
+* Prefer non-correlated subqueries whenever possible: If the required information can be obtained independently of the outer query, use a non-correlated subquery for potential performance benefits.
+* Optimize correlated subqueries carefully: If correlated subqueries are necessary, consider techniques like using indexes and optimizing the subquery logic to minimize execution time.
+* Test and measure: Always test and measure the performance of different query approaches with your specific data and workload to determine the most efficient solution for your use case.
+
+---
+
+CTE: SQL CTEs or Common Table Expressions are nothing but temporary tables that you can use within a query.They can be referenced within a SELECT, INSERT, UPDATE, or DELETE statement.
+
+Recursive CTEs: CTEs can be used for recursive queries, which are queries that refer to themselves to generate a result. For example, you can use a recursive CTE to generate a list of numbers or dates.
+
+```sql
+WITH recursive numbers (n) AS (
+    SELECT 1
+    UNION ALL
+    SELECT n + 1
+    FROM numbers
+    WHERE n < 10
+)
+SELECT n
+FROM numbers;
+```
+
+When to Use:
+
+* CTE can help you to avoid repeated sub queries.
+* A CTE can be used multiple times within your statement, e.g. within a `JOIN` with a dynamic behavior depending on the actual row-count.
+* You can use multiple CTEs within one statement and you can use the result of one CTE within a later CTE.
+* There are recursive (or better  *iterative* ) CTEs.
+
+Advantages:
+
+* useable in  *ad-hoc* -queries (functions, views)
+* no unexpected side effects (most narrow scope)
+
+Disadvantages:
+
+* You cannot use the CTE's result in different statements
+* You cannot use indexes, statistics to optimize your CTE's set (although it will implicitly use existing indexes and statistics of the targeted objects - if appropriate).
+
+difference between Subquery and CTE:
+
+* **CTE can be reusable:** One advantage of using CTE is CTE is reusable by design. Instead of having to declare the same subquery in every place you need to use it, you can use CTE to define a temporary table once, then refer to it whenever you need it.
+* **CTE can be more readable:** Another advantage of CTE is CTE is more readable than Subqueries. Since CTE can be reusable, you can write less code using CTE than using a subquery. Also, **people tend to follow logic and ideas easier in sequence than in a nested fashion. **When you write a query, it is easier to break down a complex query into smaller pieces using CTE.
+* **CTEs can be recursive:** A CTE can run recursively, which a subquery cannot. This makes it especially well suited to tree structures, in which information in a given row is based on the information from the previous row(s). The recursion feature can be implemented with `RECURSIVE` and `UNION ALL`.
+
+
+
+
+1. cte's are defined using the "with" keyword followed by the CTE name and columns list(optional).Where as subqueries are enclosed within parentheses and can be used in various parts of a query such as the SELECT,FROM,WHERE or HAVING clauses.
+2. CTE's are used to create temporary result sets that can be referenced multiple times within a larger query hence improve code readability and maintainability.Subqueries are used to retrieve data based on the result of an outer query.Commonly used for data filtering,joining related tables or performing calculations on subsets of data.
+3. CTEs can improve performance by making queries run faster, but it depends on how complicated the query is and how much data it involves.Subqueries can sometimes result in poor performance, particularly when dealing with large datasets or complex join conditions.
+4. CTEs make queries easier to read and maintain by breaking them into smaller, managable parts.Subqueries can make queries more complicated, especially when they are deeply nested**,** which makes them harder to understand and update.
+5. CTEs have a **limited scope** and exist temporarily during a single query, not accessible outside it.Subqueries are embedded within a query and have a **limited scope,** retrieving data based on the outer query.
+6. CTE's act as a named temporary result set whreas subquery is a part of a larger query.
+7. CTE's can be used for recursive queries where subquery used for filtering or retrieving specific values.
+8. Cte's can be referenced by multiple queries within a single query block, subquery cannot be referenced outside the query where it is defined.
+9. Use CTEs to make complex queries easier to read and organize, especially when dealing with repeated subqueries.Use subqueries sparingly, avoiding excessive nesting for better code readability and performance.
