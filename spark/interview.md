@@ -404,11 +404,194 @@ mode = "overwrite"
 df.write.jdbc(url=url, table=table_name, mode=mode, properties=properties)
 ```
 
+
+**create SparkSession:** sparkSession class from the pyspark.sql liabrary has the getOrCreate() method which creates new sparkSession.
+
+```python-
+import pyspark
+from pyspark.sql import SparkSession
+spark = SparkSession.builder.master("local[1]") 
+                   .appName('InterviewBitSparkSession') 
+                   .getOrCreate()
+```
+
+builder -> The `builder` method initializes a `SparkSession.Builder` object, which provides methods for configuring the SparkSession, such as setting the master URL, application name, configuration options, and more. It provides methods : 1.master(), 2. appName(), 3. config(), 4.enableHiveSupport() 5. getOrCreate(), 6. newSession().
+
+master() -> setting up the mode where application run clustermode/standalone mode for standalone mode we use local[x] value where x represents partition count to be created in RDD,dataframe,dataset.ideally x is CPU numbers of cores available.
+
+appName() -> setting the application name
+
+getOrCreate() -> returning sparkSession object. creates new one if it does not exists
+
+for creating new sparkSession every time we use spark_session = SparkSession.newSession
+
+---
+
 Dataframe Transformation:
 
 schema = column Name + Column Data type
 
 Dataframe = column + rows
+
+Operations:
+
+* **Viewing DataFrames**
+  * `show() - Displays the top rows of the DataFrame.`
+  * `printSchema() - Prints the schema of the DataFrame, including column names and data types.`
+  * `head() - Returns the first row as a Row object.`
+  * `columns - Returns a list of column names.`
+  * `dtypes - Returns a list of tuples with column names and their data types.`
+  * `describe() - Computes basic statistics like count, mean, stddev, min, and max for numeric columns.`
+
+### 2. **Data Manipulation**
+
+* **Selecting Data**
+  * `select() - Selects one or more columns from the DataFrame.`
+  * `selectExpr() - Selects using SQL expressions.`
+  * `withColumn() - Adds a new column or replaces an existing column.`
+  * `drop() - Removes one or more columns from the DataFrame. `
+  * `filter()` / `where() - Filters rows based on a condition.`
+  * `distinct() - Removes duplicate rows from the DataFrame.`
+* **Grouping and Aggregating**
+  * `groupBy() - Groups rows by one or more columns.`
+  * `agg() - Applies aggregate functions on grouped data.`
+  * `count() - Counts the number of rows in each group.is action as well as transformation.`
+  * `sum() - Computes the sum for each group. `
+  * `avg() - Computes the average for each group.`
+  * `max() - Finds the maximum value in each group.`
+  * `min() - Finds the minimum value in each group.`
+* **Sorting and Ordering**
+  * `orderBy() - Sorts the DataFrame by one or more columns.`
+  * `sort() - An alias for orderBy().`
+* **Joins**
+  * `join() - oins two DataFrames on a specified column(s).`
+* **Handling Missing Data**
+  * `na.drop() - Drops rows with missing data.`
+  * `na.fill() - Fills missing data with specified values.`
+  * `na.replace() - Replaces specified values in a DataFrame.`
+* **Modifying Columns**
+  * `withColumnRenamed() - Renames a column.`
+  * `alias() - Assigns a temporary name to a column, often used in SQL expressions.`
+
+### 3. **Window Functions**
+
+* **Window Specifications**
+  * `Window.partitionBy() - Partitions data into groups for window functions.`
+  * `Window.orderBy() - Orders data within each partition.`
+  * `Window.rowsBetween() - Defines the range of rows for each window.`
+  * `Window.rangeBetween() - Defines the range of values for each window.`
+* **Window Functions**
+  * `row_number() - Assigns a unique row number to each row within a window partition.`
+  * `rank() - Assigns a rank to each row within a partition, with gaps.`
+  * `dense_rank() - Assigns a rank without gaps.`
+  * `lag() - Accesses data from a previous row within the window.`
+  * `lead() - Accesses data from a subsequent row within the window.`
+  * `cumsum() - Computes the cumulative sum.`
+  * `ntile() - Divides rows into n buckets based on rank.`
+
+### 4. **SQL Functions**
+
+* **Basic SQL Functions**
+  * `lit() - Creates a Column object for a literal value.`
+  * `col() - Returns a Column object for a DataFrame column.`
+  * `asc() - Sorts the data in ascending order.`
+  * `desc() - Sorts the data in descending order.`
+  * `expr() - Parses the expression string into a column.`
+* **String Functions**
+  * `concat() - Concatenates multiple string columns.`
+  * `substr() - Extracts a substring from a string column.`
+  * `lower() - Converts strings to lowercase.`
+  * `upper() - Converts strings to uppercase.`
+  * `trim() - Removes leading and trailing spaces from strings.`
+  * `split() - Splits strings around a specified separator.`
+* **Date and Time Functions**
+  * `current_date() - Returns the current date.`
+  * `current_timestamp() - Returns the current timestamp.`
+  * `date_format() - Formats date into a specified pattern.`
+  * `datediff() - Computes the difference in days between two dates.`
+  * `add_months() - Adds a specified number of months to a date.`
+  * `year()`, `month()`, `dayofmonth() - Extracts the year, month, or day from a date.`
+* **Mathematical Functions**
+  * `abs() - Computes the absolute value.`
+  * `round() - Rounds a number to a specified number of decimal places.`
+  * `sqrt() - Computes the square root.`
+  * `sin()`, `cos()`, `tan() - Trigonometric functions for sine, cosine, and tangent.`
+
+### 5. **Aggregations and Statistics**
+
+* **Aggregation Functions**
+  * `count() - Counts the number of rows.`
+  * `sum() - Sums values in a column.`
+  * `avg() - Calculates the average of a column.`
+  * `max() - Finds the maximum value in a column.`
+  * `min() - Finds the minimum value in a column.`
+* **Statistical Functions**
+  * `corr() - Calculates the correlation between two columns.`
+  * `cov() - Calculates the covariance between two columns.`
+  * `approxQuantile() - Calculates approximate quantiles.`
+  * `describe() - Provides summary statistics for columns.`
+
+### 6. **User-Defined Functions (UDFs)**
+
+* **Creating UDFs**
+  * `udf() - Creates a user-defined function (UDF) for use in DataFrames.`
+* **Using UDFs**
+  * `withColumn() - Applies a UDF to create or modify columns.`
+  * `select() - Applies a UDF in a select statement.`
+
+### 7. **DataFrames Actions**
+
+* **Actions**
+
+  * `collect() - Returns all rows as a list of Row objects.`
+  * `count() - Returns the number of rows in the DataFrame.`
+  * `take() - Returns the first n rows as a list.`
+  * `first() - Returns the first row as a Row object.`
+  * `foreach() - Applies a function to each row.`
+  * `foreachPartition() - Applies a function to each partition.`
+
+### **RDD Functions**
+
+1. **Basic RDD Operations**
+   * `getNumPartitions()`: Returns the number of partitions in the RDD.
+   * `collect()`: Returns all the elements of the RDD as an array.
+   * `count()`: Returns the number of elements in the RDD.
+   * `first()`: Returns the first element of the RDD.
+   * `take(n)`: Returns the first n elements of the RDD.
+   * `top(n)`: Returns the top n elements in the RDD.
+   * `takeSample(withReplacement, num, [seed])`: Returns a sample of num elements from the RDD.
+   * `reduce(func)`: Aggregates the elements of the RDD using the given function.
+   * `foreach(func)`: Applies the function to each element of the RDD.
+2. **RDD Transformations**
+   * `map(func)`: Returns a new RDD by applying a function to each element.
+   * `flatMap(func)`: Similar to `map`, but each input item can be mapped to 0 or more output items (flattening the results).
+   * `filter(func)`: Returns a new RDD containing only the elements that satisfy a condition.
+   * `distinct()`: Returns a new RDD containing distinct elements.
+   * `union(otherRDD)`: Returns the union of this RDD and another RDD.
+   * `intersection(otherRDD)`: Returns the intersection of this RDD and another RDD.
+   * `join(otherRDD)`: Joins two RDDs by their keys.
+   * `groupByKey()`: Groups the values for each key in the RDD.
+   * `reduceByKey(func)`: Merges the values for each key using an associative function.
+   * `sortByKey(ascending=True)`: Returns an RDD sorted by the key.
+3. **Persistence**
+   * `cache()`: Caches the RDD in memory.
+   * `persist()`: Persist the RDD with a specified storage level.
+   * `unpersist()`: Removes the RDD from memory.
+4. **Partitioning**
+   * `repartition(numPartitions)`: Reshuffles the data into the specified number of partitions.
+   * `coalesce(numPartitions)`: Reduces the number of partitions in the RDD, useful for optimization.
+
+JOIN:
+
+Types of joins:
+
+* Inner join
+* full outer join
+* Left join
+* Right join
+* Left semi join
+* Left anti join
+* Cross join
 
 union VS unionAll
 
@@ -417,3 +600,33 @@ union VS unionAll
 ** but in spark sql union will give only distinct records while unionAll will give all records including duplicates.
 
 **unionByName - it will check both dataframes column name if they are same then only it gives result.
+
+---
+
+Shared Variables: There are two different types of Shared Variables in spark -Broadcast Variable and Accumulator
+
+1. Broadcast Variables: are read-only Variables distributed across worker nodes in-memory. The data Broadcasted this way is cached in serialized form and deserialized before running each task. Used for cache a value in memory on all nodes generally small datasets only Broadcasted.
+2. Accumulator: Which are used to update the variables in parallel during execution/runtime and share results from worker to driver.similar to counters in Mapreduce. used for performing associative and commutative operations such as counters or sums.
+
+coalesce and repartition:
+
+coalesce: is used to decrease the number of partitions without invoking Shuffling. It used in when output partitions is less than the input.
+
+repartition: helps to increase or decrease the number of partitions by doing Shuffling of data.
+
+
+difference between Persist and Cache: are optimization techniques for both iterative and interactive Spark applications to improve the performance of the jobs or applications.
+
+iterative -> Reuse intermediate results
+
+interactive  -> allowing a two-way flow of information
+
+cache() -> MEMORY_ONLY
+
+Persist(level) -> MEMORY_ONLY, MEMORY_AND_DISK, MEMORY_ONLY_SER, MEMORY_AND_DISK_SER, DISK_ONLY (disk, or off-heap memory)
+
+unpersist() can be used to Freeing up space from the Storage memory.
+
+Checkpoint: used for fault-tolerance and to cut down the lineage of RDDs/dataframes especially in long and complex computations. It breaks the lineage and stores data to a reliable Storage(HDFS), used in scenario where lineage graph is too long or when you want to recover from failures efficiently.
+
+Note: use cache() -> for optimization purpose Checkpoint() -> for fault tolerance purpose, and reduce the lineage length in complex computations.
