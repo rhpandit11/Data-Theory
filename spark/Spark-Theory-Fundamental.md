@@ -64,7 +64,6 @@
 2. **Stage** - A stage represents a set of tasks that can be executed in parallel. There are two types of stages in Spark: shuffle stages and non-shuffle stages. Shuffle stages involve the exchange of data between nodes, while non-shuffle stages do not.(groupByKey, sortByKey).
 3. **Task** - in spark is the samallest unit of work that can be scheduled. Each stage is divided into task.A task is a unit of execution that runs on a single machine.
 
-
 * **Application:** When we submit the Spark code to a cluster it creates a Spark Application.
 * **Job:** The Job is the top-level execution for any Spark application. A Job corresponds to an Action in a Spark application.
 * **Stage:** Jobs will be divided into stages. The Transformations work in a lazy fashion and will not be executed until an Action is called. Actions might include one or many Transformations and the Transformations define the breakdown of jobs into stages, which corresponds to a shuffle dependency.
@@ -412,19 +411,33 @@ Projection Pushdown: Projection Pushdown stands for the selected column(s) with 
 
 Bucketing and Partitioning in Spark:
 
-Partitioning in Spark:Partitioning is an integral concept in Spark that controls how the data is physically distributed across various nodes in the cluster during data processing. Spark, by default, performs data partitioning, which can also be manually optimized based on the workload.
+Partitioning: Partitioning splits data into separate folders on disk based on one or moremultiple columns.This enables efficient parallelism and partition pruning, which optimizes queries by skipping unnecessary data.
 
-Work: In Spark, an RDD (Resilient Distributed Dataset), DataFrame, or Dataset is divided into a number of partitions, each of which can be computed on different nodes in the cluster. Data in each partition is processed in parallel, ensuring efficient use of cluster resources and enhancing the speed of computation.
+syntax: df.write.partitionBy("date").format("parquet").save("path") 
 
-Why is Partitioning important:
+Note: The number of resulting files is controlled by the spark.sql.shuffle.partitions setting
 
-**Load Balancing**: proper distribution of data across partitions ensures all nodes utilized, avoiding data skew and preventing nodes being overloaded while others are idle.
+Bucketing: bucketing assigns rows to specific buckets and collects them on disk, which is useful for wide operations like joins and agg.Bucketing reduces the need for shuffling data across partitions.
 
-**Network Optimization**: transformations like join or group by minimize the data transferred over the network.
+Syntax:
 
-**Parallelism**: Each partitions can be processed independently and in parallel on different nodes.
+df.write.bucketBy(10,"id").sortBy("id").format("parquet").save("path") #bucket the dataset by the "id" column into 10 buckets
 
-Bucketing: is a technique to be able to divide dataset into managable chunks, and the division of data depends on hash value, by this we can improve the performance of spark query(ex: filter, agg, joins).
+No of bucket = Total dataset size/default block size
+
+default block size = 128 mb
+
+Total data size  = total no. of records * variable * datatype
+
+variable = no of columns
+
+When to use Partitioning and Bucketing:
+
+* Partitioning: use partitioning when you frequently filters on a column with low cardinality. This helps in skipping unnecessary data and speeds up query performance. Ex: partitioning data by date is common when you need to analyze daily logs.
+* Bucketing: Use bucketing for complex operations like joins, groupBy and windowing on columns with high cardinality. Bucketing helps in reducing shuffling and sorting costs.
+* Partitioning is more about pruning data for faster reads, while bucketing is more about optimizing joins and reducing data shuffle.
+
+
 
 ---
 
@@ -509,7 +522,7 @@ These above-mentioned factors for spark optimization, if properly used, -
 
 ---
 
-Spark-Submit : 
+Spark-Submit :
 
 ```apache
 \bin\spark-submit\
@@ -531,7 +544,6 @@ Spark-Submit :
 c:\user\Rahul\Desktop\my_folder_name\main.py testing-project
 
 ```
-
 
 Edge Node:
 

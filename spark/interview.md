@@ -176,7 +176,7 @@ The number of tasks for a job is = ( no of your stages * no of your partitions )
 | Representation | dependencies between tasks or events                                          | history of data transformations or processing steps                                          |
 | Cycle          | A DAG does not contain cycles                                                 | lineage graph can contain cycles.                                                            |
 | Direction      | direction of edges represent the flow``of<br />dependencies between tasks     | the direction of edges represent the flow of data<br />transformations``or processing steps. |
-| Use            | used in task scheduling, workflow``management,<br />and distributed computing | used in data lineage and data                                                                |
+| Use            | used in task scheduling, workflow``management,<br />and distributed computing |                                                                                              |
 
 Lazy Evoluation: In spark it's a powerful concept that allows the optimization of data processing tasks by postponing the execution of transformations until an action is called.
 
@@ -404,7 +404,6 @@ mode = "overwrite"
 df.write.jdbc(url=url, table=table_name, mode=mode, properties=properties)
 ```
 
-
 **create SparkSession:** sparkSession class from the pyspark.sql liabrary has the getOrCreate() method which creates new sparkSession.
 
 ```python-
@@ -606,14 +605,13 @@ union VS unionAll
 Shared Variables: There are two different types of Shared Variables in spark -Broadcast Variable and Accumulator
 
 1. Broadcast Variables: are read-only Variables distributed across worker nodes in-memory. The data Broadcasted this way is cached in serialized form and deserialized before running each task. Used for cache a value in memory on all nodes generally small datasets only Broadcasted.
-2. Accumulator: Which are used to update the variables in parallel during execution/runtime and share results from worker to driver.similar to counters in Mapreduce. used for performing associative and commutative operations such as counters or sums.
+2. Accumulator: Which are used to update the variables in parallel during execution/runtime and share results from worker to driver.similar to counters in Mapreduce. used for aggregating information across all tasks in a Spark job.
 
 coalesce and repartition:
 
 coalesce: is used to decrease the number of partitions without invoking Shuffling. It used in when output partitions is less than the input.
 
 repartition: helps to increase or decrease the number of partitions by doing Shuffling of data.
-
 
 difference between Persist and Cache: are optimization techniques for both iterative and interactive Spark applications to improve the performance of the jobs or applications.
 
@@ -630,3 +628,32 @@ unpersist() can be used to Freeing up space from the Storage memory.
 Checkpoint: used for fault-tolerance and to cut down the lineage of RDDs/dataframes especially in long and complex computations. It breaks the lineage and stores data to a reliable Storage(HDFS), used in scenario where lineage graph is too long or when you want to recover from failures efficiently.
 
 Note: use cache() -> for optimization purpose Checkpoint() -> for fault tolerance purpose, and reduce the lineage length in complex computations.
+
+
+Bucketing and Partitioning in Spark:
+
+Partitioning: Partitioning splits data into separate folders on disk based on one or more multiple columns.This enables efficient parallelism and partition pruning, which optimizes queries by skipping unnecessary data.
+
+syntax: df.write.partitionBy("date").format("parquet").save("path")
+
+Note: The number of resulting files is controlled by the spark.sql.shuffle.partitions setting
+
+Bucketing: bucketing assigns rows to specific buckets and collects them on disk, which is useful for wide operations like joins and agg.Bucketing reduces the need for shuffling data across partitions.
+
+Syntax:
+
+df.write.bucketBy(10,"id").sortBy("id").format("parquet").save("path") #bucket the dataset by the "id" column into 10 buckets
+
+No of bucket = Total dataset size/default block size
+
+default block size = 128 mb
+
+Total data size  = total no. of records * variable * datatype
+
+variable = no of columns
+
+When to use Partitioning and Bucketing:
+
+* Partitioning: use partitioning when you frequently filters on a column with low cardinality. This helps in skipping unnecessary data and speeds up query performance. Ex: partitioning data by date is common when you need to analyze daily logs.
+* Bucketing: Use bucketing for complex operations like joins, groupBy and windowing on columns with high cardinality. Bucketing helps in reducing shuffling and sorting costs.
+* Partitioning is more about pruning data for faster reads, while bucketing is more about optimizing joins and reducing data shuffle.

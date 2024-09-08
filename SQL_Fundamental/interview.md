@@ -117,10 +117,10 @@ reasons for denormalizing the data: We de-normalize data when we need better per
 **Relationship in SQL:**
 
 1. One-to-one Relationship
-1. One-to-many Relationship
-1. Many-to-many Relationship
-1. Many-to-one Relationship
-1. Self-referencing Relationship
+2. One-to-many Relationship
+3. Many-to-many Relationship
+4. Many-to-one Relationship
+5. Self-referencing Relationship
 
 ---
 
@@ -317,6 +317,107 @@ Difference:
 | ------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | -------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
 | returns rows when there<br />is a match in both tables. | returns all rows from the left table, even<br /> if there are no matches in the right table. | returns all rows from the right table,<br />even if there are no matches in the left table. | combines the results of both<br /> left and right outer joins. | joins a table to itself as<br />if the table were two tables,<br />temporarily renaming at least <br />one table in the SQL statement. | returns the Cartesian product of the<br />sets of records from the two or more<br /> joined tables. |
 
+
+
+**Products Table:**
+
+| ProductID | ProductName | SupplierID |
+| --------- | ----------- | ---------- |
+| 1         | Apples      | 100        |
+| 2         | Oranges     | 101        |
+| 3         | Bananas     | NULL       |
+| 4         | Grapes      | 102        |
+| 5         | Pineapples  | 103        |
+
+**Suppliers Table:**
+
+| SupplierID | SupplierName   |
+| ---------- | -------------- |
+| 100        | Fresh Farms    |
+| 101        | Citrus World   |
+| 102        | Vine Vineyards |
+| 104        | Tropical Goods |
+
+Inner Join: 	
+
+SELECT Products.ProductName, Suppliers.SupplierName
+FROM Products
+INNER JOIN Suppliers
+ON Products.SupplierID = Suppliers.SupplierID;
+
+| ProductName | SupplierName   |
+| ----------- | -------------- |
+| Apples      | Fresh Farms    |
+| Oranges     | Citrus World   |
+| Grapes      | Vine Vineyards |
+
+Self Join:
+
+SELECT p1.ProductName AS Product1, p2.ProductName AS Product2, p1.SupplierID
+FROM Products p1
+JOIN Products p2
+ON p1.SupplierID = p2.SupplierID
+AND p1.ProductID < p2.ProductID;
+
+| Product1 | Product2   | SupplierID |
+| -------- | ---------- | ---------- |
+| Apples   | Oranges    | 100        |
+| Grapes   | Pineapples | 102        |
+
+
+
+LEFT JOIN (LEFT OUTER JOIN):
+
+SELECT Products.ProductName, Suppliers.SupplierName
+FROM Products
+LEFT JOIN Suppliers
+ON Products.SupplierID = Suppliers.SupplierID;
+
+| ProductName | SupplierName   |
+| ----------- | -------------- |
+| Apples      | Fresh Farms    |
+| Oranges     | Citrus World   |
+| Bananas     | NULL           |
+| Grapes      | Vine Vineyards |
+| Pineapples  | NULL           |
+
+RIGHT JOIN (RIGHT OUTER JOIN):
+
+SELECT Products.ProductName, Suppliers.SupplierName
+FROM Products
+RIGHT JOIN Suppliers
+ON Products.SupplierID = Suppliers.SupplierID;
+
+| ProductName | SupplierName   |
+| ----------- | -------------- |
+| Apples      | Fresh Farms    |
+| Oranges     | Citrus World   |
+| Grapes      | Vine Vineyards |
+| NULL        | Tropical Goods |
+
+FULL OUTER JOIN:
+
+| ProductName | SupplierName   |
+| ----------- | -------------- |
+| Apples      | Fresh Farms    |
+| Oranges     | Citrus World   |
+| Bananas     | NULL           |
+| Grapes      | Vine Vineyards |
+| Pineapples  | NULL           |
+| NULL        | Tropical Goods |
+
+Natural Join: 
+
+SELECT *
+FROM Products
+NATURAL JOIN Suppliers;
+
+| ProductID | ProductName | SupplierID | SupplierName   |
+| --------- | ----------- | ---------- | -------------- |
+| 1         | Apples      | 100        | Fresh Farms    |
+| 2         | Oranges     | 101        | Citrus World   |
+| 4         | Grapes      | 102        | Vine Vineyards |
+
 ---
 
 SUBQUERIES: A subquery is a query that is nested inside another query, or inside another subquery. There are different types of subqueries.
@@ -407,9 +508,6 @@ difference between Subquery and CTE:
 * **CTE can be more readable:** Another advantage of CTE is CTE is more readable than Subqueries. Since CTE can be reusable, you can write less code using CTE than using a subquery. Also, **people tend to follow logic and ideas easier in sequence than in a nested fashion. **When you write a query, it is easier to break down a complex query into smaller pieces using CTE.
 * **CTEs can be recursive:** A CTE can run recursively, which a subquery cannot. This makes it especially well suited to tree structures, in which information in a given row is based on the information from the previous row(s). The recursion feature can be implemented with `RECURSIVE` and `UNION ALL`.
 
-
-
-
 1. cte's are defined using the "with" keyword followed by the CTE name and columns list(optional).Where as subqueries are enclosed within parentheses and can be used in various parts of a query such as the SELECT,FROM,WHERE or HAVING clauses.
 2. CTE's are used to create temporary result sets that can be referenced multiple times within a larger query hence improve code readability and maintainability.Subqueries are used to retrieve data based on the result of an outer query.Commonly used for data filtering,joining related tables or performing calculations on subsets of data.
 3. CTEs can improve performance by making queries run faster, but it depends on how complicated the query is and how much data it involves.Subqueries can sometimes result in poor performance, particularly when dealing with large datasets or complex join conditions.
@@ -419,3 +517,34 @@ difference between Subquery and CTE:
 7. CTE's can be used for recursive queries where subquery used for filtering or retrieving specific values.
 8. Cte's can be referenced by multiple queries within a single query block, subquery cannot be referenced outside the query where it is defined.
 9. Use CTEs to make complex queries easier to read and organize, especially when dealing with repeated subqueries.Use subqueries sparingly, avoiding excessive nesting for better code readability and performance.
+
+---
+
+Window Functions: SQL function where the input values are taken from a "window" of one or more rows in the results set of a SELECT statement.
+
+AGGREGATE FUNCTIONS VS. WINDOW FUNCTIONS: unlike aggregate functions, window functions do not collapse rows.
+
+PARTITION BY: divides rows into multiple groups, called partitions, to which the window function is applied.
+
+1. Aggregate Functions
+   * avg() - average value for rows within the window frame
+   * count() - count of values for rows within the window frame
+   * max() - maximum value within the window frame
+   * min() - minimum value within the window frame
+   * sum() - sum of values within the window frame
+2. Ranking Functions
+   * row_number() - unique number for each row within partition, with different numbers for tied values (give unique value for duplicates values also)
+   * rank() - ranking within partition, with gaps and same ranking for tied values - (give samevalue for duplicates values and skip next digits)
+   * dense_rank() - ranking within partition, with no gaps and same ranking for tied values - (give samevalue for duplicates values and not skip digits)
+3. Distribution Functions
+   * percent_rank() - he percentile ranking number of a row—a value in [0, 1] interval: (rank - 1) / (total number of rows - 1)
+   * cume_dist()  - the cumulative distribution of a value within a group of values, i.e., the number of rows with values less than or equal to the current row’s value divided by the total number of rows; a value in (0, 1] interval
+4. Analytic Functions
+   * lead(expr, offset, default)
+   * lag(expr, offset, default)
+   * ntile(n) - divide rows within a partition as equally as possible into n groups, and assign each row its group number.
+   * first_value(expr) - the value for the first row within the window frame
+   * last_value(expr) - the value for the last row within the window frame
+   * nth_value(expr,n) - the value for the n-th row within the window frame; n must be an integer
+
+---
