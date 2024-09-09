@@ -317,8 +317,6 @@ Difference:
 | ------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | -------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
 | returns rows when there<br />is a match in both tables. | returns all rows from the left table, even<br /> if there are no matches in the right table. | returns all rows from the right table,<br />even if there are no matches in the left table. | combines the results of both<br /> left and right outer joins. | joins a table to itself as<br />if the table were two tables,<br />temporarily renaming at least <br />one table in the SQL statement. | returns the Cartesian product of the<br />sets of records from the two or more<br /> joined tables. |
 
-
-
 **Products Table:**
 
 | ProductID | ProductName | SupplierID |
@@ -338,7 +336,7 @@ Difference:
 | 102        | Vine Vineyards |
 | 104        | Tropical Goods |
 
-Inner Join: 	
+Inner Join:
 
 SELECT Products.ProductName, Suppliers.SupplierName
 FROM Products
@@ -363,8 +361,6 @@ AND p1.ProductID < p2.ProductID;
 | -------- | ---------- | ---------- |
 | Apples   | Oranges    | 100        |
 | Grapes   | Pineapples | 102        |
-
-
 
 LEFT JOIN (LEFT OUTER JOIN):
 
@@ -406,7 +402,7 @@ FULL OUTER JOIN:
 | Pineapples  | NULL           |
 | NULL        | Tropical Goods |
 
-Natural Join: 
+Natural Join:
 
 SELECT *
 FROM Products
@@ -502,11 +498,7 @@ Disadvantages:
 * You cannot use the CTE's result in different statements
 * You cannot use indexes, statistics to optimize your CTE's set (although it will implicitly use existing indexes and statistics of the targeted objects - if appropriate).
 
-difference between Subquery and CTE:
-
-* **CTE can be reusable:** One advantage of using CTE is CTE is reusable by design. Instead of having to declare the same subquery in every place you need to use it, you can use CTE to define a temporary table once, then refer to it whenever you need it.
-* **CTE can be more readable:** Another advantage of CTE is CTE is more readable than Subqueries. Since CTE can be reusable, you can write less code using CTE than using a subquery. Also, **people tend to follow logic and ideas easier in sequence than in a nested fashion. **When you write a query, it is easier to break down a complex query into smaller pieces using CTE.
-* **CTEs can be recursive:** A CTE can run recursively, which a subquery cannot. This makes it especially well suited to tree structures, in which information in a given row is based on the information from the previous row(s). The recursion feature can be implemented with `RECURSIVE` and `UNION ALL`.
+difference between Subquery and CTE
 
 1. cte's are defined using the "with" keyword followed by the CTE name and columns list(optional).Where as subqueries are enclosed within parentheses and can be used in various parts of a query such as the SELECT,FROM,WHERE or HAVING clauses.
 2. CTE's are used to create temporary result sets that can be referenced multiple times within a larger query hence improve code readability and maintainability.Subqueries are used to retrieve data based on the result of an outer query.Commonly used for data filtering,joining related tables or performing calculations on subsets of data.
