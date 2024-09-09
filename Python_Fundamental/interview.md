@@ -441,18 +441,56 @@ What is the difference between Python Arrays and lists?
 
 For loop used to iterate through the element lik list,tuple,set,dict, use for loop when there have both start and end condition. Where as while loop have the end condition.
 
-Python Iterators
+What are magic methods in Python? Can you give examples?
 
-An iterator is an object that contains a countable number of values.
+Magic methods are special methods in Python that start and end with double underscores, like `__init__` or `__str__`. These methods are automatically called by Python in response to specific operations. For example, when you add two numbers with the `+` operator, Python internally calls the `__add__` method.
 
-An iterator is an object that can be iterated upon, meaning that you can
-traverse through all the values.
+`__init__` (Constructor) -
 
-Technically, in Python, an iterator is an object which implements the
-iterator protocol, which consist of the methods `__iter__()`
-and `__next__()`.
+Used to initialize the object's state.
 
-## Iterator vs Iterable
+Called when an instance of a class is created.
 
-Lists, tuples, dictionaries, and sets are all iterable objects. They are iterable
-*containers* which you can get an iterator from.
+`__str__` (String Representation) - Called by the `str()` function and `print()` to get a human-readable string representation of the object.
+
+`__repr__` (Official String Representation) - Called by the `repr()` function and is meant to provide an unambiguous string representation of the object, often one that can be used to recreate the object.
+
+`__len__` (Length) - Called by the `len()` function to determine the length of an object.
+
+`__add__` (Addition) -  
+
+* Defines the behavior of the addition operator `+` for objects of a class.
+
+
+**`__getitem__` (Indexing)**
+
+* Called to retrieve an item from an object using the indexing syntax (`obj[index]`)
+
+
+**`__eq__` (Equality)**
+
+* Defines the behavior of the equality operator `==`.
+
+What is the purpose of __name__ == "__main__" in Python scripts?
+
+The construct `if __name__ == "__main__":` in Python is used to determine whether a Python script is being run as the main program or being imported as a module in another script. This allows the script to execute some code only when it is run directly, not when it is imported elsewhere.
+
+It allows a file to act both as an executable script and as an importable module. This is helpful when you want to write code that can be reused elsewhere but still allows the file to be run independently.
+
+
+
+
+
+
+
+
+
+
+What is the difference between __init__ and __new__ in Python?
+
+* **____new_ ____** : Handles object creation, returning a new instance of the class.
+* **____init____** : Initialises the newly created object by setting up instance variables and performing initialisation tasks.
+* **__new__** : Static method that must be explicitly defined within the class.
+* **__init__** : Instance method that is automatically called after __new__ and receives the newly created instance (self).
+* **__new__** : Returns a newly created instance of the class.
+* **__init__** : Does not return any value; it initialises the object passed to it.
