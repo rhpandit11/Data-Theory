@@ -63,13 +63,15 @@ Example:
 
 **Keys of DBMS:**
 
-* Super Key: To uniquely identify each tuple in the table, it might be single or a combination of many attributes. EX: booking(Passenger ID + Reservation Number) Bank(customer Id + account number)
-* Candidate Keys(minimum super key): simple collection of characetricstics that can be used to identify a tuple, can contain null value, but must always be unique. EX: Account No, Voter Id
-* Primary Key: most suitable candidate key, cannot have null values, it must unique and non-null. EX: email_id, Name, DOB.
-* Alternate Key: different from primary key, if necessary primary key can be selected from any of the alternate keys, sometimes to improve search speed, alternate keys are used for indexing.
-* Foreign Key: supports for creation of associations between tables, EX: course_id
-* Composite Key: unique method two identifying rows in a table by combining two or more characteristics to create composite key. EX: (AP 19 CB 2005) AP -> state_id, 19->sectore_id
-* Surrogate Key: allow under certain conditions like main PK is very large, challenging PK, lack of key, when not natural choice. EX: student Table {student_id}
+1. 𝐔𝐧𝐢𝐪𝐮𝐞 𝐊𝐞𝐲 - ensures that all values in a column (or a set of columns) are uniqueacross the table. Unlike a primary key, a unique key allows one NULLvalue. Use: It prevents duplicate values in the column, but unlike the primary key, it is not necessarily used for identifying rows.
+2. Super Key: is any set of columns that can uniquely identify a row in a table. It can contain additional columns besides the minimum required to uniquely identify rows (i.e., it might include non-essential columns along with the primary key). Use: It's a superset of the primary key, often used conceptually in database design.
+   Example: In a table, both (EmployeeID, Name) and (EmployeeID) could be super keys if EmployeeID is the primary key.
+3. Candidate Keys(minimum super key): is any column (or set of columns) that can potentially become a primary key. A table can have multiple candidate keys, but only one can be chosen as the primary key. Use: It serves as a potential unique identifier for the table. Example: In a table of employees, both EmployeeID and SSN might be candidate keys, but only one will be chosen as the primary key.
+4. Primary Key: is a column (or a set of columns) that uniquely identifies each row in a table. It ensures that no duplicate or NULL values are present in the specified column. Use: It helps in identifying records uniquely and is usually indexed for fast retrieval.
+5. Alternate Key: different from primary key, if necessary primary key can be selected from any of the alternate keys, sometimes to improve search speed, alternate keys are used for indexing.
+6. Foreign Key: is a column (or a set of columns) in one table that links to the primary key of another table. It enforces referential integrity between the two tables.Use: It establishes a relationship between tables and ensures that the value in the foreign key column exists in the primary key column of the referenced table.
+7. Composite Key: is a combination of two or more columns that together uniquely identify a row in the table. Neither of the columns alone can act as a primary key. Use: It is useful when no single column can uniquely identify a record, so multiple columns are combined.
+8. Surrogate Key: allow under certain conditions like main PK is very large, challenging PK, lack of key, when not natural choice. EX: student Table {student_id}
 
 | Key Type      | Definition                                          | Uniqueness   | Null Values | Purpose                                     | Index                   | Usage             | Alteration                           |
 | ------------- | --------------------------------------------------- | ------------ | ----------- | ------------------------------------------- | ----------------------- | ----------------- | ------------------------------------ |
