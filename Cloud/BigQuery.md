@@ -37,6 +37,31 @@ Execution:
 
 ---
 
+Google BigQuery data types:
+
+* NUMERIC (including INT64, NUMERIC, BIGNUMERIC, and FLOAT64)
+
+  * Integer type (INT64) - The values can't contain decimals or fractional components.
+  * Numeric type (NUMERIC DECIMAL) - Stores exact, high-precision decimal numbers with up to 38 digits of precision.use for storing large financial data,currency values and precise calculations.
+  * Bignumeric type (BIGNUMERIC BIGDECIMAL) - similar as numeric but allows even larger numbers with more digits of precision.
+  * Floating point type (FLOAT64) - stores 64-bit floating point number use for store decimal precision numbers.
+* BOOLEAN - store logical valuse of either TRUE or FALSE use for flags, binary condition or toggles in data.
+* STRING - stores text data operates on Unicode characters use for storing names,description and text fields.
+* BYTES - stores binary data as a sequence of bytes rather than Unicode characters useful for storing images,files, encoded data etc.
+* TIME (including DATE, TIME, DATETIME, and TIMESTAMP)
+
+  * DATE - stores calendar dates without time.
+  * TIME - stores time-of-day values without date.
+  * DATETIME - stores both the date and time(without time zone information)
+  * TIMESTAMP - stores an exact point in time, including the date and time(with time zone).
+* GEOGRAPHY - stores latitude/longitude co-ordinates, geometric shapes points, lines, and polygons.
+* ARRAY - stores a collections of  ordered list of items of a single data type. useful for store list of related data such as user tags or items in an order.Note that none of these elements can be of an ARRAY type themselves.
+* STRUCT - stores a collection of key-value pairs, where each key is associated with a value of a specific data type.userful for storing ex. user profile with multiple attributes. EX: STRUCT<name STRING, age INT64>('John Doe', 30)
+
+GEOGRAPHY, ARRAY,STRUCT will not work on orderby, groupby, distinct, partitionby, compare to others.
+
+---
+
 Big Query Time Travel:(ex: avenger endgame)
 
 In bigquery time travel is used to access historical data for analysis and troubleshooting.This means that you can query data that was stored, updated, or deleted in the past.
@@ -102,6 +127,48 @@ BigQuery has  **a limit of 4 cluster columns per table** .
 * Allows for partition-level management, including creating, deleting, and moving partitions, which is not feasible with clustering.
 
 Slot : A BigQuery slot is  **a virtual CPU used by BigQuery to execute SQL queries** .
+
+---
+
+In  **BigQuery** , **clustering** and **partitioning** are optimization techniques used to organize and manage large datasets for faster and more efficient query performance.
+
+Partitioning: Partitioning divides table into smaller, managable segments(partitions) based on certain column typically a timestamp or an integer.Queries that only need data from specific partitons can skip over irrelevant partitions, improving query performance and reducing cost by scanning less data.
+
+Types of Partitioning:
+
+* Time-base Partitioning: this partition data by DATE, TIMESTAMP, DATETIME. Most common as data is often collected over time. e.g daily logs.
+* Integer-range Partitioning: This partition data based on custom integer column range useful when the data isn't time-based but needs to be organized by sequental or meaningful numeric values.
+
+EX: There is an e-commerce comapany that collects millions of transactions every day.Now need to analyze transactions quickly based on different date ranges(e.g. daily, weekly, or monthly). it provides benefits for queries like fetch data only for a specific month, bq will only scan partitions for that month rather than the entire dataset.
+
+R.EX: A social media platform like Twitter or Facebook can partition user activity logs by date, ensuring that queries analyzing user activity over a specific time range (e.g., the past week) are efficient and scalable.
+
+Clustering: Clustering is a way to automatically organize data within the partitions based on the values of certain columns. Data is physically stored based on the clustered columns, Improves performance when you run queries with where, orderBy, or groupBy clauses on the clustered columns.It works on partition level so, it's often combined with partitioning for more efficient queries.
+
+EX: e-commerce company wants to frequently query transactions by customer_id and product_id within a certain date range.So, we can partition the table by transaction_date and cluster it by customer_id and product_id.Now, when we query to get transactions for a specific customer and product within a date range, BQ will scan only the relevant partitions and clustered data within those partitions.
+
+REX: In healthcare system, patient records can be partitioned by admission_date and clustered by patient_id and hospital_id.This ensures that when querying records for a specific patient at a specific hospital over a time period, only relevant partitions abd clusters are scanned , leading to quicker query results.
+
+Parttioning and Clustering Combine:
+
+Example, netflix that stores user activity logs.Each log contains details about which movie or series a user watched, the timestamp, and the region from which they accessed the platform.
+
+We can partition the table by DATE(activity_timestamp) since activity data comes in daily and you're likely to run queries on recent activities.
+
+And we can cluster the table by user_id and region because most of queries will filter data based on these columns.
+
+Benefits of Clustering and Partitioning:
+
+1. Reduced Query Costs
+2. Improved query performance
+3. Efficient data organization
+
+Key Difference:
+
+1. partitioning divides the table into logical segments where clustering sorts data within partitions based on cloumns.
+2. Partitioning used for reducing the amount of data scanned accross large datasets based on a data or range.Clustering improves query performance on specific columns using filtering, ordering or grouping.
+3. Partitioning operates on the table level and clustering operates within each partition.
+4. Partitioning is best for date or range-based queries (e.g querying data by day, month, year) where as clustering best for column-based queries like filtering by user_id or product_id).
 
 ---
 

@@ -457,15 +457,13 @@ Called when an instance of a class is created.
 
 `__len__` (Length) - Called by the `len()` function to determine the length of an object.
 
-`__add__` (Addition) -  
+`__add__` (Addition) -
 
 * Defines the behavior of the addition operator `+` for objects of a class.
-
 
 **`__getitem__` (Indexing)**
 
 * Called to retrieve an item from an object using the indexing syntax (`obj[index]`)
-
 
 **`__eq__` (Equality)**
 
@@ -476,15 +474,6 @@ What is the purpose of __name__ == "__main__" in Python scripts?
 The construct `if __name__ == "__main__":` in Python is used to determine whether a Python script is being run as the main program or being imported as a module in another script. This allows the script to execute some code only when it is run directly, not when it is imported elsewhere.
 
 It allows a file to act both as an executable script and as an importable module. This is helpful when you want to write code that can be reused elsewhere but still allows the file to be run independently.
-
-
-
-
-
-
-
-
-
 
 What is the difference between __init__ and __new__ in Python?
 

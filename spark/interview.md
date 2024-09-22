@@ -178,7 +178,6 @@ The number of tasks for a job is = ( no of your stages * no of your partitions )
 | Direction      | direction of edges represent the flow``of<br />dependencies between tasks     | the direction of edges represent the flow of data<br />transformations``or processing steps. |
 | Use            | used in task scheduling, workflow``management,<br />and distributed computing |                                                                                              |
 
-
 What is a DAG?
 
 DAG stands for **Directed Acyclic Graph**. In Spark, a DAG is a sequence of computations, or tasks, that are connected together in a way that forms a graph. The "directed" part means that the tasks flow in onedirection, and "acyclic" means that the graph has no cycles or loops. In simple terms, a DAG is a roadmap that Spark follows to process data.
@@ -188,7 +187,6 @@ Why is DAG Important in Spark?
 When you write a Spark job, like performing transformations on a DataFrame or RDD, Spark doesn't immediately execute your code. Instead, it builds a DAG that outlines all the transformations you want to perform. Spark then uses this DAG to determine the most efficient way to execute the job.
 
 How DAG Works in Spark
-
 
 1. Stage Creation : Spark divides the DAG into smaller stages. Each stage is a set of tasks that can be executed without any dependencies on other stages. Stages are created based on the transformations you've applied, especially when there's a *shuffle* involved (like with `groupBy` or  `join` operations).
 2. Task Execution : Once the stages are defined, Spark schedules tasks within each stage. Tasks are units of work that are executed on the worker nodes of the Spark cluster. Each task processes a partition of the data.
@@ -211,9 +209,8 @@ Here’s how Spark would handle it:
 Step 1: Load data : Spark starts by creating a DAG node for loading the data.
 Step 2: Filter : Spark adds another node to the DAG for the filter operation.
 Step 3: Group by : This operation might require a shuffle, so Spark adds a new stage in the DAG.
-Step 4: Sum : The sum calculation happens after the shuffle, so it’s part of the same stage as the group by.
+Step 4: Sum : The sum calculation happens after the shuffle, so its part of the same stage as the group by.
 Step 5: Save: Finally, Spark adds a node to the DAG for saving the result.
-
 
 Lazy Evoluation: In spark it's a powerful concept that allows the optimization of data processing tasks by postponing the execution of transformations until an action is called.
 
