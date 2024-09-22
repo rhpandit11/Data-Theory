@@ -138,12 +138,13 @@ Types of Partitioning:
 
 * Time-base Partitioning: this partition data by DATE, TIMESTAMP, DATETIME. Most common as data is often collected over time. e.g daily logs.
 * Integer-range Partitioning: This partition data based on custom integer column range useful when the data isn't time-based but needs to be organized by sequental or meaningful numeric values.
+* **Ingestion time** : Tables are partitioned based on the timestamp when BigQuery ingests the data.
 
 EX: There is an e-commerce comapany that collects millions of transactions every day.Now need to analyze transactions quickly based on different date ranges(e.g. daily, weekly, or monthly). it provides benefits for queries like fetch data only for a specific month, bq will only scan partitions for that month rather than the entire dataset.
 
 R.EX: A social media platform like Twitter or Facebook can partition user activity logs by date, ensuring that queries analyzing user activity over a specific time range (e.g., the past week) are efficient and scalable.
 
-Clustering: Clustering is a way to automatically organize data within the partitions based on the values of certain columns. Data is physically stored based on the clustered columns, Improves performance when you run queries with where, orderBy, or groupBy clauses on the clustered columns.It works on partition level so, it's often combined with partitioning for more efficient queries.
+Clustering: **Clustering** is a technique that sorts and organizes data within partitions based on specified columns. It improves query performance, especially for filter and aggregation queries like `WHERE`, `ORDER BY`, and `GROUP BY`, by optimizing how data is stored and accessed.
 
 EX: e-commerce company wants to frequently query transactions by customer_id and product_id within a certain date range.So, we can partition the table by transaction_date and cluster it by customer_id and product_id.Now, when we query to get transactions for a specific customer and product within a date range, BQ will scan only the relevant partitions and clustered data within those partitions.
 
